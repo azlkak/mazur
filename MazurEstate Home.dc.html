@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <script src="./image-slot.js"></script>
+  <style id="__om-edit-overrides"></style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+    body { margin: 0; font-family: 'Manrope', sans-serif; background: oklch(0.98 0.005 250); }
+    a { color: oklch(0.5 0.14 250); text-decoration: none; }
+    a:hover { color: oklch(0.4 0.16 250); }
+    * { box-sizing: border-box; }
+    .me-cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 24px; border: 1px solid transparent; border-radius: 999px; font-family: 'Manrope', sans-serif; font-size: 14.5px; line-height: 1; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease; }
+    .me-cta:hover { transform: translateY(-1px); }
+    .me-cta-primary { background: oklch(0.5 0.14 250); color: white; }
+    .me-cta-primary:hover { background: oklch(0.44 0.15 250); color: white; }
+    .me-cta-light { background: white; color: oklch(0.3 0.03 250); }
+    .me-cta-light:hover { background: oklch(0.94 0.01 250); color: oklch(0.3 0.03 250); }
+    .me-cta-outline { background: white; border-color: oklch(0.88 0.01 250); color: oklch(0.3 0.03 250); }
+    .me-cta-outline:hover { background: oklch(0.96 0.01 250); border-color: oklch(0.82 0.03 250); color: oklch(0.3 0.03 250); }
+    .me-cta-compact { min-height: 38px; padding: 0 16px; font-size: 12.5px; }
+    .me-cta-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 1.2; font-weight: 700; color: oklch(0.5 0.14 250); }
+    .me-cta-link:hover { color: oklch(0.4 0.16 250); }
+    @media (max-width: 768px) {
+      #page-root > header, #page-root > section, #page-root > footer { padding-left: 16px !important; padding-right: 16px !important; }
+      #header-bar { padding: 6px 8px !important; }
+      #main-nav { display: none !important; }
+      #header-actions { gap: 6px !important; }
+      #header-actions a[href="tel:+48503937749"] { display: none !important; }
+      #mobile-menu-btn { display: flex !important; }
+      #hero-section { flex-direction: column !important; padding-top: 12px !important; padding-bottom: 24px !important; }
+      #hero-inner { min-height: 460px !important; border-radius: 20px !important; }
+      #hero-content { padding: 32px 20px !important; max-width: 100% !important; }
+      #hero-title { font-size: 30px !important; }
+      #hero-subtitle { font-size: 14.5px !important; max-width: 100% !important; }
+      #hero-stat-chip { top: 14px !important; right: 14px !important; padding: 10px 12px !important; border-radius: 14px !important; }
+      #hero-stat-chip span:first-child { font-size: 18px !important; }
+      #hero-search-card { position: static !important; transform: none !important; width: 100% !important; max-width: 100% !important; margin-top: -40px !important; }
+      #search-tabs-row { flex-wrap: wrap !important; }
+      #search-tabs-row button { padding: 8px 12px !important; font-size: 12.5px !important; }
+      #search-fields-row { flex-direction: column !important; gap: 6px !important; padding: 6px !important; }
+      #search-fields-row [data-search-divider] { display: none !important; }
+      #search-fields-row button { width: 100% !important; padding: 14px !important; }
+      #categories-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+      #why-header-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+      #why-grid { grid-template-columns: 1fr !important; grid-template-rows: none !important; }
+      #why-tile-big { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 260px !important; }
+      #why-cta-bar { flex-direction: column !important; align-items: flex-start !important; padding: 32px 24px !important; }
+      #categories { padding-top: 40px !important; padding-bottom: 20px !important; }
+      #why-us { padding-top: 20px !important; padding-bottom: 20px !important; }
+      #faq { padding-top: 20px !important; padding-bottom: 20px !important; }
+      #testimonials { padding-top: 20px !important; padding-bottom: 40px !important; }
+      #testi-arrow-left, #testi-arrow-right { display: none !important; }
+      #footer-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+      #footer-grid > div:first-child { grid-column: span 2 !important; }
+    }
+    @media (max-width: 480px) {
+      #footer-grid { grid-template-columns: 1fr !important; }
+      #footer-grid > div:first-child { grid-column: span 1 !important; }
+    }
+  </style>
+</helmet>
+
+<div id="page-root" style="width: 100%; overflow-x: hidden; background: oklch(0.98 0.006 250);">
+
+  <!-- HEADER -->
+  <header id="site-header" style="position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; padding: 20px 40px 0;">
+    <div id="header-bar" style="width: 100%; max-width: 1360px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-radius: 999px; padding: 6px 12px 6px 20px; box-shadow: 0 4px 24px rgba(30,50,90,0.08); border: 1px solid oklch(0.93 0.01 250);">
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 0px 4px;">
+        <img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: rgba(255,255,255,0.9);" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" />
+        <div style="display: none; align-items: center; gap: 8px;">
+          <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
+            <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
+          </div>
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: oklch(0.28 0.03 250); letter-spacing: -0.01em;">MazurEstate</span>
+        </div>
+      </div>
+
+      <button id="mobile-menu-btn" onClick="{{ toggleMobileMenu }}" style="display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); cursor: pointer; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <nav id="main-nav" style="display: flex; align-items: center; gap: 0px;">
+        <a href="#" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
+        <a href="#about" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Doradztwo</a>
+
+        <a href="#why-us" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dlaczego my</a>
+
+        <a href="#services" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dla deweloperów</a>
+        <a href="#contact" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Kontakt</a>
+      </nav>
+
+      <div id="header-actions" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+        <div style="position: relative;" onMouseEnter="{{ openLang }}" onMouseLeave="{{ closeLang }}">
+          <button style="display: flex; align-items: center; justify-content: center; gap: 4px; width: 76px; padding: 8px 8px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); background: white; font-size: 12px; font-weight: 700; color: oklch(0.32 0.02 250); cursor: pointer; flex-shrink: 0;">
+            🌐 {{ currentLangLabel }}
+            <svg width="9" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div style="display: {{ langDropdownDisplay }}; position: absolute; top: 100%; right: 0; width: 96px; padding-top: 8px; z-index: 10;">
+            <div style="background: white; border-radius: 14px; box-shadow: 0 12px 32px rgba(30,50,90,0.14); border: 1px solid oklch(0.93 0.01 250); padding: 6px;">
+              <sc-for list="{{ langs }}" as="lang" hint-placeholder-count="4">
+                <a href="#" onClick="{{ selectLang }}" data-lang-code="{{ lang.code }}" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250); transition: background 0.15s;" style-hover="background: oklch(0.95 0.01 250);">{{ lang.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <a href="tel:+48503937749" style="display: flex; align-items: center; gap: 4px; padding: 8px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; color: oklch(0.32 0.02 250); white-space: nowrap; flex-shrink: 0;">
+          +48 503 937 749
+        </a>
+        <a href="#contact" class="me-cta me-cta-primary me-cta-compact" style="flex-shrink: 0;">Skontaktuj się</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-menu-panel" style="display: {{ mobileMenuDisplay }}; position: fixed; inset: 0; z-index: 100; background: rgba(15,25,50,0.4); flex-direction: column;" onClick="{{ closeMobileMenu }}">
+    <div style="background: white; margin: 12px; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 20px 50px rgba(15,25,50,0.25);" onClick="{{ stopPropagation }}">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 16px; color: oklch(0.26 0.03 250);">Menu</span>
+        <button onClick="{{ toggleMobileMenu }}" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <a href="#" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
+      <a href="#about" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Doradztwo</a>
+      <a href="#why-us" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Dlaczego my</a>
+      <a href="#services" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Dla deweloperów</a>
+      <a href="#contact" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250);">Kontakt</a>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+        <a href="tel:+48503937749" style="flex: 1; text-align: center; padding: 12px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); font-size: 13px; font-weight: 700; color: oklch(0.32 0.02 250);">+48 503 937 749</a>
+        <a href="#contact" class="me-cta me-cta-primary" onClick="{{ toggleMobileMenu }}" style="flex: 1;">Skontaktuj się</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero-section" style="position: relative; display: flex; justify-content: center; padding: 28px 40px 140px;">
+    <div id="hero-inner" style="width: 100%; max-width: 1360px; position: relative; border-radius: 32px; overflow: hidden; min-height: 620px; display: flex; align-items: center;">
+
+      <div style="position: absolute; inset: 0;">
+        <image-slot id="hero-bg" src="uploads/hf_20260726_144517_90fd2149-4cca-4eef-974e-74aa570050e6.png" placeholder="Фото жилого дома / улицы Варшавы" shape="rect" style="width: 100%; height: 100%;"></image-slot>
+        <div style="position: absolute; inset: 0; background: linear-gradient(100deg, rgba(15,30,55,0.72) 0%, rgba(15,30,55,0.5) 45%, rgba(15,30,55,0.18) 75%);"></div>
+      </div>
+
+      <div id="hero-content" style="position: relative; z-index: 2; padding: 80px 64px; max-width: 640px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(6px); margin-bottom: 24px;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: oklch(0.75 0.16 145);"></span>
+          <span style="font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.02em;">Agencja nieruchomości</span>
+        </div>
+        <h1 id="hero-title" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 52px; line-height: 1.08; font-weight: 800; color: white; margin: 0 0 20px; letter-spacing: -0.02em; text-wrap: pretty;">
+          Znajdź miejsce, którego szukasz
+        </h1>
+        <p id="hero-subtitle" style="font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0 0 32px; max-width: 480px; text-wrap: pretty;">
+          Przeglądaj aktualne oferty sprzedaży i wynajmu oraz skorzystaj ze wsparcia doświadczonych doradców. Pomożemy Ci znaleźć przestrzeń do życia, rozwoju biznesu lub bezpiecznej inwestycji.
+        </p>
+        <div style="display: flex; align-items: center; gap: 28px;">
+          <a href="#offers" class="me-cta me-cta-light">Zobacz oferty</a>
+        </div>
+      </div>
+
+      <!-- floating stat chip -->
+      <div id="hero-stat-chip" style="position: absolute; top: 44px; right: 44px; z-index: 2; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 20px; padding: 18px 22px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 12px 32px rgba(15,30,55,0.2);">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: oklch(0.32 0.03 250);">500+</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: oklch(0.5 0.02 250);">zadowolonych klientów</span>
+      </div>
+    </div>
+
+    <!-- floating search card -->
+    <div id="hero-search-card" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 3; width: calc(100% - 80px); max-width: 1160px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(20,35,65,0.16); border: 1px solid oklch(0.94 0.01 250); padding: 8px;">
+
+      <div id="search-tabs-row" style="display: flex; gap: 4px; padding: 6px 8px 0;">
+        <sc-for list="{{ propertyTabs }}" as="tab" hint-placeholder-count="4">
+          <button onClick="{{ selectTab }}" data-tab="{{ tab.id }}" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+            <sc-if value="{{ tab.active }}" hint-placeholder-val="{{ false }}">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250);"></span>
+            </sc-if>
+            {{ tab.label }}
+          </button>
+        </sc-for>
+      </div>
+
+      <div id="search-fields-row" style="display: flex; align-items: stretch; gap: 4px; padding: 10px;">
+        <div style="flex: 1.3; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Lokalizacja</span>
+          <input type="text" placeholder="Warszawa, dzielnica lub adres" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Transakcja</span>
+          <select style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit; appearance: none;">
+            <option>Sprzedaż</option>
+            <option>Wynajem</option>
+          </select>
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Cena max</span>
+          <input type="text" placeholder="np. 1 000 000 PLN" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.8; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Powierzchnia</span>
+          <input type="text" placeholder="min m²" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <button class="me-cta me-cta-primary" style="align-self: center; flex-shrink: 0; height: 46px; min-height: 46px; padding: 0 24px; border: none;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M21 21L16.5 16.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          Szukaj
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories" style="display: flex; justify-content: center; padding: 56px 40px 28px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px; flex-wrap: wrap;">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Wybierz typ nieruchomości</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 38px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em; text-wrap: pretty;">
+            Znajdź nieruchomość<br/>dopasowaną do <span style="color: oklch(0.5 0.14 250);">Twoich potrzeb</span>
+          </h2>
+        </div>
+        <a href="#offers" class="me-cta me-cta-outline" style="flex-shrink: 0;">
+          Zobacz wszystkie oferty
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div id="categories-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;">
+        <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column;">
+            <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+              <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div style="padding: 24px 4px 0; display: flex; flex-direction: column; flex: 1;">
+              <h3 style="min-height: 28px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">{{ cat.title }}</h3>
+              <p style="min-height: 44px; font-size: 14px; line-height: 1.55; color: oklch(0.52 0.02 250); margin: 0 0 14px;">{{ cat.subtitle }}</p>
+              <a href="{{ cat.href }}" class="me-cta-link">
+                Sprawdź oferty
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why-us" style="display: flex; justify-content: center; padding: 28px 40px;">
+    <div style="width: 100%; max-width: 1360px;">
+
+      <div id="why-header-grid" style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; margin-bottom: 56px; padding-bottom: 48px; border-bottom: 1px solid oklch(0.9 0.01 250);">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 16px;">Dlaczego my</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 40px; line-height: 1.14; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em; text-wrap: pretty;">
+            Dlaczego MazurEstate?
+          </h2>
+        </div>
+        <p style="font-size: 20px; line-height: 1.55; font-weight: 700; color: oklch(0.32 0.03 250); margin: 0; align-self: end; text-wrap: pretty;">
+          Nieruchomości wymagają dobrych decyzji. Pomagamy podejmować je świadomie, bezpiecznie i bez zbędnych komplikacji.
+        </p>
+      </div>
+
+      <div id="why-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(200px, auto)); gap: 20px;">
+        <div id="why-tile-big" style="position: relative; grid-column: span 2; grid-row: span 2; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 36px;">
+          <image-slot id="why-us-photo-v2" src="uploads/individual-approach-v2.png" placeholder="Zdjęcie: indywidualne podejście / spotkanie z klientem" shape="rect" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></image-slot>
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,25,50,0.35) 0%, rgba(15,25,50,0.82) 100%); z-index: 1; pointer-events: none;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 12px; letter-spacing: -0.01em; text-wrap: pretty;">{{ why1.title }}</h3>
+            <p style="font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0; max-width: 420px;">{{ why1.text }}</p>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3L19 6V11C19 15.6 16.1 19.2 12 21C7.9 19.2 5 15.6 5 11V6L12 3Z M8.8 12L11 14.2L15.5 9.7" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Wsparcie na każdym etapie</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 19V13 M10 19V9 M16 19V5 M3 19H21 M5 9L10 5L14 8L20 3" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Znajomość rynku</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 5H16V14H9L5 18V14H4V5Z M9 9H12 M18 8H20V17H17L14 20V17H12" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Jasna komunikacja</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21Z M3.5 9H20.5 M3.5 15H20.5 M12 3C14.2 5.45 15.4 8.45 15.4 12C15.4 15.55 14.2 18.55 12 21 M12 3C9.8 5.45 8.6 8.45 8.6 12C8.6 15.55 9.8 18.55 12 21" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Obsługa w wielu językach</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.</p>
+        </div>
+      </div>
+
+      <div id="why-cta-bar" style="margin-top: 48px; background: oklch(0.2 0.035 255); border-radius: 28px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;">
+        <div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 8px; letter-spacing: -0.01em; text-wrap: pretty;">Porozmawiajmy o Twojej nieruchomości</h3>
+          <p style="font-size: 15px; color: rgba(255,255,255,0.66); margin: 0; text-wrap: pretty;">Niezależnie od tego, czy chcesz kupić, sprzedać, wynająć czy zainwestować — zacznijmy od rozmowy.</p>
+        </div>
+        <a href="tel:+48503937749" class="me-cta me-cta-primary" style="flex-shrink: 0;" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Skontaktuj się z nami</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="display: flex; justify-content: center; padding: 28px 40px;">
+    <div style="width: 100%; max-width: 900px;">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Masz pytania?</span>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">Najczęściej zadawane pytania</h2>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="5">
+          <div style="border: 1px solid oklch(0.91 0.01 250); border-radius: 18px; background: white; overflow: hidden;">
+            <button onClick="{{ toggleFaq }}" data-faq-id="{{ faq.id }}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; background: none; border: none; cursor: pointer; text-align: left;">
+              <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16.5px; font-weight: 700; color: oklch(0.26 0.03 250);">{{ faq.q }}</span>
+              <span style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: oklch(0.96 0.012 250); display: flex; align-items: center; justify-content: center; transform: {{ faq.rotate }}; transition: transform 0.2s;">
+                <svg width="12" height="12" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="oklch(0.4 0.03 250)" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+            </button>
+            <div style="max-height: {{ faq.maxHeight }}; overflow: hidden; transition: max-height 0.25s ease;">
+              <p style="margin: 0; padding: 0 26px 22px; font-size: 14.5px; line-height: 1.6; color: oklch(0.5 0.02 250); text-wrap: pretty;">{{ faq.a }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" style="display: flex; justify-content: center; padding: 28px 40px 56px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Opinie klientów</span>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">Co nasi klienci mówią o nas</h2>
+      </div>
+
+      <div style="position: relative;">
+        <button id="testi-arrow-left" onClick="{{ scrollLeftBtn }}" style="position: absolute; left: -22px; top: 50%; transform: translateY(-50%); z-index: 5; width: 44px; height: 44px; border-radius: 50%; border: 1px solid oklch(0.9 0.01 250); background: white; box-shadow: 0 8px 20px rgba(20,35,65,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: oklch(0.96 0.01 250);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12L15 18" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="testi-arrow-right" onClick="{{ scrollRightBtn }}" style="position: absolute; right: -22px; top: 50%; transform: translateY(-50%); z-index: 5; width: 44px; height: 44px; border-radius: 50%; border: 1px solid oklch(0.9 0.01 250); background: white; box-shadow: 0 8px 20px rgba(20,35,65,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: oklch(0.96 0.01 250);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="testimonials-track" onMouseDown="{{ startDrag }}" onMouseMove="{{ duringDrag }}" onMouseUp="{{ endDrag }}" onMouseLeave="{{ endDrag }}" style="display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 8px; scrollbar-width: none; cursor: grab; user-select: none;">
+        <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="8">
+          <div data-tcard style="flex: 0 0 340px; background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 22px; padding: 32px;">
+            <div style="display: flex; gap: 3px; margin-bottom: 18px;">
+              <sc-for list="{{ t.stars }}" as="s" hint-placeholder-count="5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="oklch(0.75 0.15 85)"><path d="M12 2L14.9 8.6L22 9.3L16.7 14.1L18.2 21L12 17.4L5.8 21L7.3 14.1L2 9.3L9.1 8.6L12 2Z"/></svg>
+              </sc-for>
+            </div>
+            <p style="font-size: 15px; line-height: 1.65; color: oklch(0.32 0.02 250); margin: 0 0 24px; text-wrap: pretty;">"{{ t.quote }}"</p>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px; color: oklch(0.5 0.14 250); flex-shrink: 0;">{{ t.initials }}</div>
+              <div>
+                <div style="font-size: 14.5px; font-weight: 700; color: oklch(0.26 0.03 250);">{{ t.name }}</div>
+                <div style="font-size: 13px; color: oklch(0.55 0.02 250);">{{ t.role }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" style="display: flex; justify-content: center; background: oklch(0.2 0.035 255); padding: 72px 40px 32px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div id="footer-grid" style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; background: white; border-radius: 12px; padding: 8px 10px; width: fit-content; margin-bottom: 20px;">
+            <img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 40px; width: auto; object-fit: contain;" />
+          </div>
+          <p style="font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.6); margin: 0 0 20px; max-width: 300px; text-wrap: pretty;">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i zarządzanie nieruchomościami dla klientów lokalnych i zagranicznych.</p>
+          <div style="display: flex; gap: 10px;">
+            <a href="#" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 9H16V6H14C12.34 6 11 7.34 11 9V11H9V14H11V20H14V14H16.5L17 11H14V9.5C14 9.22 14.22 9 14 9Z" fill="white"/></svg>
+            </a>
+            <a href="#" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="5" stroke="white" stroke-width="1.8"/><circle cx="12" cy="12" r="3.4" stroke="white" stroke-width="1.8"/><circle cx="16.6" cy="7.4" r="1" fill="white"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Nawigacja</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Wybierz nieruchomość</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Doradztwo</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Kim jesteśmy</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Dla deweloperów</a>
+            <a href="#contact" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Kontakt</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Oferty</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Mieszkania</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Domy</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Działki</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Lokale komercyjne</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Projekty</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Dla inwestora</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Wynajem</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Sprzedaż mieszkań</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Pośrednictwo</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Nieruchomość komercyjna</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Biura</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Kontakt</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <span style="font-size: 14.5px; color: rgba(255,255,255,0.65); text-wrap: pretty;">ul. Franciszka Klimczaka 10A, lok. 5<br/>02-797 Warszawa</span>
+            <a href="tel:+48503937749" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">+48 503 937 749</a>
+            <a href="mailto:info@mazurestate.com" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">info@mazurestate.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 28px;">
+        <span style="font-size: 13px; color: rgba(255,255,255,0.45);">© 2026 MazurEstate. Wszelkie prawa zastrzeżone.</span>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.45);" style-hover="color: white;">Polityka prywatności</a>
+          <a href="#" style="font-size: 13px; color: rgba(255,255,255,0.45);" style-hover="color: white;">Regulamin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { activeTab: 'mieszkania', langOpen: false, lang: 'PL', openFaq: 0, mobileMenuOpen: false };
+
+  componentDidMount() {
+    this._testimonialTimer = setInterval(() => {
+      const el = document.getElementById('testimonials-track');
+      if (!el) return;
+      const card = el.querySelector('[data-tcard]');
+      const step = card ? card.getBoundingClientRect().width + 24 : 340;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+      el.scrollTo({ left: atEnd ? 0 : el.scrollLeft + step, behavior: 'smooth' });
+    }, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._testimonialTimer);
+  }
+
+  renderVals() {
+    const tabs = [
+      { id: 'mieszkania', label: 'Mieszkania' },
+      { id: 'domy', label: 'Domy' },
+      { id: 'dzialki', label: 'Działki' },
+      { id: 'lokale', label: 'Lokale' },
+    ];
+    const langs = [
+      { code: 'PL', label: 'PL' },
+      { code: 'UKR', label: 'UKR' },
+      { code: 'ENG', label: 'ENG' },
+      { code: 'RU', label: 'RU' },
+    ];
+    const whyUs = [
+      { title: 'Indywidualne podejście', text: 'Nie pracujemy według jednego schematu. Najpierw poznajemy Twoje potrzeby, plany i oczekiwania, a następnie dopasowujemy sposób działania do konkretnej sytuacji.', iconPath: 'M12 3L4 8V21H20V8L12 3Z M9 21V13H15V21' },
+      { title: 'Wsparcie na każdym etapie', text: 'Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.', iconPath: 'M12 3L19 6V11C19 15.6 16.1 19.2 12 21C7.9 19.2 5 15.6 5 11V6L12 3Z M8.8 12L11 14.2L15.5 9.7' },
+      { title: 'Znajomość rynku', text: 'Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.', iconPath: 'M4 19V13 M10 19V9 M16 19V5 M3 19H21 M5 9L10 5L14 8L20 3' },
+      { title: 'Jasna komunikacja', text: 'Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.', iconPath: 'M4 5H16V14H9L5 18V14H4V5Z M9 9H12 M18 8H20V17H17L14 20V17H12' },
+      { title: 'Obsługa w wielu językach', text: 'Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.', iconPath: 'M12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21Z M3.5 9H20.5 M3.5 15H20.5 M12 3C14.2 5.45 15.4 8.45 15.4 12C15.4 15.55 14.2 18.55 12 21 M12 3C9.8 5.45 8.6 8.45 8.6 12C8.6 15.55 9.8 18.55 12 21' },
+    ];
+    const categories = [
+      { src: 'uploads/category-apartments.webp', href: 'mieszkania.html', title: 'Mieszkania', subtitle: 'Nowoczesne przestrzenie do życia' },
+      { src: 'uploads/category-houses.webp', href: 'domy.html', title: 'Domy', subtitle: 'Komfortowe domy dla rodzin' },
+      { src: 'uploads/category-land.webp', href: 'dzialki.html', title: 'Działki', subtitle: 'Inwestycja pod budowę' },
+      { src: 'uploads/category-commercial.webp', href: 'lokale-komercyjne.html', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla Twojego biznesu' },
+    ];
+    const faqData = [
+      { id: 0, q: 'Jaka jest prowizja za pośrednictwo?', a: 'Nasza prowizja jest jedną z najniższych na rynku warszawskim. Dokładną stawkę ustalamy indywidualnie w zależności od rodzaju transakcji i zakresu usług — skontaktuj się z nami po szczegóły.' },
+      { id: 1, q: 'Czy pomagacie klientom spoza Polski?', a: 'Tak, obsługujemy klientów w języku polskim, ukraińskim, angielskim i rosyjskim. Prowadzimy przez cały proces krok po kroku, tłumacząc formalności i lokalne realia rynku.' },
+      { id: 2, q: 'Ile trwa sprzedaż lub wynajem nieruchomości?', a: 'Czas zależy od lokalizacji, ceny i stanu nieruchomości. Dzięki bazie zweryfikowanych klientów i aktywnemu marketingowi większość ofert znajduje nabywcę lub najemcę w ciągu kilku tygodni.' },
+      { id: 3, q: 'Czy zajmujecie się zarządzaniem najmem?', a: 'Tak, oferujemy pełne zarządzanie najmem — od znalezienia najemcy, przez formalności, po bieżącą obsługę nieruchomości w trakcie trwania umowy.' },
+      { id: 4, q: 'Jak wygląda pierwszy krok współpracy?', a: 'Wystarczy się z nami skontaktować telefonicznie, mailowo lub przez formularz na stronie. Umówimy się na rozmowę, poznamy Twoje potrzeby i zaproponujemy dalsze kroki.' },
+    ];
+    const testimonials = [
+      { initials: 'AK', name: 'Anna Kowalska', role: 'Sprzedaż mieszkania, Wola', quote: 'Profesjonalne podejście od pierwszego kontaktu. Mieszkanie sprzedaliśmy szybciej niż zakładaliśmy, a cała formalna strona przebiegła bez stresu.', stars: [1,2,3,4,5] },
+      { initials: 'OM', name: 'Oksana Melnyk', role: 'Najem, klientka z Ukrainy', quote: 'Bardzo doceniam obsługę w moim języku. Agencja pomogła mi zrozumieć każdy etap wynajmu i znaleźć mieszkanie, które naprawdę mi odpowiada.', stars: [1,2,3,4,5] },
+      { initials: 'PN', name: 'Piotr Nowak', role: 'Zakup domu, Ząbki', quote: 'Znajomość lokalnego rynku widać na każdym kroku. Doradcy jasno tłumaczyli każdą decyzję i negocjowali w naszym imieniu.', stars: [1,2,3,4,5] },
+      { initials: 'MW', name: 'Marta Wiśniewska', role: 'Wynajem, Wilanów', quote: 'Szybka i sprawna obsługa. Znaleźli najemcę w niecałe dwa tygodnie i zajęli się wszystkimi formalnościami umowy.', stars: [1,2,3,4,5] },
+      { initials: 'DK', name: 'Dmytro Kravchenko', role: 'Zakup mieszkania, klient z Ukrainy', quote: 'Cały proces zakupu tłumaczony krok po kroku w moim języku. Czułem się bezpiecznie na każdym etapie transakcji.', stars: [1,2,3,4,5] },
+      { initials: 'KZ', name: 'Katarzyna Zielińska', role: 'Sprzedaż domu, Wiązowna', quote: 'Rzetelna wycena i skuteczny marketing oferty. Dom sprzedał się w bardzo dobrej cenie i bez zbędnych opóźnień.', stars: [1,2,3,4,5] },
+      { initials: 'IP', name: 'Igor Popov', role: 'Najem, klient z Rosji', quote: 'Doceniam obsługę w moim ojczystym języku i jasne wyjaśnienie każdego dokumentu. Polecam osobom spoza Polski.', stars: [1,2,3,4,5] },
+      { initials: 'TL', name: 'Tomasz Lewandowski', role: 'Nieruchomość komercyjna, Mokotów', quote: 'Doradcy dobrze znają rynek komercyjny w Warszawie. Pomogli wynegocjować korzystne warunki najmu lokalu.', stars: [1,2,3,4,5] },
+    ];
+    return {
+      mobileMenuDisplay: this.state.mobileMenuOpen ? 'flex' : 'none',
+      toggleMobileMenu: () => this.setState(s => ({ mobileMenuOpen: !s.mobileMenuOpen })),
+      closeMobileMenu: () => this.setState({ mobileMenuOpen: false }),
+      stopPropagation: (e) => e.stopPropagation(),
+      scrollLeftBtn: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        const card = el.querySelector('[data-tcard]');
+        const step = card ? card.getBoundingClientRect().width + 24 : 340;
+        el.scrollBy({ left: -step, behavior: 'smooth' });
+      },
+      scrollRightBtn: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        const card = el.querySelector('[data-tcard]');
+        const step = card ? card.getBoundingClientRect().width + 24 : 340;
+        el.scrollBy({ left: step, behavior: 'smooth' });
+      },
+      startDrag: (e) => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        el._dragStartX = e.pageX;
+        el._dragStartScroll = el.scrollLeft;
+        el._dragging = true;
+        el.style.cursor = 'grabbing';
+      },
+      duringDrag: (e) => {
+        const el = document.getElementById('testimonials-track');
+        if (!el || !el._dragging) return;
+        el.scrollLeft = el._dragStartScroll - (e.pageX - el._dragStartX);
+      },
+      endDrag: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        el._dragging = false;
+        el.style.cursor = 'grab';
+      },
+      faqs: faqData.map(f => ({ ...f, rotate: this.state.openFaq === f.id ? 'rotate(180deg)' : 'rotate(0deg)', maxHeight: this.state.openFaq === f.id ? '200px' : '0px' })),
+      toggleFaq: (e) => { const id = Number(e.currentTarget.dataset.faqId); this.setState(s => ({ openFaq: s.openFaq === id ? -1 : id })); },
+      testimonials,
+      why1: whyUs[0],
+      whySmall: whyUs.slice(1),
+      categories,
+      propertyTabs: tabs.map(t => ({ ...t, active: t.id === this.state.activeTab })),
+      selectTab: (e) => this.setState({ activeTab: e.currentTarget.dataset.tab }),
+      langs,
+      currentLangLabel: this.state.lang,
+      langDropdownDisplay: this.state.langOpen ? 'block' : 'none',
+      openLang: () => this.setState({ langOpen: true }),
+      closeLang: () => this.setState({ langOpen: false }),
+      selectLang: (e) => { e.preventDefault(); this.setState({ lang: e.currentTarget.dataset.langCode, langOpen: false }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
