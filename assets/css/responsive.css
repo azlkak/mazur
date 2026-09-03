@@ -1,11 +1,11 @@
 html,body{max-width:100%;overflow-x:hidden}
 button,a,input,select{touch-action:manipulation}
 :where(a,button,input,select):focus-visible{outline:3px solid rgba(6,113,189,.35);outline-offset:3px}
-a[aria-label^="Instagram"]{background:linear-gradient(135deg,#833ab4 0%,#fd1d1d 55%,#fcb045 100%)!important;border-color:transparent!important;color:#fff!important}
-a[aria-label^="Facebook"]{background:#1877f2!important;border-color:transparent!important;color:#fff!important}
-a[aria-label^="Threads"]{background:#000!important;border-color:#353f4b!important;color:#fff!important}
-a[aria-label^="YouTube"]{background:#ff0000!important;border-color:transparent!important;color:#fff!important}
-:is(.footer-social,#footer-grid>div:first-child>div:last-child) a[aria-label]{transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+:is(.footer-social,#footer-grid>div:first-child>div:last-child) a[aria-label]{width:34px!important;height:34px!important;min-height:34px!important;transition:transform .18s ease,filter .18s ease,box-shadow .18s ease}
+a[aria-label^="Instagram"]{background:linear-gradient(135deg,rgba(131,58,180,.58) 0%,rgba(253,29,29,.52) 55%,rgba(252,176,69,.58) 100%)!important;border-color:rgba(255,255,255,.2)!important;color:#fff!important}
+a[aria-label^="Facebook"]{background:rgba(24,119,242,.52)!important;border-color:rgba(74,148,244,.5)!important;color:#fff!important}
+a[aria-label^="Threads"]{background:rgba(0,0,0,.48)!important;border-color:rgba(255,255,255,.2)!important;color:#fff!important}
+a[aria-label^="YouTube"]{background:rgba(255,0,0,.5)!important;border-color:rgba(255,75,75,.45)!important;color:#fff!important}
 :is(.footer-social,#footer-grid>div:first-child>div:last-child) a[aria-label]:hover{filter:brightness(1.08);transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.22)}
 #why-us>#categories,#why-us>div>#categories{padding-left:0!important;padding-right:0!important;width:100%}
 #page-root>#featured-offers{width:min(1360px,calc(100% - 80px));margin-inline:auto;padding:56px 0 28px!important}
