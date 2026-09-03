@@ -123,8 +123,8 @@
       </nav>
 
       <div id="header-actions" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
-        <div style="position: relative;" onMouseEnter="{{ openLang }}" onMouseLeave="{{ closeLang }}">
-          <button style="display: flex; align-items: center; justify-content: center; gap: 4px; width: 76px; padding: 8px 8px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); background: white; font-size: 12px; font-weight: 700; color: oklch(0.32 0.02 250); cursor: pointer; flex-shrink: 0;">
+        <div id="language-picker-home" style="position: relative;" onMouseEnter="{{ openLang }}" onMouseLeave="{{ closeLang }}">
+          <button type="button" aria-label="Wybierz język" aria-expanded="{{ languageExpanded }}" onClick="{{ toggleLang }}" style="display: flex; align-items: center; justify-content: center; gap: 4px; width: 76px; padding: 8px 8px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); background: white; font-size: 12px; font-weight: 700; color: oklch(0.32 0.02 250); cursor: pointer; flex-shrink: 0;">
             🌐 {{ currentLangLabel }}
             <svg width="9" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
@@ -540,6 +540,19 @@ class Component extends DCLogic {
   state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
+    this._outsideDropdownHandler = (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const outsideLocation = !target.closest('.location-combobox');
+      const outsideLanguage = !target.closest('#language-picker-home');
+      if ((outsideLocation && this.state.locationOpen) || (outsideLanguage && this.state.langOpen)) {
+        this.setState({
+          locationOpen: outsideLocation ? false : this.state.locationOpen,
+          langOpen: outsideLanguage ? false : this.state.langOpen,
+        });
+      }
+    };
+    document.addEventListener('pointerdown', this._outsideDropdownHandler);
     this._testimonialTimer = setInterval(() => {
       const el = document.getElementById('testimonials-track');
       if (!el) return;
@@ -552,6 +565,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     clearInterval(this._testimonialTimer);
+    document.removeEventListener('pointerdown', this._outsideDropdownHandler);
   }
 
   renderVals() {
@@ -741,6 +755,8 @@ class Component extends DCLogic {
       langs,
       currentLangLabel: this.state.lang,
       langDropdownDisplay: this.state.langOpen ? 'block' : 'none',
+      languageExpanded: this.state.langOpen ? 'true' : 'false',
+      toggleLang: (e) => { e.stopPropagation(); this.setState(s => ({ langOpen: !s.langOpen })); },
       openLang: () => this.setState({ langOpen: true }),
       closeLang: () => this.setState({ langOpen: false }),
     };

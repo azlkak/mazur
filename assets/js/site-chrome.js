@@ -54,7 +54,11 @@
     if(legalBar){legalBar.className='legal-links';legalBar.innerHTML=`<a href="../polityka-prywatnosci/?lang=${lang}">${t.privacy}</a><a href="../polityka-cookies/?lang=${lang}">Cookies</a><a href="../regulamin/?lang=${lang}">${t.terms}</a>`;}
     const picker = header?.querySelector('.chrome-language');
     picker?.querySelector('button').addEventListener('click', e => { e.stopPropagation(); const open = picker.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(open)); });
-    document.addEventListener('click', event => { if (picker && !picker.contains(event.target)) picker.classList.remove('open'); });
+    document.addEventListener('click', event => {
+      if (!picker || picker.contains(event.target)) return;
+      picker.classList.remove('open');
+      picker.querySelector('button')?.setAttribute('aria-expanded', 'false');
+    });
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.applySiteChrome); else window.applySiteChrome();
   const translations=document.createElement('script');translations.src='../assets/js/page-translations.js';document.body.appendChild(translations);
