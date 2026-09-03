@@ -128,7 +128,7 @@
             🌐 {{ currentLangLabel }}
             <svg width="9" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
           </button>
-          <div style="display: {{ langDropdownDisplay }}; position: absolute; top: 100%; right: 0; width: 96px; padding-top: 8px; z-index: 10;">
+          <div style="display: {{ langDropdownDisplay }}; position: absolute; top: 100%; right: 0; width: 76px; padding-top: 8px; z-index: 10;">
             <div style="background: white; border-radius: 14px; box-shadow: 0 12px 32px rgba(30,50,90,0.14); border: 1px solid oklch(0.93 0.01 250); padding: 6px;">
               <sc-for list="{{ langs }}" as="lang" hint-placeholder-count="4">
                 <a href="{{ lang.href }}" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250); transition: background 0.15s;" style-hover="background: oklch(0.95 0.01 250);">{{ lang.label }}</a>
