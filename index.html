@@ -108,7 +108,7 @@
         </div>
       </div>
 
-      <button id="mobile-menu-btn" onClick="{{ toggleMobileMenu }}" style="display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); cursor: pointer; flex-shrink: 0;">
+      <button id="mobile-menu-btn" type="button" aria-label="Otwórz menu" aria-expanded="false" onClick="{{ toggleMobileMenu }}" style="display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); cursor: pointer; flex-shrink: 0;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
 
@@ -148,7 +148,7 @@
     <div style="background: white; margin: 12px; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 20px 50px rgba(15,25,50,0.25);" onClick="{{ stopPropagation }}">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
         <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 16px; color: oklch(0.26 0.03 250);">Menu</span>
-        <button onClick="{{ toggleMobileMenu }}" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <button type="button" aria-label="Zamknij menu" onClick="{{ toggleMobileMenu }}" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); display: flex; align-items: center; justify-content: center; cursor: pointer;">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
         </button>
       </div>
