@@ -148,7 +148,7 @@
       if (dictionary.has(key)) element.setAttribute('aria-label', dictionary.get(key));
     });
     root.querySelectorAll?.('a[href$=".html"]').forEach(link => {
-      if (!link.href.includes('MazurEstate%20Home.dc.html')) link.href += `${link.href.includes('?') ? '&' : '?'}lang=${lang}`;
+      if (!link.href.includes('index.html')) link.href += `${link.href.includes('?') ? '&' : '?'}lang=${lang}`;
     });
   }
 
