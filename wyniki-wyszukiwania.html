@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Wyniki wyszukiwania | MazurEstate</title>
+  <link rel="icon" href="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="wyniki-wyszukiwania.css">
+  <link rel="stylesheet" href="site-chrome.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-bar shell">
+      <a class="brand" href="MazurEstate%20Home.dc.html"><img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></a>
+      <nav class="main-nav">
+        <a data-i18n="chooseProperty" href="MazurEstate%20Home.dc.html#categories">Wybierz nieruchomość</a>
+        <a data-i18n="advisory" href="MazurEstate%20Home.dc.html#about">Doradztwo</a>
+        <a data-i18n="whyUs" href="MazurEstate%20Home.dc.html#why-us">Dlaczego my</a>
+        <a data-i18n="developers" href="MazurEstate%20Home.dc.html#services">Dla deweloperów</a>
+        <a data-i18n="contact" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Kontakt</a>
+      </nav>
+      <div class="header-actions">
+        <div class="language-picker" id="language-picker"><button class="language-trigger" type="button" aria-expanded="false" aria-haspopup="listbox"><span aria-hidden="true">🌐</span><span id="language-current">PL</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="language-menu" role="listbox"><button data-lang="pl">PL</button><button data-lang="uk">UKR</button><button data-lang="en">ENG</button><button data-lang="ru">RU</button></div></div>
+        <a class="phone" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">+48 503 937 749</a>
+        <a class="button" data-i18n="contactUs" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Skontaktuj się</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell results-main">
+    <a class="back-link" data-i18n="back" href="MazurEstate%20Home.dc.html#categories">← Wróć do wyszukiwarki</a>
+    <section class="results-heading">
+      <div><p class="eyebrow" data-i18n="offersEyebrow">OFERTY MAZURESTATE</p><h1 id="results-title">Nieruchomości na sprzedaż</h1><p id="results-summary"></p></div>
+      <div class="controls">
+        <label><span data-i18n="sort">Sortuj</span><select id="sort-select"><option data-i18n="recommended" value="recommended">Polecane</option><option data-i18n="newest" value="newest">Najnowsze</option><option data-i18n="priceAsc" value="price-asc">Cena: od najniższej</option><option data-i18n="priceDesc" value="price-desc">Cena: od najwyższej</option></select></label>
+      </div>
+    </section>
+
+    <div class="active-filters" id="active-filters"></div>
+    <section id="offer-list" class="offer-list" aria-live="polite"></section>
+
+    <section class="pagination-bar" aria-label="Paginacja wyników">
+      <label><span data-i18n="perPage">Pokaż na stronie</span><select id="per-page"><option value="4">4</option><option value="6" selected>6</option><option value="8">8</option><option value="12">12</option></select></label>
+      <nav id="pagination" class="pagination"></nav>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div><div class="footer-logo"><img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></div><p data-i18n="footerIntro">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i kompleksowa obsługa nieruchomości.</p></div>
+      <div><h2 data-i18n="navigation">Nawigacja</h2><a data-i18n="chooseProperty" href="MazurEstate%20Home.dc.html#categories">Wybierz nieruchomość</a><a data-i18n="whyUs" href="MazurEstate%20Home.dc.html#why-us">Dlaczego my</a><a data-i18n="reviews" href="MazurEstate%20Home.dc.html#testimonials">Opinie klientów</a></div>
+      <div><h2 data-i18n="offers">Oferty</h2><a data-type-link="mieszkania" href="?type=mieszkania&transaction=sprzedaz">Mieszkania</a><a data-type-link="domy" href="?type=domy&transaction=sprzedaz">Domy</a><a data-type-link="dzialki" href="?type=dzialki&transaction=sprzedaz">Działki</a><a data-type-link="lokale" href="?type=lokale&transaction=wynajem">Lokale komercyjne</a></div>
+      <div><h2 data-i18n="contact">Kontakt</h2><p>ul. Franciszka Klimczaka 10A, lok. 5<br>02-797 Warszawa</p><a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">+48 503 937 749</a><a href="mailto:info@mazurestate.com">info@mazurestate.com</a></div>
+    </div>
+    <div class="shell copyright">© 2026 MazurEstate. <span data-i18n="rights">Wszelkie prawa zastrzeżone.</span></div>
+  </footer>
+  <script src="wyniki-wyszukiwania.js"></script>
+  <script src="site-chrome.js"></script>
+</body>
+</html>

@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/png" href="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
+<link rel="apple-touch-icon" href="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <script src="./image-slot.js"></script>
+  <style id="__om-edit-overrides"></style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: 'Manrope', sans-serif; background: oklch(0.98 0.005 250); }
+    #categories, #why-us, #faq, #testimonials { scroll-margin-top: 112px; }
+    a { color: oklch(0.5 0.14 250); text-decoration: none; }
+    a:hover { color: oklch(0.4 0.16 250); }
+    * { box-sizing: border-box; }
+    #page-root { user-select: text; -webkit-user-select: text; }
+    #page-root button, #page-root svg, #page-root img { user-select: none; -webkit-user-select: none; }
+    .me-cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 24px; border: 1px solid transparent; border-radius: 999px; font-family: 'Manrope', sans-serif; font-size: 14.5px; line-height: 1; font-weight: 700; white-space: nowrap; cursor: pointer; transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, transform 0.18s ease; }
+    .me-cta:hover { transform: translateY(-1px); }
+    .me-cta-primary { background: oklch(0.5 0.14 250); color: white; }
+    .me-cta-primary:hover { background: oklch(0.44 0.15 250); color: white; }
+    .me-cta-light { background: white; color: oklch(0.3 0.03 250); }
+    .me-cta-light:hover { background: oklch(0.94 0.01 250); color: oklch(0.3 0.03 250); }
+    .me-cta-outline { background: white; border-color: oklch(0.88 0.01 250); color: oklch(0.3 0.03 250); }
+    .me-cta-outline:hover { background: oklch(0.96 0.01 250); border-color: oklch(0.82 0.03 250); color: oklch(0.3 0.03 250); }
+    .me-cta-compact { min-height: 38px; padding: 0 16px; font-size: 12.5px; }
+    .me-cta-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; line-height: 1.2; font-weight: 700; color: oklch(0.5 0.14 250); }
+    .me-cta-link:hover { color: oklch(0.4 0.16 250); }
+    .testimonial-avatar { width: 46px; height: 46px; flex-shrink: 0; border-radius: 50%; background-image: url('uploads/testimonial-portraits-grid.png'); background-size: 400% 200%; background-position: var(--avatar-position); box-shadow: inset 0 0 0 1px rgba(20,35,65,0.08); }
+    .location-combobox { position: relative; flex: 1.3; min-width: 0; }
+    .location-field { display: flex; flex-direction: column; gap: 4px; padding: 10px 42px 10px 18px; border-radius: 16px; transition: background 0.18s ease; }
+    .location-field:focus-within { background: oklch(0.97 0.008 250); }
+    .location-input { width: 100%; min-width: 0; border: none; outline: none; padding: 0; font: 600 15px/1.4 'Manrope', sans-serif; color: oklch(0.28 0.02 250); background: transparent; }
+    .location-input::placeholder { color: oklch(0.58 0.018 250); opacity: 1; }
+    .location-chevron { position: absolute; right: 15px; bottom: 14px; width: 20px; height: 20px; display: grid; place-items: center; border: 0; padding: 0; background: transparent; color: oklch(0.5 0.025 250); cursor: pointer; }
+    .location-menu { position: absolute; left: 0; right: 0; top: calc(100% + 10px); z-index: 30; max-height: 290px; overflow-y: auto; padding: 8px; border: 1px solid oklch(0.9 0.012 250); border-radius: 18px; background: rgba(255,255,255,0.98); box-shadow: 0 18px 44px rgba(20,35,65,0.18); backdrop-filter: blur(14px); scrollbar-width: thin; scrollbar-color: oklch(0.82 0.02 250) transparent; }
+    .location-option { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; border-radius: 12px; padding: 11px 12px; background: transparent; color: oklch(0.31 0.025 250); font: 650 14px/1.3 'Manrope', sans-serif; text-align: left; cursor: pointer; }
+    .location-option:hover, .location-option:focus-visible { outline: none; background: oklch(0.95 0.02 250); color: oklch(0.43 0.14 250); }
+    .location-option svg { flex-shrink: 0; }
+    /* The off-canvas navigation must never cover the desktop header. */
+    #mobile-menu-panel { display: none !important; }
+    @media (max-width: 768px) {
+      #page-root > header, #page-root > section, #page-root > footer { padding-left: 16px !important; padding-right: 16px !important; }
+      #header-bar { padding: 6px 8px !important; }
+      #main-nav { display: none !important; }
+      #header-actions { gap: 6px !important; }
+      #header-actions a[href="tel:+48503937749"] { display: none !important; }
+      #mobile-menu-btn { display: flex !important; }
+      #mobile-menu-panel[style*="display: flex"] { display: flex !important; }
+      #hero-section { flex-direction: column !important; padding-top: 12px !important; padding-bottom: 24px !important; }
+      #hero-inner { min-height: 460px !important; border-radius: 20px !important; }
+      #hero-content { padding: 32px 20px !important; max-width: 100% !important; }
+      #hero-title { font-size: 30px !important; }
+      #hero-subtitle { font-size: 14.5px !important; max-width: 100% !important; }
+      #hero-stat-chip { top: 14px !important; right: 14px !important; padding: 10px 12px !important; border-radius: 14px !important; }
+      #hero-stat-chip span:first-child { font-size: 18px !important; }
+      #hero-search-card { position: static !important; transform: none !important; width: 100% !important; max-width: 100% !important; margin-top: -40px !important; }
+      #search-tabs-row { flex-wrap: wrap !important; }
+      #search-tabs-row button { padding: 8px 12px !important; font-size: 12.5px !important; }
+      #search-fields-row { flex-direction: column !important; gap: 6px !important; padding: 6px !important; }
+      .location-combobox { width: 100% !important; }
+      .location-menu { position: static; margin: 4px 6px 8px; max-height: 230px; }
+      #search-fields-row [data-search-divider] { display: none !important; }
+      #search-fields-row button { width: 100% !important; padding: 14px !important; }
+      #categories-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+      #why-header-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+      #why-grid { grid-template-columns: 1fr !important; grid-template-rows: none !important; }
+      #why-tile-big { grid-column: span 1 !important; grid-row: span 1 !important; min-height: 260px !important; }
+      #why-cta-bar { flex-direction: column !important; align-items: flex-start !important; padding: 32px 24px !important; }
+      #categories { padding-top: 40px !important; padding-bottom: 20px !important; }
+      #why-us { padding-top: 20px !important; padding-bottom: 20px !important; }
+      #faq { padding-top: 20px !important; padding-bottom: 20px !important; }
+      #testimonials { padding-top: 20px !important; padding-bottom: 40px !important; }
+      #categories, #why-us, #faq, #testimonials { scroll-margin-top: 92px; }
+      #testi-arrow-left, #testi-arrow-right { display: none !important; }
+      #footer-grid { grid-template-columns: 1fr 1fr !important; gap: 28px !important; }
+      #footer-grid > div:first-child { grid-column: span 2 !important; }
+    }
+    @media (max-width: 480px) {
+      #footer-grid { grid-template-columns: 1fr !important; }
+      #footer-grid > div:first-child { grid-column: span 1 !important; }
+    }
+  </style>
+</helmet>
+
+<div id="page-root" style="width: 100%; overflow-x: clip; background: oklch(0.98 0.006 250);">
+
+  <!-- HEADER -->
+  <header id="site-header" style="position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; padding: 20px 40px 0;">
+    <div id="header-bar" style="width: 100%; max-width: 1360px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-radius: 999px; padding: 6px 12px 6px 20px; box-shadow: 0 4px 24px rgba(30,50,90,0.08); border: 1px solid oklch(0.93 0.01 250);">
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: transparent; border-radius: 12px; padding: 0px 4px;">
+        <img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: multiply;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" />
+        <div style="display: none; align-items: center; gap: 8px;">
+          <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
+            <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
+          </div>
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: oklch(0.28 0.03 250); letter-spacing: -0.01em;">MazurEstate</span>
+        </div>
+      </div>
+
+      <button id="mobile-menu-btn" onClick="{{ toggleMobileMenu }}" style="display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); cursor: pointer; flex-shrink: 0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6H20M4 12H20M4 18H20" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <nav id="main-nav" style="display: flex; align-items: center; gap: 0px;">
+        <a href="#categories" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
+        <a href="#about" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Doradztwo</a>
+
+        <a href="#why-us" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dlaczego my</a>
+
+        <a href="#services" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dla deweloperów</a>
+        <a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Kontakt</a>
+      </nav>
+
+      <div id="header-actions" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+        <div style="position: relative;" onMouseEnter="{{ openLang }}" onMouseLeave="{{ closeLang }}">
+          <button style="display: flex; align-items: center; justify-content: center; gap: 4px; width: 76px; padding: 8px 8px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); background: white; font-size: 12px; font-weight: 700; color: oklch(0.32 0.02 250); cursor: pointer; flex-shrink: 0;">
+            🌐 {{ currentLangLabel }}
+            <svg width="9" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div style="display: {{ langDropdownDisplay }}; position: absolute; top: 100%; right: 0; width: 96px; padding-top: 8px; z-index: 10;">
+            <div style="background: white; border-radius: 14px; box-shadow: 0 12px 32px rgba(30,50,90,0.14); border: 1px solid oklch(0.93 0.01 250); padding: 6px;">
+              <sc-for list="{{ langs }}" as="lang" hint-placeholder-count="4">
+                <a href="{{ lang.href }}" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250); transition: background 0.15s;" style-hover="background: oklch(0.95 0.01 250);">{{ lang.label }}</a>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <a href="tel:+48503937749" style="display: flex; align-items: center; gap: 4px; padding: 8px 6px; border-radius: 999px; font-size: 11px; font-weight: 700; color: oklch(0.32 0.02 250); white-space: nowrap; flex-shrink: 0;">
+          +48 503 937 749
+        </a>
+        <a href="tel:+48503937749" class="me-cta me-cta-primary me-cta-compact" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="flex-shrink: 0;">Skontaktuj się</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-menu-panel" style="display: {{ mobileMenuDisplay }}; position: fixed; inset: 0; z-index: 100; background: rgba(15,25,50,0.4); flex-direction: column;" onClick="{{ closeMobileMenu }}">
+    <div style="background: white; margin: 12px; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 20px 50px rgba(15,25,50,0.25);" onClick="{{ stopPropagation }}">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 16px; color: oklch(0.26 0.03 250);">Menu</span>
+        <button onClick="{{ toggleMobileMenu }}" style="width: 36px; height: 36px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6L18 18M6 18L18 6" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <a href="#categories" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
+      <a href="#about" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Doradztwo</a>
+      <a href="#why-us" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Dlaczego my</a>
+      <a href="#services" onClick="{{ toggleMobileMenu }}" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250); border-bottom: 1px solid oklch(0.95 0.01 250);">Dla deweloperów</a>
+      <a href="tel:+48503937749" onClick="{{ toggleMobileMenu }}" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="padding: 12px 8px; font-size: 15px; font-weight: 600; color: oklch(0.3 0.03 250);">Kontakt</a>
+      <div style="display: flex; align-items: center; gap: 8px; margin-top: 12px;">
+        <a href="tel:+48503937749" style="flex: 1; text-align: center; padding: 12px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); font-size: 13px; font-weight: 700; color: oklch(0.32 0.02 250);">+48 503 937 749</a>
+        <a href="tel:+48503937749" class="me-cta me-cta-primary" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="flex: 1;">Skontaktuj się</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero-section" style="position: relative; display: flex; justify-content: center; padding: 28px 40px 140px;">
+    <div id="hero-inner" style="width: 100%; max-width: 1360px; position: relative; border-radius: 32px; overflow: hidden; min-height: 620px; display: flex; align-items: center;">
+
+      <div style="position: absolute; inset: 0;">
+        <image-slot id="hero-bg" src="uploads/hf_20260726_144517_90fd2149-4cca-4eef-974e-74aa570050e6.png" placeholder="Фото жилого дома / улицы Варшавы" shape="rect" style="width: 100%; height: 100%;"></image-slot>
+        <div style="position: absolute; inset: 0; background: linear-gradient(100deg, rgba(15,30,55,0.72) 0%, rgba(15,30,55,0.5) 45%, rgba(15,30,55,0.18) 75%);"></div>
+      </div>
+
+      <div id="hero-content" style="position: relative; z-index: 2; padding: 80px 64px; max-width: 640px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(6px); margin-bottom: 24px;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: oklch(0.75 0.16 145);"></span>
+          <span style="font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.02em;">Agencja nieruchomości</span>
+        </div>
+        <h1 id="hero-title" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 52px; line-height: 1.08; font-weight: 800; color: white; margin: 0 0 20px; letter-spacing: -0.02em; text-wrap: pretty;">
+          Znajdź miejsce, którego szukasz
+        </h1>
+        <p id="hero-subtitle" style="font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0 0 32px; max-width: 480px; text-wrap: pretty;">
+          Przeglądaj aktualne oferty sprzedaży i wynajmu oraz skorzystaj ze wsparcia doświadczonych doradców. Pomożemy Ci znaleźć przestrzeń do życia, rozwoju biznesu lub bezpiecznej inwestycji.
+        </p>
+        <div style="display: flex; align-items: center; gap: 28px;">
+          <a href="#offers" class="me-cta me-cta-light">Zobacz oferty</a>
+        </div>
+      </div>
+
+      <!-- floating stat chip -->
+      <div id="hero-stat-chip" style="position: absolute; top: 44px; right: 44px; z-index: 2; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 20px; padding: 18px 22px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 12px 32px rgba(15,30,55,0.2);">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: oklch(0.32 0.03 250);">500+</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: oklch(0.5 0.02 250);">zadowolonych klientów</span>
+      </div>
+    </div>
+
+    <!-- floating search card -->
+    <div id="hero-search-card" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 3; width: calc(100% - 80px); max-width: 1160px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(20,35,65,0.16); border: 1px solid oklch(0.94 0.01 250); padding: 8px;">
+
+      <div id="search-tabs-row" style="display: flex; gap: 4px; padding: 6px 8px 0;">
+        <sc-for list="{{ propertyTabs }}" as="tab" hint-placeholder-count="4">
+          <button onClick="{{ selectTab }}" data-tab="{{ tab.id }}" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+            <sc-if value="{{ tab.active }}" hint-placeholder-val="{{ false }}">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250);"></span>
+            </sc-if>
+            {{ tab.label }}
+          </button>
+        </sc-for>
+      </div>
+
+      <div id="search-fields-row" style="display: flex; align-items: stretch; gap: 4px; padding: 10px;">
+        <div class="location-combobox">
+          <div class="location-field">
+            <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Lokalizacja</span>
+            <input id="location-input" class="location-input" type="text" value="{{ locationQuery }}" placeholder="Wpisz miasto lub dzielnicę" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="location-options" aria-expanded="{{ locationExpanded }}" onFocus="{{ openLocations }}" onInput="{{ filterLocations }}" onKeyDown="{{ locationKeyDown }}" />
+            <button class="location-chevron" type="button" onClick="{{ toggleLocations }}" aria-label="Pokaż lokalizacje" tabindex="-1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+          <sc-if value="{{ locationOpen }}" hint-placeholder-val="{{ false }}">
+            <div id="location-options" class="location-menu" role="listbox">
+              <sc-for list="{{ filteredLocations }}" as="location" hint-placeholder-count="8">
+                <button class="location-option" type="button" role="option" data-location="{{ location.name }}" onClick="{{ chooseLocation }}">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 10C20 15 12 22 12 22S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.4" stroke="currentColor" stroke-width="1.8"/></svg>
+                  {{ location.name }}
+                </button>
+              </sc-for>
+              <sc-if value="{{ noLocations }}" hint-placeholder-val="{{ false }}"><div style="padding: 13px 12px; color: oklch(0.56 0.02 250); font-size: 13px;">Brak pasujących lokalizacji</div></sc-if>
+            </div>
+          </sc-if>
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Transakcja</span>
+          <select id="search-transaction" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit; appearance: none;">
+            <option>Sprzedaż</option>
+            <option>Wynajem</option>
+          </select>
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Cena max</span>
+          <input id="search-price" type="text" placeholder="np. 1 000 000 PLN" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div style="flex: 0.8; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Powierzchnia</span>
+          <input id="search-area" type="text" placeholder="min m²" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <button class="me-cta me-cta-primary" onClick="{{ runSearch }}" style="align-self: center; flex-shrink: 0; height: 46px; min-height: 46px; padding: 0 24px; border: none;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M21 21L16.5 16.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          Szukaj
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories" style="display: flex; justify-content: center; padding: 56px 40px 28px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px; flex-wrap: wrap;">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Wybierz typ nieruchomości</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 38px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em; text-wrap: pretty;">
+            Znajdź nieruchomość<br/>dopasowaną do <span style="color: oklch(0.5 0.14 250);">Twoich potrzeb</span>
+          </h2>
+        </div>
+        <a href="{{ featuredOffersHref }}" class="me-cta me-cta-outline" style="flex-shrink: 0;">
+          Zobacz wybrane oferty
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div id="categories-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;">
+        <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
+          <div style="display: flex; flex-direction: column;">
+            <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+              <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" />
+            </div>
+            <div style="padding: 24px 4px 0; display: flex; flex-direction: column; flex: 1;">
+              <h3 style="min-height: 28px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">{{ cat.title }}</h3>
+              <p style="min-height: 44px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 14px; line-height: 1.55; color: oklch(0.52 0.02 250); margin: 0;">{{ cat.subtitle }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div id="featured-offers" style="padding-top: 72px; scroll-margin-top: 112px;">
+        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 30px;">
+          <div>
+            <span style="display: block; margin-bottom: 12px; color: oklch(0.5 0.14 250); font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;">Ostatnio dodane</span>
+            <h2 style="margin: 0; color: oklch(0.26 0.03 250); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 34px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em;">Wybrane nieruchomości</h2>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button onClick="{{ scrollOffersLeft }}" aria-label="Poprzednie ogłoszenia" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid oklch(0.88 0.01 250); border-radius: 50%; background: white; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button onClick="{{ scrollOffersRight }}" aria-label="Następne ogłoszenia" style="width: 44px; height: 44px; display: grid; place-items: center; border: none; border-radius: 50%; background: oklch(0.5 0.14 250); color: white; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <div id="featured-track" style="display: flex; gap: 22px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 2px 2px 16px; scroll-snap-type: x mandatory;">
+          <sc-for list="{{ featuredOffers }}" as="offer" hint-placeholder-count="6">
+            <a href="oferta.html?id=4374&amp;lang={{ pageLang }}" data-offer-card style="display: block; flex: 0 0 min(390px, 82vw); overflow: hidden; border: 1px solid oklch(0.9 0.01 250); border-radius: 22px; background: white; scroll-snap-align: start; color: inherit;">
+              <div style="position: relative; height: 230px; overflow: hidden;"><img src="{{ offer.image }}" alt="{{ offer.title }}" style="width: 100%; height: 100%; object-fit: cover;"><span style="position: absolute; right: 14px; bottom: 14px; padding: 9px 12px; border-radius: 10px; background: white; color: oklch(0.25 0.03 250); font-size: 13px; font-weight: 800; box-shadow: 0 6px 18px rgba(20,35,65,0.12);">{{ offer.price }}</span></div>
+              <div style="padding: 22px;">
+                <span style="display: block; margin-bottom: 8px; color: oklch(0.5 0.14 250); font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">{{ offer.location }}</span>
+                <h3 style="min-height: 48px; margin: 0 0 17px; color: oklch(0.26 0.03 250); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.28; font-weight: 800;">{{ offer.title }}</h3>
+                <div style="display: flex; flex-wrap: wrap; gap: 7px;"><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.rooms }}</span><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.area }}</span><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.type }}</span></div>
+              </div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why-us" style="display: flex; justify-content: center; padding: 28px 40px;">
+    <div style="width: 100%; max-width: 1360px;">
+
+      <div id="why-header-grid" style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; margin-bottom: 56px; padding-bottom: 48px; border-bottom: 1px solid oklch(0.9 0.01 250);">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 16px;">Dlaczego my</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 40px; line-height: 1.14; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em; text-wrap: pretty;">
+            Dlaczego MazurEstate?
+          </h2>
+        </div>
+        <p style="font-size: 20px; line-height: 1.55; font-weight: 700; color: oklch(0.32 0.03 250); margin: 0; align-self: end; text-wrap: pretty;">
+          Nieruchomości wymagają dobrych decyzji. Pomagamy podejmować je świadomie, bezpiecznie i bez zbędnych komplikacji.
+        </p>
+      </div>
+
+      <div id="why-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(200px, auto)); gap: 20px;">
+        <div id="why-tile-big" style="position: relative; grid-column: span 2; grid-row: span 2; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 36px;">
+          <image-slot id="why-us-photo-v2" src="uploads/individual-approach-v2.png" placeholder="Zdjęcie: indywidualne podejście / spotkanie z klientem" shape="rect" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></image-slot>
+          <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,25,50,0.35) 0%, rgba(15,25,50,0.82) 100%); z-index: 1; pointer-events: none;"></div>
+          <div style="position: relative; z-index: 2;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 12px; letter-spacing: -0.01em; text-wrap: pretty;">{{ why1.title }}</h3>
+            <p style="font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0; max-width: 420px;">{{ why1.text }}</p>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3L19 6V11C19 15.6 16.1 19.2 12 21C7.9 19.2 5 15.6 5 11V6L12 3Z M8.8 12L11 14.2L15.5 9.7" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Wsparcie na każdym etapie</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 19V13 M10 19V9 M16 19V5 M3 19H21 M5 9L10 5L14 8L20 3" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Znajomość rynku</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M4 5H16V14H9L5 18V14H4V5Z M9 9H12 M18 8H20V17H17L14 20V17H12" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Jasna komunikacja</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: flex-start;">
+          <div aria-hidden="true" style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px; flex-shrink: 0;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21Z M3.5 9H20.5 M3.5 15H20.5 M12 3C14.2 5.45 15.4 8.45 15.4 12C15.4 15.55 14.2 18.55 12 21 M12 3C9.8 5.45 8.6 8.45 8.6 12C8.6 15.55 9.8 18.55 12 21" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h3 style="min-height: 44px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 8px; letter-spacing: -0.01em;">Obsługa w wielu językach</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.</p>
+        </div>
+      </div>
+
+      <div id="why-cta-bar" style="margin-top: 48px; background: oklch(0.2 0.035 255); border-radius: 28px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;">
+        <div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 8px; letter-spacing: -0.01em; text-wrap: pretty;">Porozmawiajmy o Twojej nieruchomości</h3>
+          <p style="font-size: 15px; color: rgba(255,255,255,0.66); margin: 0; text-wrap: pretty;">Niezależnie od tego, czy chcesz kupić, sprzedać, wynająć czy zainwestować — zacznijmy od rozmowy.</p>
+        </div>
+        <a href="tel:+48503937749" class="me-cta me-cta-primary" style="flex-shrink: 0;" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Skontaktuj się z nami</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="display: flex; justify-content: center; padding: 28px 40px;">
+    <div style="width: 100%; max-width: 900px;">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Masz pytania?</span>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">Najczęściej zadawane pytania</h2>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ faqs }}" as="faq" hint-placeholder-count="5">
+          <div style="border: 1px solid oklch(0.91 0.01 250); border-radius: 18px; background: white; overflow: hidden;">
+            <button onClick="{{ toggleFaq }}" data-faq-id="{{ faq.id }}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; background: none; border: none; cursor: pointer; text-align: left;">
+              <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16.5px; font-weight: 700; color: oklch(0.26 0.03 250);">{{ faq.q }}</span>
+              <span style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%; background: oklch(0.96 0.012 250); display: flex; align-items: center; justify-content: center; transform: {{ faq.rotate }}; transition: transform 0.2s;">
+                <svg width="12" height="12" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="oklch(0.4 0.03 250)" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+            </button>
+            <div style="max-height: {{ faq.maxHeight }}; overflow: hidden; transition: max-height 0.25s ease;">
+              <p style="margin: 0; padding: 0 26px 22px; font-size: 14.5px; line-height: 1.6; color: oklch(0.5 0.02 250); text-wrap: pretty;">{{ faq.a }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" style="display: flex; justify-content: center; padding: 28px 40px 56px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Opinie klientów</span>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 36px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">Co nasi klienci mówią o nas</h2>
+      </div>
+
+      <div style="position: relative;">
+        <button id="testi-arrow-left" onClick="{{ scrollLeftBtn }}" style="position: absolute; left: -22px; top: 50%; transform: translateY(-50%); z-index: 5; width: 44px; height: 44px; border-radius: 50%; border: 1px solid oklch(0.9 0.01 250); background: white; box-shadow: 0 8px 20px rgba(20,35,65,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: oklch(0.96 0.01 250);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12L15 18" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button id="testi-arrow-right" onClick="{{ scrollRightBtn }}" style="position: absolute; right: -22px; top: 50%; transform: translateY(-50%); z-index: 5; width: 44px; height: 44px; border-radius: 50%; border: 1px solid oklch(0.9 0.01 250); background: white; box-shadow: 0 8px 20px rgba(20,35,65,0.12); display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="background: oklch(0.96 0.01 250);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="oklch(0.3 0.03 250)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="testimonials-track" style="display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 8px; scrollbar-width: none; cursor: auto; user-select: text; -webkit-user-select: text; -webkit-overflow-scrolling: touch;">
+        <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="8">
+          <div data-tcard style="flex: 0 0 340px; height: 360px; display: flex; flex-direction: column; background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 22px; padding: 32px;">
+            <div style="display: flex; gap: 3px; margin-bottom: 18px;">
+              <sc-for list="{{ t.stars }}" as="s" hint-placeholder-count="5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="oklch(0.75 0.15 85)"><path d="M12 2L14.9 8.6L22 9.3L16.7 14.1L18.2 21L12 17.4L5.8 21L7.3 14.1L2 9.3L9.1 8.6L12 2Z"/></svg>
+              </sc-for>
+            </div>
+            <p style="font-size: 15px; line-height: 1.65; color: oklch(0.32 0.02 250); margin: 0 0 24px; text-wrap: pretty;">"{{ t.quote }}"</p>
+            <div style="display: flex; align-items: center; gap: 12px; min-height: 48px; margin-top: auto;">
+              <div class="testimonial-avatar" style="--avatar-position: {{ t.avatarPosition }};" role="img" aria-label="{{ t.name }}"></div>
+              <div style="min-width: 0; flex: 1;">
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14.5px; line-height: 1.35; font-weight: 700; color: oklch(0.26 0.03 250);">{{ t.name }}</div>
+                <div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; line-height: 1.35; color: oklch(0.55 0.02 250);">{{ t.role }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        </div>
+      </div>
+      <div style="display: flex; justify-content: center; margin-top: 30px;">
+        <a href="https://www.google.com/maps/place/Mazur+Estate/@52.1496174,21.065997,14z/data=!4m6!3m5!1s0x4ca43461dd791c89:0xaee552ad79224114!8m2!3d52.1627299!4d21.0771852!16s%2Fg%2F11y3x08s89?entry=ttu&amp;g_ep=EgoyMDI2MDgzMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Więcej opinii w Google Maps" style="display: inline-flex; align-items: center; justify-content: center; gap: 11px; min-height: 52px; padding: 0 24px; border: 1px solid oklch(0.88 0.015 250); border-radius: 999px; background: white; color: oklch(0.28 0.035 250); font-size: 15px; font-weight: 750; text-decoration: none; box-shadow: 0 8px 24px rgba(20,35,65,0.07); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;" style-hover="transform: translateY(-2px); box-shadow: 0 12px 28px rgba(20,35,65,0.12); border-color: oklch(0.76 0.08 250);">
+          <svg width="25" height="25" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="#4285F4" d="M12 2a7.2 7.2 0 0 0-7.2 7.2c0 5.4 7.2 12.8 7.2 12.8s7.2-7.4 7.2-12.8A7.2 7.2 0 0 0 12 2Z"/>
+            <path fill="#34A853" d="M7.3 4.4a7.2 7.2 0 0 0-2.5 5.5L12 22v-7.7L7.3 4.4Z"/>
+            <path fill="#FBBC04" d="M4.9 10.4C5.5 14.7 12 22 12 22l2.6-9.1-9.7-2.5Z"/>
+            <path fill="#EA4335" d="M12 2a7.2 7.2 0 0 0-4.7 1.7l4.7 10.6 4.7-10.6A7.2 7.2 0 0 0 12 2Z"/>
+            <circle cx="12" cy="9.2" r="2.7" fill="white"/>
+          </svg>
+          <span>Więcej opinii w Google Maps</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12H19M14 7L19 12L14 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="footer" style="display: flex; justify-content: center; background: oklch(0.2 0.035 255); padding: 72px 40px 32px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div id="footer-grid" style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; background: white; border-radius: 12px; padding: 8px 10px; width: fit-content; margin-bottom: 20px;">
+            <img src="uploads/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 40px; width: auto; object-fit: contain;" />
+          </div>
+          <p style="font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.6); margin: 0 0 20px; max-width: 300px; text-wrap: pretty;">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i zarządzanie nieruchomościami dla klientów lokalnych i zagranicznych.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <a href="https://www.instagram.com/mazurestate" target="_blank" rel="noopener noreferrer" aria-label="Instagram MazurEstate" title="Instagram" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5" stroke="white" stroke-width="1.8"/><circle cx="12" cy="12" r="3.7" stroke="white" stroke-width="1.8"/><circle cx="17.4" cy="6.7" r="1.1" fill="white"/></svg>
+            </a>
+            <a href="https://www.facebook.com/MazurEstate" target="_blank" rel="noopener noreferrer" aria-label="Facebook MazurEstate" title="Facebook" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14 8.2H16.5V4.4C16.1 4.35 14.65 4.2 12.95 4.2C9.55 4.2 7.2 6.25 7.2 10V13.2H3.5V17.45H7.2V24H11.75V17.45H15.55L16.15 13.2H11.75V10.4C11.75 9.15 12.1 8.2 14 8.2Z" fill="white" transform="translate(2 -2) scale(.92)"/></svg>
+            </a>
+            <a href="https://www.threads.com/@mazurestate" target="_blank" rel="noopener noreferrer" aria-label="Threads MazurEstate" title="Threads" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M17.7 10.3C17.45 6.55 15.35 4.5 12.05 4.5C8.35 4.5 6.2 7.2 6.2 11.95C6.2 16.7 8.25 19.5 12 19.5C15.05 19.5 17.15 17.85 17.15 15.5C17.15 13.45 15.5 12.25 13.2 12.25C10.95 12.25 9.55 13.4 9.55 15C9.55 16.3 10.6 17.15 12.05 17.15C14.45 17.15 17.85 15.25 17.85 11.5C17.85 10.9 17.8 10.55 17.7 10.3Z" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@mazurestate" target="_blank" rel="noopener noreferrer" aria-label="YouTube MazurEstate" title="YouTube" style="width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); display: flex; align-items: center; justify-content: center;" style-hover="background: rgba(255,255,255,0.16);">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 8.2C20.8 6.75 20.1 5.9 18.65 5.7C16.8 5.45 14.85 5.35 12 5.35C9.15 5.35 7.2 5.45 5.35 5.7C3.9 5.9 3.2 6.75 3 8.2C2.85 9.25 2.8 10.25 2.8 12C2.8 13.75 2.85 14.75 3 15.8C3.2 17.25 3.9 18.1 5.35 18.3C7.2 18.55 9.15 18.65 12 18.65C14.85 18.65 16.8 18.55 18.65 18.3C20.1 18.1 20.8 17.25 21 15.8C21.15 14.75 21.2 13.75 21.2 12C21.2 10.25 21.15 9.25 21 8.2Z" stroke="white" stroke-width="1.6"/><path d="M10.2 9.1L15.2 12L10.2 14.9V9.1Z" fill="white"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Nawigacja</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Wybierz nieruchomość</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Doradztwo</a>
+            <a href="kim-jestesmy.html" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Kim jesteśmy</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Dla deweloperów</a>
+            <a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Kontakt</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Oferty</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Mieszkania</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Domy</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Działki</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Lokale komercyjne</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Projekty</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Dla inwestora</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Wynajem</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Sprzedaż mieszkań</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Pośrednictwo</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Nieruchomość komercyjna</a>
+            <a href="#" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Biura</a>
+          </div>
+        </div>
+
+        <div>
+          <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Kontakt</h4>
+          <div style="display: flex; flex-direction: column; gap: 13px;">
+            <span style="font-size: 14.5px; color: rgba(255,255,255,0.65); text-wrap: pretty;">ul. Franciszka Klimczaka 10A, lok. 5<br/>02-797 Warszawa</span>
+            <a href="tel:+48503937749" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">+48 503 937 749</a>
+            <a href="mailto:info@mazurestate.com" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">info@mazurestate.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 28px;">
+        <span style="font-size: 13px; color: rgba(255,255,255,0.45);">© 2026 MazurEstate. Wszelkie prawa zastrzeżone.</span>
+        <div style="display: flex; gap: 24px;">
+          <a href="polityka-prywatnosci.html" style="font-size: 13px; color: rgba(255,255,255,0.45);" style-hover="color: white;">Polityka prywatności</a>
+          <a href="polityka-cookies.html" style="font-size: 13px; color: rgba(255,255,255,0.45);" style-hover="color: white;">Cookies</a>
+          <a href="regulamin.html" style="font-size: 13px; color: rgba(255,255,255,0.45);" style-hover="color: white;">Regulamin</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: 0, mobileMenuOpen: false };
+
+  componentDidMount() {
+    this._testimonialTimer = setInterval(() => {
+      const el = document.getElementById('testimonials-track');
+      if (!el) return;
+      const card = el.querySelector('[data-tcard]');
+      const step = card ? card.getBoundingClientRect().width + 24 : 340;
+      const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 4;
+      el.scrollTo({ left: atEnd ? 0 : el.scrollLeft + step, behavior: 'smooth' });
+    }, 10000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this._testimonialTimer);
+  }
+
+  renderVals() {
+    const tabs = [
+      { id: 'mieszkania', label: 'Mieszkania' },
+      { id: 'domy', label: 'Domy' },
+      { id: 'dzialki', label: 'Działki' },
+      { id: 'lokale', label: 'Lokale komercyjne' },
+    ];
+    const locations = [
+      'Bąkówka', 'Bemowo', 'Białołęka', 'Bielany', 'Czyste', 'Falenty', 'Gdańsk Jasień', 'Gocław',
+      'Klimczaka', 'Konstancin-Jeziorna', 'Kraków', 'Łódź', 'Marki', 'Mokotów', 'Mysiadło', 'Ochota', 'Piaseczno',
+      'Praga Południe', 'Praga Północ', 'Pruszków', 'Radom', 'Rembertów', 'Słupno', 'Śródmieście',
+      'Targówek', 'Ursus', 'Ursynów', 'Warszawa', 'Wawer', 'Wesoła', 'Wiązowna', 'Wilanów', 'Włochy',
+      'Wola', 'Ząbki', 'Żoliborz'
+    ].sort((a, b) => a.localeCompare(b, 'pl'));
+    const normalizedLocationQuery = this.state.locationQuery.trim().toLocaleLowerCase('pl');
+    const filteredLocations = locations
+      .filter(name => name.toLocaleLowerCase('pl').includes(normalizedLocationQuery))
+      .map(name => ({ name }));
+    const langs = [
+      { code: 'PL', label: 'PL', href: 'MazurEstate%20Home.dc.html?lang=pl' },
+      { code: 'UKR', label: 'UKR', href: 'MazurEstate%20Home.dc.html?lang=uk' },
+      { code: 'ENG', label: 'ENG', href: 'MazurEstate%20Home.dc.html?lang=en' },
+      { code: 'RU', label: 'RU', href: 'MazurEstate%20Home.dc.html?lang=ru' },
+    ];
+    const whyUs = [
+      { title: 'Indywidualne podejście', text: 'Nie pracujemy według jednego schematu. Najpierw poznajemy Twoje potrzeby, plany i oczekiwania, a następnie dopasowujemy sposób działania do konkretnej sytuacji.', iconPath: 'M12 3L4 8V21H20V8L12 3Z M9 21V13H15V21' },
+      { title: 'Wsparcie na każdym etapie', text: 'Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.', iconPath: 'M12 3L19 6V11C19 15.6 16.1 19.2 12 21C7.9 19.2 5 15.6 5 11V6L12 3Z M8.8 12L11 14.2L15.5 9.7' },
+      { title: 'Znajomość rynku', text: 'Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.', iconPath: 'M4 19V13 M10 19V9 M16 19V5 M3 19H21 M5 9L10 5L14 8L20 3' },
+      { title: 'Jasna komunikacja', text: 'Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.', iconPath: 'M4 5H16V14H9L5 18V14H4V5Z M9 9H12 M18 8H20V17H17L14 20V17H12' },
+      { title: 'Obsługa w wielu językach', text: 'Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.', iconPath: 'M12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21Z M3.5 9H20.5 M3.5 15H20.5 M12 3C14.2 5.45 15.4 8.45 15.4 12C15.4 15.55 14.2 18.55 12 21 M12 3C9.8 5.45 8.6 8.45 8.6 12C8.6 15.55 9.8 18.55 12 21' },
+    ];
+    const categories = [
+      { src: 'uploads/category-apartments.webp', title: 'Mieszkania', subtitle: 'Nowoczesne mieszkania' },
+      { src: 'uploads/category-houses.webp', title: 'Domy', subtitle: 'Komfortowe domy rodzinne' },
+      { src: 'uploads/category-land.webp', title: 'Działki', subtitle: 'Grunty pod inwestycje' },
+      { src: 'uploads/category-commercial.webp', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla biznesu' },
+    ];
+    const featuredOffers = [
+      { image: 'uploads/category-apartments.webp', price: '1 190 000 PLN', location: 'Warszawa · Wola', title: 'Nowoczesny apartament z balkonem', rooms: '3 pokoje', area: '64 m²', type: 'Sprzedaż' },
+      { image: 'uploads/category-houses.webp', price: '1 850 000 PLN', location: 'Konstancin-Jeziorna', title: 'Rodzinny dom blisko zieleni', rooms: '5 pokoi', area: '168 m²', type: 'Sprzedaż' },
+      { image: 'uploads/category-commercial.webp', price: '7 900 PLN / mies.', location: 'Warszawa · Mokotów', title: 'Lokal usługowy przy głównej ulicy', rooms: '4 pomieszczenia', area: '92 m²', type: 'Wynajem' },
+      { image: 'uploads/category-land.webp', price: '690 000 PLN', location: 'Wiązowna', title: 'Działka budowlana z dobrym dojazdem', rooms: 'Działka', area: '1 240 m²', type: 'Sprzedaż' },
+      { image: 'uploads/hf_20260726_144524_c09ad56f-4bf3-454e-ad5c-3ebd0166d985.png', price: '4 600 PLN / mies.', location: 'Warszawa · Wilanów', title: 'Jasne mieszkanie gotowe do wynajmu', rooms: '2 pokoje', area: '48 m²', type: 'Wynajem' },
+      { image: 'uploads/individual-approach-v2.png', price: '980 000 PLN', location: 'Warszawa · Ochota', title: 'Mieszkanie w kameralnej inwestycji', rooms: '3 pokoje', area: '58 m²', type: 'Sprzedaż' },
+    ];
+    const languageParams = new URLSearchParams(window.location.search);
+    const detectedLanguage = languageParams.has('lang') ? languageParams.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0];
+    const pageLang = ['pl', 'uk', 'en', 'ru'].includes(detectedLanguage) ? detectedLanguage : 'pl';
+    const faqByLang = {
+      pl: [
+        ['Czym różni się zakup mieszkania na rynku pierwotnym i wtórnym?', 'Na rynku pierwotnym kupujesz mieszkanie od dewelopera, zazwyczaj w stanie deweloperskim. Nie płacisz podatku PCC, ale trzeba uwzględnić koszt wykończenia i termin oddania inwestycji. Na rynku wtórnym lokal jest zwykle gotowy do zamieszkania lub remontu i można od razu ocenić budynek oraz okolicę, natomiast kupujący najczęściej płaci 2% podatku PCC.'],
+        ['Jakie dodatkowe koszty trzeba uwzględnić przy zakupie mieszkania?', 'Koszty okołozakupowe mieszkania w Warszawie wynoszą zwykle około 3–6% ceny nieruchomości. Mogą obejmować podatek PCC 2% na rynku wtórnym, taksę notarialną, opłaty sądowe za wpisy do księgi wieczystej, koszty kredytu hipotecznego oraz prowizję agencji nieruchomości. Przed zakupem przygotowujemy przejrzyste zestawienie kosztów dla konkretnej transakcji.'],
+        ['Co to jest księga wieczysta i dlaczego trzeba ją sprawdzić?', 'Księga wieczysta to podstawowy rejestr stanu prawnego nieruchomości. Przed zakupem sprawdzamy właściciela, powierzchnię lokalu, prawa i roszczenia osób trzecich oraz wpisy hipoteczne. Analiza księgi wieczystej pomaga wykryć ryzyka prawne przed podpisaniem umowy i bezpiecznie przygotować zakup mieszkania.'],
+        ['Co obejmuje czynsz administracyjny po zakupie mieszkania?', 'Czynsz administracyjny to miesięczna opłata na rzecz wspólnoty lub spółdzielni mieszkaniowej. Zwykle obejmuje zarządzanie budynkiem, sprzątanie części wspólnych, fundusz remontowy oraz zaliczki na ogrzewanie, wodę i wywóz odpadów. Przed zakupem warto sprawdzić aktualną wysokość czynszu, rozliczenia i ewentualne zaległości.'],
+        ['Czy trzeba podpisywać umowę przedwstępną przy zakupie mieszkania?', 'Umowa przedwstępna nie zawsze jest obowiązkowa, ale w praktyce zabezpiecza cenę, termin i zobowiązania stron, szczególnie przy zakupie na kredyt hipoteczny. Warto rozróżnić zadatek, który chroni wykonanie umowy, od zaliczki, która co do zasady podlega zwrotowi. Pomagamy dobrać formę umowy i sprawdzić jej dokumenty.'],
+        ['Czy zajmujecie się kompleksową obsługą inwestycji i zarządzaniem najmem?', 'Tak. Prowadzimy cały proces end-to-end: od wyboru nieruchomości, analizy ryzyk i potencjału rynkowego, przez wsparcie przy kredycie, negocjacje, zakup i weryfikację dokumentów, aż po planowanie projektu, organizację wykończenia i nadzór nad pracami. Po przygotowaniu nieruchomości możemy zająć się jej sprzedażą albo najmem długo- lub krótkoterminowym oraz bieżącym zarządzaniem.'],
+        ['Jak wygląda pierwszy krok współpracy z MazurEstate?', 'Dobra komunikacja jest podstawą naszej pracy. Zaczynamy od krótkiej rozmowy telefonicznej lub spotkania, podczas którego określamy cel, potrzeby, budżet i termin. Następnie przedstawiamy ściśle dopasowane rozwiązanie oraz jasny plan działania dotyczący zakupu, sprzedaży, najmu lub inwestycji w nieruchomość w Warszawie.']
+      ],
+      uk: [
+        ['Чи може іноземець купити квартиру в Польщі без спеціального дозволу?', 'Іноземці з країн поза ЄС, зокрема громадяни України, можуть купувати окрему квартиру у багатоквартирному будинку без дозволу MSWiA. Для купівлі будинку або земельної ділянки та в окремих законодавчо визначених випадках дозвіл може бути потрібен. Перед угодою ми перевіряємо статус об’єкта й актуальні вимоги.'],
+        ['Чим відрізняється купівля на первинному та вторинному ринку?', 'На первинному ринку квартира купується у забудовника, часто у стані під оздоблення: податку PCC 2% немає, але слід врахувати бюджет ремонту й термін здачі. На вторинному ринку житло зазвичай готове до заселення, однак покупець найчастіше сплачує PCC 2% і повинен ретельно перевірити юридичний та технічний стан.'],
+        ['Які додаткові витрати виникають під час купівлі квартири?', 'Супутні витрати зазвичай становлять близько 3–6% ціни: PCC 2% на вторинному ринку, нотаріальні послуги, судові збори, витрати на іпотеку та комісія агенції. Для кожної квартири у Варшаві ми готуємо зрозумілий розрахунок витрат до ухвалення рішення.'],
+        ['Що таке Księga Wieczysta і навіщо її перевіряти?', 'Поземельна книга — головний реєстр юридичного стану нерухомості в Польщі. У ній перевіряють власника, площу, права та вимоги третіх осіб, а також іпотеку. Така перевірка допомагає виявити ризики до підписання договору купівлі.'],
+        ['Що входить до czynsz після купівлі квартири?', 'Czynsz — щомісячна оплата спільноті або кооперативу. Зазвичай вона охоплює управління будинком, прибирання, ремонтний фонд та аванси за опалення, воду й відходи. Перед купівлею варто перевірити актуальні нарахування та відсутність боргів.'],
+        ['Чи обов’язково укладати попередній договір?', 'Не завжди, але попередній договір фіксує ціну, строк і зобов’язання сторін та особливо важливий при іпотеці. Zadatek захищає виконання угоди й має інші наслідки, ніж zaliczka, яка зазвичай повертається. Ми допомагаємо перевірити умови та документи.'],
+        ['Чи може іноземець отримати іпотечний кредит у Польщі?', 'Так, польські банки кредитують іноземців, але аналізують статус перебування, стабільність офіційного доходу, кредитну історію та власний внесок, зазвичай 10–20%. Умови відрізняються між банками, тому допомагаємо підготувати документи та підібрати реалістичний варіант фінансування.'],
+        ['Чи надаєте ви комплексний супровід інвестиції та управління орендою?', 'Так. Ми ведемо процес end-to-end: підбір нерухомості, аналіз ризиків і ринкового потенціалу, підтримка з кредитом, переговори, купівля та документи, планування й організація оздоблення з наглядом. Потім можемо організувати продаж, довго- або короткострокову оренду та поточне управління.'],
+        ['Який перший крок співпраці з MazurEstate?', 'Якісна комунікація — основа нашої роботи. Починаємо з короткої розмови, визначаємо Вашу мету, потреби, бюджет і строки, а потім пропонуємо точно підібране рішення та зрозумілий план купівлі, продажу, оренди або інвестиції у Варшаві.']
+      ],
+      en: [
+        ['Can a foreigner buy an apartment in Poland without a special permit?', 'Non-EU citizens, including Ukrainians and Belarusians, can generally buy a separate apartment in a multi-unit building without an MSWiA permit. Buying a house or land, and certain legally defined cases, may require permission. Before the transaction, we verify the property type and current legal requirements.'],
+        ['What is the difference between buying on the primary and secondary market?', 'A primary-market apartment is bought from a developer, often unfinished: there is no 2% PCC tax, but you must budget for fit-out and wait for completion. A secondary-market property is usually ready to occupy, but the buyer generally pays 2% PCC and should carefully verify its legal and technical condition.'],
+        ['What additional costs should I expect when buying an apartment?', 'Purchase-related costs in Warsaw usually total around 3–6% of the property price. They may include 2% PCC on the secondary market, notary fees, land-register court fees, mortgage costs and an estate agency fee. We prepare a clear cost estimate for the specific transaction before you commit.'],
+        ['What is the Polish land and mortgage register and why should it be checked?', 'The Księga Wieczysta is the main public record of a property’s legal status. It confirms the owner and area and shows third-party rights, claims and mortgages. Reviewing it before signing helps identify legal risks and prepare a secure apartment purchase in Poland.'],
+        ['What does the monthly czynsz charge include?', 'Czynsz is paid to the housing association or cooperative. It normally covers building management, cleaning, the renovation fund and advances for heating, water and waste collection. Before buying, ask for recent statements and confirmation that no payments are overdue.'],
+        ['Is a preliminary agreement required when buying an apartment?', 'It is not always mandatory, but it secures the price, deadline and obligations, especially when a mortgage is involved. A zadatek deposit has different legal consequences from a refundable zaliczka advance. We help choose the right structure and verify the agreement and documents.'],
+        ['Can a foreigner obtain a mortgage in Poland?', 'Yes. Polish banks lend to foreigners but assess residence status, stable documented income, credit history and a down payment, typically 10–20%. Requirements vary by bank, so we help prepare the documents and identify realistic financing options.'],
+        ['Do you provide end-to-end investment and rental management?', 'Yes. We handle the entire process: property selection, risk and market-potential analysis, mortgage support, negotiation, purchase and document checks, followed by project planning, fit-out organisation and supervision. We can then arrange a sale, long- or short-term rental and ongoing property management.'],
+        ['What is the first step when working with MazurEstate?', 'Clear communication is central to our work. We begin with a short call or meeting to define your objective, needs, budget and timing. We then present a carefully tailored solution and a transparent plan for buying, selling, renting or investing in Warsaw property.']
+      ],
+      ru: [
+        ['Может ли иностранец купить квартиру в Польше без специального разрешения?', 'Граждане стран вне ЕС, включая Украину и Беларусь, как правило, могут купить отдельную квартиру в многоквартирном доме без разрешения MSWiA. Для покупки дома или земли и в отдельных предусмотренных законом случаях разрешение может потребоваться. До сделки мы проверяем тип объекта и актуальные требования.'],
+        ['В чем разница между покупкой на первичном и вторичном рынке?', 'На первичном рынке квартира покупается у застройщика, часто без отделки: налог PCC 2% отсутствует, но нужно учесть бюджет ремонта и срок сдачи. На вторичном рынке жильё обычно готово к заселению, однако покупатель чаще всего платит PCC 2% и должен проверить юридическое и техническое состояние.'],
+        ['Какие дополнительные расходы возникают при покупке квартиры?', 'Сопутствующие расходы в Варшаве обычно составляют около 3–6% цены недвижимости. Они могут включать PCC 2% на вторичном рынке, услуги нотариуса, судебные сборы, расходы по ипотеке и комиссию агентства. До принятия решения мы готовим понятный расчёт для конкретной сделки.'],
+        ['Что такое Księga Wieczysta и зачем её проверять?', 'Поземельная книга — основной реестр юридического состояния недвижимости в Польше. В ней проверяют собственника, площадь, права и требования третьих лиц, а также ипотеку. Анализ реестра помогает выявить риски до подписания договора покупки.'],
+        ['Что входит в ежемесячный czynsz после покупки квартиры?', 'Czynsz — плата в пользу жилищного товарищества или кооператива. Обычно она включает управление домом, уборку, ремонтный фонд, авансы за отопление, воду и вывоз мусора. Перед покупкой важно проверить последние начисления и отсутствие задолженности.'],
+        ['Обязательно ли заключать предварительный договор?', 'Не всегда, но предварительный договор фиксирует цену, срок и обязательства сторон и особенно важен при ипотеке. Zadatek обеспечивает исполнение сделки и отличается от zaliczka, которая обычно возвращается. Мы помогаем проверить условия договора и документы.'],
+        ['Может ли иностранец получить ипотеку в Польше?', 'Да. Польские банки кредитуют иностранцев, но оценивают статус пребывания, стабильный официальный доход, кредитную историю и собственный вклад, обычно 10–20%. Условия различаются, поэтому мы помогаем подготовить документы и подобрать реалистичный вариант финансирования.'],
+        ['Занимаетесь ли вы комплексным сопровождением инвестиций и управлением арендой?', 'Да. Мы ведём весь процесс end-to-end: подбор объекта, анализ рисков и рыночного потенциала, помощь с ипотекой, переговоры, покупка и проверка документов, планирование и организация отделки с надзором. Затем можем организовать продажу, долгосрочную или краткосрочную аренду и текущее управление.'],
+        ['Как выглядит первый шаг сотрудничества с MazurEstate?', 'Качественная коммуникация — основа нашей работы. Начинаем с короткого разговора, определяем вашу цель, потребности, бюджет и сроки, затем предлагаем точно подобранное решение и понятный план покупки, продажи, аренды или инвестирования в недвижимость Варшавы.']
+      ]
+    };
+    const faqData = (faqByLang[pageLang] || faqByLang.pl).map((item, id) => ({ id, q: item[0], a: item[1] }));
+    const testimonials = [
+      { avatarPosition: '33.333% 0%', name: 'Anna Kowalska', role: 'Sprzedaż mieszkania, Wola', quote: 'Profesjonalne podejście od pierwszego kontaktu. Mieszkanie sprzedaliśmy szybciej niż zakładaliśmy, a cała formalna strona przebiegła bez stresu.', stars: [1,2,3,4,5] },
+      { avatarPosition: '100% 0%', name: 'Oksana Melnyk', role: 'Najem, klientka z Ukrainy', quote: 'Bardzo doceniam obsługę w moim języku. Agencja pomogła mi zrozumieć każdy etap wynajmu i znaleźć mieszkanie, które naprawdę mi odpowiada.', stars: [1,2,3,4,5] },
+      { avatarPosition: '0% 0%', name: 'Piotr Nowak', role: 'Zakup domu, Ząbki', quote: 'Znajomość lokalnego rynku widać na każdym kroku. Doradcy jasno tłumaczyli każdą decyzję i negocjowali w naszym imieniu.', stars: [1,2,3,4,5] },
+      { avatarPosition: '0% 100%', name: 'Marta Wiśniewska', role: 'Wynajem, Wilanów', quote: 'Szybka i sprawna obsługa. Znaleźli najemcę w niecałe dwa tygodnie i zajęli się wszystkimi formalnościami umowy.', stars: [1,2,3,4,5] },
+      { avatarPosition: '66.666% 0%', name: 'Dmytro Kravchenko', role: 'Zakup mieszkania, klient z Ukrainy', quote: 'Cały proces zakupu tłumaczony krok po kroku w moim języku. Czułem się bezpiecznie na każdym etapie transakcji.', stars: [1,2,3,4,5] },
+      { avatarPosition: '66.666% 100%', name: 'Katarzyna Zielińska', role: 'Sprzedaż domu, Wiązowna', quote: 'Rzetelna wycena i skuteczny marketing oferty. Dom sprzedał się w bardzo dobrej cenie i bez zbędnych opóźnień.', stars: [1,2,3,4,5] },
+      { avatarPosition: '100% 100%', name: 'Igor Popov', role: 'Najem, klient z Rosji', quote: 'Doceniam obsługę w moim ojczystym języku i jasne wyjaśnienie każdego dokumentu. Polecam osobom spoza Polski.', stars: [1,2,3,4,5] },
+      { avatarPosition: '33.333% 100%', name: 'Tomasz Lewandowski', role: 'Nieruchomość komercyjna, Mokotów', quote: 'Doradcy dobrze znają rynek komercyjny w Warszawie. Pomogli wynegocjować korzystne warunki najmu lokalu.', stars: [1,2,3,4,5] },
+    ];
+    return {
+      mobileMenuDisplay: this.state.mobileMenuOpen ? 'flex' : 'none',
+      toggleMobileMenu: () => this.setState(s => ({ mobileMenuOpen: !s.mobileMenuOpen })),
+      closeMobileMenu: () => this.setState({ mobileMenuOpen: false }),
+      stopPropagation: (e) => e.stopPropagation(),
+      scrollLeftBtn: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        const card = el.querySelector('[data-tcard]');
+        const step = card ? card.getBoundingClientRect().width + 24 : 340;
+        el.scrollBy({ left: -step, behavior: 'smooth' });
+      },
+      scrollRightBtn: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        const card = el.querySelector('[data-tcard]');
+        const step = card ? card.getBoundingClientRect().width + 24 : 340;
+        el.scrollBy({ left: step, behavior: 'smooth' });
+      },
+      scrollOffersLeft: () => {
+        const el = document.getElementById('featured-track');
+        const card = el?.querySelector('[data-offer-card]');
+        if (el) el.scrollBy({ left: -(card ? card.getBoundingClientRect().width + 22 : 410), behavior: 'smooth' });
+      },
+      scrollOffersRight: () => {
+        const el = document.getElementById('featured-track');
+        const card = el?.querySelector('[data-offer-card]');
+        if (el) el.scrollBy({ left: card ? card.getBoundingClientRect().width + 22 : 410, behavior: 'smooth' });
+      },
+      startDrag: (e) => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        el._dragStartX = e.pageX;
+        el._dragStartScroll = el.scrollLeft;
+        el._dragging = true;
+        el.style.cursor = 'grabbing';
+      },
+      duringDrag: (e) => {
+        const el = document.getElementById('testimonials-track');
+        if (!el || !el._dragging) return;
+        el.scrollLeft = el._dragStartScroll - (e.pageX - el._dragStartX);
+      },
+      endDrag: () => {
+        const el = document.getElementById('testimonials-track');
+        if (!el) return;
+        el._dragging = false;
+        el.style.cursor = 'grab';
+      },
+      faqs: faqData.map(f => ({ ...f, rotate: this.state.openFaq === f.id ? 'rotate(180deg)' : 'rotate(0deg)', maxHeight: this.state.openFaq === f.id ? '520px' : '0px' })),
+      toggleFaq: (e) => { const id = Number(e.currentTarget.dataset.faqId); this.setState(s => ({ openFaq: s.openFaq === id ? -1 : id })); },
+      testimonials,
+      featuredOffers,
+      pageLang,
+      featuredOffersHref: `wyniki-wyszukiwania.html?type=mieszkania&transaction=sprzedaz&lang=${pageLang}`,
+      why1: whyUs[0],
+      whySmall: whyUs.slice(1),
+      categories,
+      propertyTabs: tabs.map(t => ({ ...t, active: t.id === this.state.activeTab })),
+      selectTab: (e) => this.setState({ activeTab: e.currentTarget.dataset.tab }),
+      locationQuery: this.state.locationQuery,
+      locationOpen: this.state.locationOpen,
+      locationExpanded: this.state.locationOpen ? 'true' : 'false',
+      filteredLocations,
+      noLocations: filteredLocations.length === 0,
+      openLocations: () => this.setState({ locationOpen: true }),
+      toggleLocations: () => this.setState(s => ({ locationOpen: !s.locationOpen })),
+      filterLocations: (e) => this.setState({ locationQuery: e.currentTarget.value, locationOpen: true }),
+      chooseLocation: (e) => { e.preventDefault(); this.setState({ locationQuery: e.currentTarget.dataset.location, locationOpen: false }); },
+      locationKeyDown: (e) => { if (e.key === 'Escape') this.setState({ locationOpen: false }); },
+      runSearch: () => {
+        const query = new URLSearchParams({
+          type: this.state.activeTab,
+          transaction: document.getElementById('search-transaction')?.value === 'Wynajem' ? 'wynajem' : 'sprzedaz',
+          location: this.state.locationQuery,
+          price: document.getElementById('search-price')?.value || '',
+          area: document.getElementById('search-area')?.value || '',
+          lang: new URLSearchParams(window.location.search).get('lang') || 'pl'
+        });
+        window.location.href = `wyniki-wyszukiwania.html?${query.toString()}`;
+      },
+      langs,
+      currentLangLabel: this.state.lang,
+      langDropdownDisplay: this.state.langOpen ? 'block' : 'none',
+      openLang: () => this.setState({ langOpen: true }),
+      closeLang: () => this.setState({ langOpen: false }),
+    };
+  }
+}
+</script>
+<script src="./homepage-i18n.js"></script>
+</body>
+</html>

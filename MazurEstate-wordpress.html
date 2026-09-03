@@ -1,0 +1,300 @@
+<!-- MazurEstate homepage — paste into a WordPress "Custom HTML" block (or Elementor/Divi HTML widget) -->
+<div style="width: 100%; overflow-x: clip; background: oklch(0.98 0.006 250); font-family: 'Manrope', sans-serif;">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+  html { scroll-behavior: smooth; }
+  .me-wrap * { box-sizing: border-box; }
+  #categories, #why-us { scroll-margin-top: 112px; }
+  .me-wrap a { text-decoration: none; }
+  .me-nav-link:hover, .me-cat-link:hover { background: oklch(0.95 0.01 250); }
+  .me-btn-primary:hover { background: oklch(0.44 0.15 250) !important; }
+  .me-btn-white:hover { background: oklch(0.94 0.01 250) !important; }
+  .me-lang-item:hover { background: oklch(0.95 0.01 250); }
+  .me-search-field:hover { background: oklch(0.97 0.006 250); }
+  .me-cat-explore:hover { color: oklch(0.4 0.16 250); }
+</style>
+
+<div class="me-wrap">
+
+  <!-- HEADER -->
+  <header style="position: sticky; top: 0; z-index: 50; display: flex; justify-content: center; padding: 20px 40px 0;">
+    <div style="width: 100%; max-width: 1360px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-radius: 999px; padding: 6px 12px 6px 20px; box-shadow: 0 4px 24px rgba(30,50,90,0.08); border: 1px solid oklch(0.93 0.01 250);">
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+        <img src="REPLACE_WITH_LOGO_URL.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain;" />
+      </div>
+
+      <nav style="display: flex; align-items: center; gap: 2px;">
+        <a href="#categories" class="me-nav-link" style="padding: 10px 16px; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: oklch(0.35 0.03 250);">Wybierz nieruchomość</a>
+        <a href="#about" class="me-nav-link" style="padding: 10px 16px; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: oklch(0.35 0.03 250);">Doradztwo</a>
+        <a href="#why-us" class="me-nav-link" style="padding: 10px 16px; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: oklch(0.35 0.03 250);">Dlaczego my</a>
+        <a href="#services" class="me-nav-link" style="padding: 10px 16px; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: oklch(0.35 0.03 250);">Dla deweloperów</a>
+        <a href="tel:+48503937749" class="me-nav-link" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="padding: 10px 16px; border-radius: 999px; font-size: 14.5px; font-weight: 600; color: oklch(0.35 0.03 250);">Kontakt</a>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
+        <div style="position: relative;" onmouseenter="document.getElementById('me-lang-dd').style.display='block'" onmouseleave="document.getElementById('me-lang-dd').style.display='none'">
+          <button style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 96px; padding: 9px 12px; border-radius: 999px; border: 1px solid oklch(0.9 0.01 250); background: white; font-size: 13.5px; font-weight: 700; color: oklch(0.32 0.02 250); cursor: pointer;">
+            🌐 <span id="me-lang-label">PL</span>
+            <svg width="9" height="5" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </button>
+          <div id="me-lang-dd" style="display: none; position: absolute; top: 100%; right: 0; width: 96px; padding-top: 8px; z-index: 10;">
+            <div style="background: white; border-radius: 14px; box-shadow: 0 12px 32px rgba(30,50,90,0.14); border: 1px solid oklch(0.93 0.01 250); padding: 6px;">
+              <a href="#" class="me-lang-item" onclick="document.getElementById('me-lang-label').textContent='PL';return false;" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250);">PL</a>
+              <a href="#" class="me-lang-item" onclick="document.getElementById('me-lang-label').textContent='UKR';return false;" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250);">UKR</a>
+              <a href="#" class="me-lang-item" onclick="document.getElementById('me-lang-label').textContent='ENG';return false;" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250);">ENG</a>
+              <a href="#" class="me-lang-item" onclick="document.getElementById('me-lang-label').textContent='RU';return false;" style="display: block; text-align: center; padding: 8px 12px; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: oklch(0.32 0.02 250);">RU</a>
+            </div>
+          </div>
+        </div>
+        <a href="tel:+48503937749" style="display: flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 700; color: oklch(0.32 0.02 250); white-space: nowrap;">+48 503 937 749</a>
+        <a href="#contact" class="me-btn-primary" style="padding: 12px 22px; border-radius: 999px; background: oklch(0.5 0.14 250); color: white; font-size: 14px; font-weight: 700; white-space: nowrap;">Skontaktuj się</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="position: relative; display: flex; justify-content: center; padding: 28px 40px 140px;">
+    <div style="width: 100%; max-width: 1360px; position: relative; border-radius: 32px; overflow: hidden; min-height: 620px; display: flex; align-items: center;">
+
+      <div style="position: absolute; inset: 0;">
+        <img src="REPLACE_WITH_HERO_IMAGE_URL.jpg" alt="" style="width: 100%; height: 100%; object-fit: cover;" />
+        <div style="position: absolute; inset: 0; background: linear-gradient(100deg, rgba(15,30,55,0.72) 0%, rgba(15,30,55,0.5) 45%, rgba(15,30,55,0.18) 75%);"></div>
+      </div>
+
+      <div style="position: relative; z-index: 2; padding: 80px 64px; max-width: 640px;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(6px); margin-bottom: 24px;">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: oklch(0.75 0.16 145);"></span>
+          <span style="font-size: 13px; font-weight: 700; color: white; letter-spacing: 0.02em;">Agencja nieruchomości</span>
+        </div>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 52px; line-height: 1.08; font-weight: 800; color: white; margin: 0 0 20px; letter-spacing: -0.02em;">
+          Znajdź miejsce, którego szukasz
+        </h1>
+        <p style="font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.85); margin: 0 0 32px; max-width: 480px;">
+          Przeglądaj aktualne oferty sprzedaży i wynajmu oraz skorzystaj ze wsparcia doświadczonych doradców. Pomożemy Ci znaleźć przestrzeń do życia, rozwoju biznesu lub bezpiecznej inwestycji.
+        </p>
+        <div style="display: flex; align-items: center; gap: 28px;">
+          <a href="#offers" class="me-btn-white" style="padding: 15px 28px; border-radius: 999px; background: white; color: oklch(0.3 0.03 250); font-size: 15px; font-weight: 700;">Zobacz oferty</a>
+        </div>
+      </div>
+
+      <div style="position: absolute; top: 44px; right: 44px; z-index: 2; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); border-radius: 20px; padding: 18px 22px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 12px 32px rgba(15,30,55,0.2);">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 26px; font-weight: 800; color: oklch(0.32 0.03 250);">500+</span>
+        <span style="font-size: 12.5px; font-weight: 600; color: oklch(0.5 0.02 250);">zadowolonych klientów</span>
+      </div>
+    </div>
+
+    <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 3; width: calc(100% - 80px); max-width: 1160px; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(20,35,65,0.16); border: 1px solid oklch(0.94 0.01 250); padding: 8px;">
+
+      <div id="me-tabs" style="display: flex; gap: 4px; padding: 6px 8px 0;">
+        <button class="me-tab" data-tab="mieszkania" onclick="meSelectTab(this)" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+          <span class="me-tab-dot" style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250); display: inline-block;"></span>Mieszkania
+        </button>
+        <button class="me-tab" data-tab="domy" onclick="meSelectTab(this)" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+          <span class="me-tab-dot" style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250); display: none;"></span>Domy
+        </button>
+        <button class="me-tab" data-tab="dzialki" onclick="meSelectTab(this)" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+          <span class="me-tab-dot" style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250); display: none;"></span>Działki
+        </button>
+        <button class="me-tab" data-tab="lokale" onclick="meSelectTab(this)" style="padding: 11px 20px; border-radius: 14px; border: none; background: transparent; font-size: 14px; font-weight: 700; color: oklch(0.5 0.02 250); cursor: pointer; display: flex; align-items: center; gap: 7px;">
+          <span class="me-tab-dot" style="width: 6px; height: 6px; border-radius: 50%; background: oklch(0.5 0.14 250); display: none;"></span>Lokale
+        </button>
+      </div>
+
+      <div style="display: flex; align-items: stretch; gap: 4px; padding: 10px;">
+        <div class="me-search-field" style="flex: 1.3; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Lokalizacja</span>
+          <input type="text" placeholder="Warszawa, dzielnica lub adres" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <div style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div class="me-search-field" style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Transakcja</span>
+          <select style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit; appearance: none;">
+            <option>Sprzedaż</option>
+            <option>Wynajem</option>
+          </select>
+        </div>
+        <div style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div class="me-search-field" style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Cena max</span>
+          <input type="text" placeholder="np. 1 000 000 PLN" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <div style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
+        <div class="me-search-field" style="flex: 0.8; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;">
+          <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Powierzchnia</span>
+          <input type="text" placeholder="min m²" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit;" />
+        </div>
+        <button class="me-btn-primary" style="align-self: center; flex-shrink: 0; display: flex; align-items: center; justify-content: center; gap: 8px; height: 46px; padding: 0 24px; border: none; border-radius: 999px; background: oklch(0.5 0.14 250); color: white; font-size: 14.5px; line-height: 1; font-weight: 700; cursor: pointer;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="white" stroke-width="2"/><path d="M21 21L16.5 16.5" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+          Szukaj
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATEGORIES -->
+  <section id="categories" style="display: flex; justify-content: center; padding: 56px 40px 28px;">
+    <div style="width: 100%; max-width: 1360px;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 44px; flex-wrap: wrap;">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 14px;">Wybierz typ nieruchomości</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 38px; line-height: 1.15; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">
+            Znajdź nieruchomość<br/>dopasowaną do <span style="color: oklch(0.5 0.14 250);">Twoich potrzeb</span>
+          </h2>
+        </div>
+        <a href="#offers" class="me-cat-link" style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px; border: 1px solid oklch(0.88 0.01 250); background: white; font-size: 14px; font-weight: 700; color: oklch(0.3 0.03 250);">
+          Zobacz wszystkie oferty
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;">
+        <div style="display: flex; flex-direction: column;">
+          <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+            <img src="REPLACE_WITH_APARTMENT_IMAGE_URL.jpg" alt="Mieszkania" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div style="position: absolute; bottom: -22px; left: 20px; width: 52px; height: 52px; border-radius: 50%; background: white; box-shadow: 0 6px 18px rgba(20,35,65,0.16); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 22px; height: 22px; border-radius: 5px; border: 2px solid oklch(0.4 0.03 250);"></div>
+            </div>
+          </div>
+          <div style="padding: 38px 4px 0;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Mieszkania</h3>
+            <p style="font-size: 14px; color: oklch(0.52 0.02 250); margin: 0 0 14px;">Nowoczesne przestrzenie do życia</p>
+            <a href="mieszkania.html" class="me-cat-explore" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: oklch(0.5 0.14 250);">
+              Sprawdź oferty
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+            <img src="REPLACE_WITH_HOUSE_IMAGE_URL.jpg" alt="Domy" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div style="position: absolute; bottom: -22px; left: 20px; width: 52px; height: 52px; border-radius: 50%; background: white; box-shadow: 0 6px 18px rgba(20,35,65,0.16); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 22px; height: 22px; border-radius: 5px; border: 2px solid oklch(0.4 0.03 250);"></div>
+            </div>
+          </div>
+          <div style="padding: 38px 4px 0;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Domy</h3>
+            <p style="font-size: 14px; color: oklch(0.52 0.02 250); margin: 0 0 14px;">Komfortowe domy dla rodzin</p>
+            <a href="domy.html" class="me-cat-explore" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: oklch(0.5 0.14 250);">
+              Sprawdź oferty
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+            <img src="REPLACE_WITH_LAND_IMAGE_URL.jpg" alt="Działki" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div style="position: absolute; bottom: -22px; left: 20px; width: 52px; height: 52px; border-radius: 50%; background: white; box-shadow: 0 6px 18px rgba(20,35,65,0.16); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 22px; height: 22px; border-radius: 5px; border: 2px solid oklch(0.4 0.03 250);"></div>
+            </div>
+          </div>
+          <div style="padding: 38px 4px 0;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Działki</h3>
+            <p style="font-size: 14px; color: oklch(0.52 0.02 250); margin: 0 0 14px;">Inwestycja pod budowę</p>
+            <a href="dzialki.html" class="me-cat-explore" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: oklch(0.5 0.14 250);">
+              Sprawdź oferty
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column;">
+          <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
+            <img src="REPLACE_WITH_COMMERCIAL_IMAGE_URL.jpg" alt="Lokale komercyjne" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div style="position: absolute; bottom: -22px; left: 20px; width: 52px; height: 52px; border-radius: 50%; background: white; box-shadow: 0 6px 18px rgba(20,35,65,0.16); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 22px; height: 22px; border-radius: 5px; border: 2px solid oklch(0.4 0.03 250);"></div>
+            </div>
+          </div>
+          <div style="padding: 38px 4px 0;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Lokale komercyjne</h3>
+            <p style="font-size: 14px; color: oklch(0.52 0.02 250); margin: 0 0 14px;">Przestrzeń dla Twojego biznesu</p>
+            <a href="lokale-komercyjne.html" class="me-cat-explore" style="display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; color: oklch(0.5 0.14 250);">
+              Sprawdź oferty
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why-us" style="display: flex; justify-content: center; padding: 28px 40px;">
+    <div style="width: 100%; max-width: 1360px;">
+
+      <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; margin-bottom: 56px; padding-bottom: 48px; border-bottom: 1px solid oklch(0.9 0.01 250);">
+        <div>
+          <span style="display: block; font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.5 0.14 250); margin-bottom: 16px;">Dlaczego my</span>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 40px; line-height: 1.14; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0; letter-spacing: -0.02em;">
+            Dlaczego MazurEstate?
+          </h2>
+        </div>
+        <p style="font-size: 20px; line-height: 1.55; font-weight: 700; color: oklch(0.32 0.03 250); margin: 0; align-self: end;">
+          Nieruchomości wymagają dobrych decyzji. Pomagamy podejmować je świadomie, bezpiecznie i bez zbędnych komplikacji.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(200px, auto)); gap: 20px;">
+        <div style="grid-column: span 2; grid-row: span 2; background: oklch(0.2 0.035 255); border-radius: 24px; padding: 36px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 12px; letter-spacing: -0.01em;">Indywidualne podejście</h3>
+            <p style="font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.66); margin: 0; max-width: 420px;">Nie pracujemy według jednego schematu. Najpierw poznajemy Twoje potrzeby, plany i oczekiwania, a następnie dopasowujemy sposób działania do konkretnej sytuacji.</p>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: center;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12.5L9.5 18L20 6" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Wsparcie na każdym etapie</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: center;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 20H21 M6 20V11 M11 20V6 M16 20V14 M21 20V9" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Znajomość rynku</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: center;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 5H20V16H8L4 20V5Z" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Jasna komunikacja</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.</p>
+        </div>
+
+        <div style="background: white; border: 1px solid oklch(0.91 0.01 250); border-radius: 24px; padding: 26px 22px; display: flex; flex-direction: column; justify-content: center;">
+          <div style="width: 42px; height: 42px; border-radius: 12px; background: oklch(0.95 0.03 250); display: flex; align-items: center; justify-content: center; margin-bottom: 14px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 21C16.4183 21 20 16.9706 20 12C20 7.02944 16.4183 3 12 3C7.58172 3 4 7.02944 4 12C4 16.9706 7.58172 21 12 21Z M4.5 9H19.5 M4.5 15H19.5 M12 3C14.5 5.8 15.8 8.8 15.8 12C15.8 15.2 14.5 18.2 12 21 M12 3C9.5 5.8 8.2 8.8 8.2 12C8.2 15.2 9.5 18.2 12 21" stroke="oklch(0.5 0.14 250)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15.5px; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">Obsługa w wielu językach</h3>
+          <p style="font-size: 13px; line-height: 1.48; color: oklch(0.5 0.02 250); margin: 0;">Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 48px; background: oklch(0.2 0.035 255); border-radius: 28px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap;">
+        <div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 8px; letter-spacing: -0.01em;">Porozmawiajmy o Twojej nieruchomości</h3>
+          <p style="font-size: 15px; color: rgba(255,255,255,0.66); margin: 0;">Niezależnie od tego, czy chcesz kupić, sprzedać, wynająć czy zainwestować — zacznijmy od rozmowy.</p>
+        </div>
+        <a href="tel:+48503937749" class="me-btn-primary" style="flex-shrink: 0; padding: 15px 28px; border-radius: 999px; background: oklch(0.5 0.14 250); color: white; font-size: 15px; font-weight: 700; white-space: nowrap;" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Skontaktuj się z nami</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script>
+  function meSelectTab(btn) {
+    document.querySelectorAll('#me-tabs .me-tab').forEach(function(b) {
+      b.style.color = 'oklch(0.5 0.02 250)';
+      b.querySelector('.me-tab-dot').style.display = 'none';
+    });
+    btn.style.color = 'oklch(0.5 0.02 250)';
+    btn.querySelector('.me-tab-dot').style.display = 'inline-block';
+  }
+</script>
