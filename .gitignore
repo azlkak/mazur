@@ -1,0 +1,25 @@
+# macOS and editor metadata
+.DS_Store
+._*
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local preview and tool state
+.thumbnail
+.image-slots.state.json
+screenshots/
+uploads/
+
+# Logs, caches and temporary files
+*.log
+.cache/
+.tmp/
+tmp/
+
+# Local environment files
+.env
+.env.*
+!.env.example
+

@@ -1,6 +1,7 @@
 # MazurEstate website
 
-Static multilingual website prepared for deployment on Netlify.
+Static multilingual website deployed with GitHub Pages. The project does not
+require a build step or package manager.
 
 ## Structure
 
@@ -16,7 +17,18 @@ Static multilingual website prepared for deployment on Netlify.
 - `archive/` — archived export files
 - `docs/screenshots/` — development reference screenshots
 
-Each public page folder contains its own `index.html` and, where needed, local `styles.css` and `script.js`. Shared files remain in `assets` to avoid duplication.
+Each public page folder contains its own `index.html` and, where needed, local
+`styles.css` and `script.js`. Shared files remain in `assets` to avoid
+duplication.
+
+## Repository conventions
+
+- Public pages use folder-based URLs and an `index.html` entry point.
+- Page-specific CSS and JavaScript stay next to the page they support.
+- Reusable styles, scripts, translations and images belong in `assets/`.
+- Archived exports and QA references stay outside public page folders.
+- Local editor state, temporary uploads and preview screenshots are ignored.
+- New file names use lowercase kebab-case.
 
 ## Local preview
 
@@ -24,4 +36,19 @@ Run a static server from the repository root and open the displayed local addres
 
 ```bash
 python3 -m http.server 4173
+```
+
+Then open `http://127.0.0.1:4173/`.
+
+## Deployment
+
+GitHub Pages publishes the `main` branch. The QA preview is available at:
+
+https://azlkak.github.io/mazur/
+
+Before committing, check that the working tree contains only intentional files:
+
+```bash
+git status --short
+git diff --check
 ```
