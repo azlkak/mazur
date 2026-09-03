@@ -44,7 +44,7 @@
     <section class="results-heading">
       <div><p class="eyebrow" data-i18n="offersEyebrow">OFERTY MAZURESTATE</p><h1 id="results-title">Nieruchomości na sprzedaż</h1><p id="results-summary"></p></div>
       <div class="controls">
-        <label><span data-i18n="sort">Sortuj</span><select id="sort-select"><option data-i18n="newest" value="newest">Data dodania: najnowsze</option><option data-i18n="oldest" value="oldest">Data dodania: najstarsze</option><option data-i18n="priceAsc" value="price-asc">Cena: od najniższej</option><option data-i18n="priceDesc" value="price-desc">Cena: od najwyższej</option><option data-i18n="areaAsc" value="area-asc">Powierzchnia: od najmniejszej</option><option data-i18n="areaDesc" value="area-desc">Powierzchnia: od największej</option></select></label>
+        <div class="custom-filter sort-control"><span data-i18n="sort">Sortuj</span><input type="hidden" id="sort-select" value="newest"><button class="filter-trigger" type="button" id="sort-trigger" aria-expanded="false" aria-controls="sort-menu"><span>Data dodania: najnowsze</span><i>⌄</i></button><div class="filter-menu" id="sort-menu" role="listbox"></div></div>
       </div>
     </section>
 

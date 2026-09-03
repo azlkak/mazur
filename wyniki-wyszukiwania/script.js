@@ -53,11 +53,12 @@
     const paint=()=>{trigger.querySelector('span').textContent=options.find(option=>option.value===input.value)?.label||'';menu.innerHTML=options.map(option=>`<button type="button" role="option" aria-selected="${option.value===input.value}" class="${option.value===input.value?'selected':''}" data-value="${option.value}">${option.label}</button>`).join('')};
     const close=()=>{wrapper.classList.remove('open');trigger.setAttribute('aria-expanded','false')};
     paint();trigger.addEventListener('click',()=>{const willOpen=!wrapper.classList.contains('open');document.querySelectorAll('.custom-filter.open').forEach(element=>element.classList.remove('open'));wrapper.classList.toggle('open',willOpen);trigger.setAttribute('aria-expanded',String(willOpen))});
-    menu.addEventListener('click',event=>{const option=event.target.closest('[data-value]');if(!option)return;input.value=option.dataset.value;paint();close()});
+    menu.addEventListener('click',event=>{const option=event.target.closest('[data-value]');if(!option)return;input.value=option.dataset.value;paint();close();input.dispatchEvent(new Event('change',{bubbles:true}))});
     document.addEventListener('click',event=>{if(!wrapper.contains(event.target))close()});
   }
   setupFilterMenu(filterType,'filter-type-trigger','filter-type-menu',Object.entries(typeLabels).map(([value,label])=>({value,label})));
   setupFilterMenu(filterTransaction,'filter-transaction-trigger','filter-transaction-menu',[{value:'sprzedaz',label:filterCopy[7]},{value:'wynajem',label:filterCopy[8]}]);
+  setupFilterMenu(sort,'sort-trigger','sort-menu',[{value:'newest',label:t.newest},{value:'oldest',label:t.oldest},{value:'price-asc',label:t.priceAsc},{value:'price-desc',label:t.priceDesc},{value:'area-asc',label:t.areaAsc},{value:'area-desc',label:t.areaDesc}]);
   document.getElementById('filter-location').value=locationFilter;
   document.getElementById('filter-price').value=params.get('price')||'';
   document.getElementById('filter-area').value=params.get('area')||'';
