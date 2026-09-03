@@ -6,6 +6,7 @@
 <link rel="icon" type="image/png" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
 <link rel="apple-touch-icon" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
 <script src="assets/js/support.js"></script>
+  <link rel="stylesheet" href="assets/css/cookie-consent.css">
 </head>
 <body>
 <x-dc>
@@ -111,13 +112,13 @@
       </button>
 
       <nav id="main-nav" style="display: flex; align-items: center; gap: 0px;">
-        <a href="#categories" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
-        <a href="#about" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Doradztwo</a>
+        <a href="#categories" style="padding: 9px 6px; border-radius: 999px; font-size: 13px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Wybierz nieruchomość</a>
+        <a href="#about" style="padding: 9px 6px; border-radius: 999px; font-size: 13px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Doradztwo</a>
 
-        <a href="#why-us" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dlaczego my</a>
+        <a href="#why-us" style="padding: 9px 6px; border-radius: 999px; font-size: 13px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dlaczego my</a>
 
-        <a href="#services" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dla deweloperów</a>
-        <a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="padding: 9px 6px; border-radius: 999px; font-size: 11.5px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Kontakt</a>
+        <a href="#services" style="padding: 9px 6px; border-radius: 999px; font-size: 13px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Dla deweloperów</a>
+        <a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749" style="padding: 9px 6px; border-radius: 999px; font-size: 13px; font-weight: 600; color: oklch(0.35 0.03 250); white-space: nowrap;" style-hover="background: oklch(0.95 0.01 250);">Kontakt</a>
       </nav>
 
       <div id="header-actions" style="display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
@@ -273,7 +274,7 @@
 
       <div id="categories-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px;">
         <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
-          <div style="display: flex; flex-direction: column;">
+          <a href="{{ cat.href }}" aria-label="{{ cat.title }} — zobacz oferty" style="display: flex; flex-direction: column; color: inherit; transition: transform .2s ease;" style-hover="transform: translateY(-4px);">
             <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
               <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" />
             </div>
@@ -281,7 +282,7 @@
               <h3 style="min-height: 28px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">{{ cat.title }}</h3>
               <p style="min-height: 44px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-size: 14px; line-height: 1.55; color: oklch(0.52 0.02 250); margin: 0;">{{ cat.subtitle }}</p>
             </div>
-          </div>
+          </a>
         </sc-for>
       </div>
 
@@ -534,7 +535,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: 0, mobileMenuOpen: false };
+  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
     this._testimonialTimer = setInterval(() => {
@@ -582,11 +583,12 @@ class Component extends DCLogic {
       { title: 'Jasna komunikacja', text: 'Dbamy o przejrzysty przebieg współpracy. Informujemy o kolejnych krokach, odpowiadamy na pytania i pozostajemy w stałym kontakcie przez cały proces.', iconPath: 'M4 5H16V14H9L5 18V14H4V5Z M9 9H12 M18 8H20V17H17L14 20V17H12' },
       { title: 'Obsługa w wielu językach', text: 'Wspieramy zarówno klientów z Polski, jak i osoby z zagranicy, zapewniając sprawną komunikację oraz pomoc w zrozumieniu procesu zakupu, sprzedaży lub najmu.', iconPath: 'M12 21C16.97 21 21 16.97 21 12C21 7.03 16.97 3 12 3C7.03 3 3 7.03 3 12C3 16.97 7.03 21 12 21Z M3.5 9H20.5 M3.5 15H20.5 M12 3C14.2 5.45 15.4 8.45 15.4 12C15.4 15.55 14.2 18.55 12 21 M12 3C9.8 5.45 8.6 8.45 8.6 12C8.6 15.55 9.8 18.55 12 21' },
     ];
+    const categoryLang = ({ PL: 'pl', UKR: 'uk', ENG: 'en', RU: 'ru' }[this.state.lang] || 'pl');
     const categories = [
-      { src: 'assets/images/category-apartments.webp', title: 'Mieszkania', subtitle: 'Nowoczesne mieszkania' },
-      { src: 'assets/images/category-houses.webp', title: 'Domy', subtitle: 'Komfortowe domy rodzinne' },
-      { src: 'assets/images/category-land.webp', title: 'Działki', subtitle: 'Grunty pod inwestycje' },
-      { src: 'assets/images/category-commercial.webp', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla biznesu' },
+      { src: 'assets/images/category-apartments.webp', title: 'Mieszkania', subtitle: 'Nowoczesne mieszkania', href: `wyniki-wyszukiwania/?type=mieszkania&transaction=sprzedaz&lang=${categoryLang}` },
+      { src: 'assets/images/category-houses.webp', title: 'Domy', subtitle: 'Komfortowe domy rodzinne', href: `wyniki-wyszukiwania/?type=domy&transaction=sprzedaz&lang=${categoryLang}` },
+      { src: 'assets/images/category-land.webp', title: 'Działki', subtitle: 'Grunty pod inwestycje', href: `wyniki-wyszukiwania/?type=dzialki&transaction=sprzedaz&lang=${categoryLang}` },
+      { src: 'assets/images/category-commercial.webp', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla biznesu', href: `wyniki-wyszukiwania/?type=lokale&transaction=wynajem&lang=${categoryLang}` },
     ];
     const featuredOffers = [
       { image: 'assets/images/category-apartments.webp', price: '1 190 000 PLN', location: 'Warszawa · Wola', title: 'Nowoczesny apartament z balkonem', rooms: '3 pokoje', area: '64 m²', type: 'Sprzedaż' },
@@ -744,5 +746,6 @@ class Component extends DCLogic {
 }
 </script>
 <script src="assets/js/homepage-i18n.js"></script>
+<script src="assets/js/cookie-consent.js"></script>
 </body>
 </html>

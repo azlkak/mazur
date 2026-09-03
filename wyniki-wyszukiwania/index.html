@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="../assets/css/site-chrome.css">
+  <link rel="stylesheet" href="../assets/css/cookie-consent.css">
 </head>
 <body>
   <header class="site-header">
@@ -32,6 +33,14 @@
 
   <main class="shell results-main">
     <a class="back-link" data-i18n="back" href="../index.html#categories">← Wróć do wyszukiwarki</a>
+    <form class="results-search" id="results-search">
+      <label><span id="filter-type-label">Typ nieruchomości</span><select id="filter-type"><option value="mieszkania">Mieszkania</option><option value="domy">Domy</option><option value="dzialki">Działki</option><option value="lokale">Lokale komercyjne</option></select></label>
+      <label><span id="filter-location-label">Lokalizacja</span><input id="filter-location" list="filter-locations" autocomplete="off" placeholder="Miasto lub dzielnica"><datalist id="filter-locations"></datalist></label>
+      <label><span id="filter-transaction-label">Transakcja</span><select id="filter-transaction"><option value="sprzedaz">Sprzedaż</option><option value="wynajem">Wynajem</option></select></label>
+      <label><span id="filter-price-label">Cena maks.</span><input id="filter-price" inputmode="numeric" placeholder="np. 1 000 000 PLN"></label>
+      <label><span id="filter-area-label">Powierzchnia</span><input id="filter-area" inputmode="numeric" placeholder="min m²"></label>
+      <button type="submit" id="filter-submit">Szukaj</button>
+    </form>
     <section class="results-heading">
       <div><p class="eyebrow" data-i18n="offersEyebrow">OFERTY MAZURESTATE</p><h1 id="results-title">Nieruchomości na sprzedaż</h1><p id="results-summary"></p></div>
       <div class="controls">
@@ -59,5 +68,6 @@
   </footer>
   <script src="script.js"></script>
   <script src="../assets/js/site-chrome.js"></script>
+<script src="../assets/js/cookie-consent.js"></script>
 </body>
 </html>
