@@ -97,3 +97,7 @@
   document.addEventListener('click',e=>{if(!picker.contains(e.target)){picker.classList.remove('open');trigger.setAttribute('aria-expanded','false')}});
   render();
 })();
+
+if (location.protocol === 'file:') {
+  document.querySelectorAll('a[href]').forEach(link=>{const href=link.getAttribute('href');if(!href||href.startsWith('#')||/^(?:https?:|mailto:|tel:)/.test(href))return;link.setAttribute('href',href.replace(/\/(\?|#|$)/,'/index.html$1'))});
+}

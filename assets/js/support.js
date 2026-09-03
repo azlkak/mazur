@@ -1909,3 +1909,14 @@
     throw err;
   });
 })();
+
+// Local file previews do not resolve directory URLs to index.html automatically.
+if (location.protocol === "file:") {
+  const makeLocalLinksExplicit = () => document.querySelectorAll("a[href]").forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href || href.startsWith("#") || /^(?:https?:|mailto:|tel:)/.test(href)) return;
+    link.setAttribute("href", href.replace(/\/(\?|#|$)/, "/index.html$1"));
+  });
+  new MutationObserver(makeLocalLinksExplicit).observe(document.documentElement, { childList: true, subtree: true });
+  document.addEventListener("DOMContentLoaded", makeLocalLinksExplicit);
+}

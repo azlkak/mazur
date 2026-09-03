@@ -26,3 +26,9 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.applySiteChrome); else window.applySiteChrome();
   const translations=document.createElement('script');translations.src='../assets/js/page-translations.js';document.body.appendChild(translations);
 })();
+
+if (location.protocol === 'file:') {
+  const makeLocalLinksExplicit=()=>document.querySelectorAll('a[href]').forEach(link=>{const href=link.getAttribute('href');if(!href||href.startsWith('#')||/^(?:https?:|mailto:|tel:)/.test(href))return;link.setAttribute('href',href.replace(/\/(\?|#|$)/,'/index.html$1'))});
+  new MutationObserver(makeLocalLinksExplicit).observe(document.documentElement,{childList:true,subtree:true});
+  makeLocalLinksExplicit();
+}
