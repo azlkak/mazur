@@ -541,7 +541,12 @@ class Component extends DCLogic {
 
   componentDidMount() {
     const categoriesSection = document.getElementById('categories');
+    const featuredOffersSection = document.getElementById('featured-offers');
+    const whyUsSection = document.getElementById('why-us');
     const conversationCta = document.getElementById('services');
+    if (featuredOffersSection && whyUsSection?.parentNode) {
+      whyUsSection.parentNode.insertBefore(featuredOffersSection, whyUsSection);
+    }
     if (categoriesSection && conversationCta?.parentNode) {
       conversationCta.parentNode.insertBefore(categoriesSection, conversationCta);
     }
