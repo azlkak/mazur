@@ -1,6 +1,7 @@
 html,body{max-width:100%;overflow-x:hidden}
 button,a,input,select{touch-action:manipulation}
 :where(a,button,input,select):focus-visible{outline:3px solid rgba(6,113,189,.35);outline-offset:3px}
+#why-us>#categories,#why-us>div>#categories{padding-left:0!important;padding-right:0!important;width:100%}
 .chrome-menu-button{display:none;width:46px;height:46px;padding:12px;border:0;border-radius:50%;background:#f0f5fa;align-items:center;justify-content:center;flex-direction:column;gap:4px;color:#122131;cursor:pointer}
 .chrome-menu-button span{display:block;width:20px;height:2px;border-radius:2px;background:currentColor;transition:transform .2s,opacity .2s}
 .chrome-menu-button.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}.chrome-menu-button.open span:nth-child(2){opacity:0}.chrome-menu-button.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}

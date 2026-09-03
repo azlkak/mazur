@@ -540,6 +540,11 @@ class Component extends DCLogic {
   state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
+    const categoriesSection = document.getElementById('categories');
+    const conversationCta = document.getElementById('services');
+    if (categoriesSection && conversationCta?.parentNode) {
+      conversationCta.parentNode.insertBefore(categoriesSection, conversationCta);
+    }
     this._outsideDropdownHandler = (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
