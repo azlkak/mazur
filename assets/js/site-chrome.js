@@ -32,3 +32,5 @@ if (location.protocol === 'file:') {
   new MutationObserver(makeLocalLinksExplicit).observe(document.documentElement,{childList:true,subtree:true});
   makeLocalLinksExplicit();
 }
+
+const responsiveStyles=document.createElement('link');responsiveStyles.rel='stylesheet';responsiveStyles.href='../assets/css/responsive.css';document.head.appendChild(responsiveStyles);

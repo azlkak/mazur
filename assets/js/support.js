@@ -1911,6 +1911,11 @@
 })();
 
 // Local file previews do not resolve directory URLs to index.html automatically.
+const responsiveStyles = document.createElement("link");
+responsiveStyles.rel = "stylesheet";
+responsiveStyles.href = "assets/css/responsive.css";
+document.head.appendChild(responsiveStyles);
+
 if (location.protocol === "file:") {
   const makeLocalLinksExplicit = () => document.querySelectorAll("a[href]").forEach((link) => {
     const href = link.getAttribute("href");
