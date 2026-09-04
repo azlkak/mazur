@@ -150,6 +150,9 @@
     root.querySelectorAll?.('a[href$=".html"]').forEach(link => {
       if (!link.href.includes('index.html')) link.href += `${link.href.includes('?') ? '&' : '?'}lang=${lang}`;
     });
+    root.querySelectorAll?.('a[href^="dla-deweloperow/"]').forEach(link => {
+      link.href = `dla-deweloperow/?lang=${lang}`;
+    });
   }
 
   document.documentElement.lang = lang === 'uk' ? 'uk' : lang;

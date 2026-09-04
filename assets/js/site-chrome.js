@@ -17,8 +17,11 @@
     const home = `../index.html?lang=${lang}`;
     if (header) header.innerHTML = `<div class="header-bar shell"><a class="brand" href="${home}" aria-label="MazurEstate"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></a><nav class="main-nav"><a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a></nav><div class="header-actions"><div class="chrome-language"><button type="button" aria-expanded="false">🌐 <span>${lang==='en'?'ENG':lang==='uk'?'UKR':lang.toUpperCase()}</span><b>⌄</b></button><div>${[['pl','PL'],['uk','UKR'],['en','ENG'],['ru','RU']].map(([code,label])=>`<a href="${withLang(currentBase,code)}">${label}</a>`).join('')}</div></div><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button chrome-primary" href="tel:+48503937749">${t.contactUs}</a></div></div>`;
     const advisoryUrl = `../doradztwo/?lang=${lang}`;
+    const developersUrl = `../dla-deweloperow/?lang=${lang}`;
     const desktopAdvisory = header?.querySelector('.main-nav a:nth-child(2)');
     if (desktopAdvisory) desktopAdvisory.href = advisoryUrl;
+    const desktopDevelopers = header?.querySelector('.main-nav a:nth-child(4)');
+    if (desktopDevelopers) desktopDevelopers.href = developersUrl;
     if (header) {
       const bar = header.querySelector('.header-bar');
       const menuButton = document.createElement('button');
@@ -33,6 +36,7 @@
       mobileNav.id = 'chrome-mobile-nav';
       mobileNav.innerHTML = `<a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a><a class="mobile-call" href="tel:+48503937749">+48 503 937 749</a>`;
       mobileNav.querySelector('a:nth-child(2)').href = advisoryUrl;
+      mobileNav.querySelector('a:nth-child(4)').href = developersUrl;
       bar.appendChild(menuButton);
       header.appendChild(mobileNav);
       menuButton.addEventListener('click', () => {
@@ -67,6 +71,8 @@
     }
     const footerAdvisory = footer?.querySelector('.footer-grid>div:nth-child(2) a:nth-of-type(2)');
     if (footerAdvisory) footerAdvisory.href = advisoryUrl;
+    const footerDevelopers = footer?.querySelector('.footer-grid>div:nth-child(2) a:nth-of-type(4)');
+    if (footerDevelopers) footerDevelopers.href = developersUrl;
     const legalBar=footer?.querySelector('.copyright span:last-child');
     if(legalBar){legalBar.className='legal-links';legalBar.innerHTML=`<a href="../polityka-prywatnosci/?lang=${lang}">${t.privacy}</a><a href="../polityka-cookies/?lang=${lang}">Cookies</a><a href="../regulamin/?lang=${lang}">${t.terms}</a>`;}
     const picker = header?.querySelector('.chrome-language');
