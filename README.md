@@ -6,6 +6,9 @@ require a build step or package manager.
 ## Structure
 
 - `index.html` — home page and deployment entry point
+- `doradztwo/` — real estate advisory hub
+- `dla-deweloperow/` — sales support landing page for property developers
+- `lokal-medyczny/` — multilingual landing page for finding and verifying medical premises
 - `kim-jestesmy/` — about page
 - `wyniki-wyszukiwania/` — search results page
 - `oferta/` — property details page
@@ -14,6 +17,8 @@ require a build step or package manager.
 - `assets/css/` — shared styles
 - `assets/js/` — shared scripts and translations
 - `assets/images/` — images and brand assets
+- `assets/images/developers/` — imagery used by the developer landing page
+- `assets/images/medical-premises/` — imagery used by the medical-premises landing page
 - `archive/` — archived export files
 - `docs/screenshots/` — development reference screenshots
 
@@ -25,6 +30,7 @@ duplication.
 
 - Public pages use folder-based URLs and an `index.html` entry point.
 - Page-specific CSS and JavaScript stay next to the page they support.
+- Page-specific translations stay in the page folder as `i18n.js`; shared navigation and footer translations remain in `assets/js/`.
 - Reusable styles, scripts, translations and images belong in `assets/`.
 - Archived exports and QA references stay outside public page folders.
 - Local editor state, temporary uploads and preview screenshots are ignored.
