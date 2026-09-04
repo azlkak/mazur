@@ -5,3 +5,27 @@
 .expertise{margin-bottom:105px;padding:55px 58px;display:grid;grid-template-columns:1fr 1fr;gap:80px;border-radius:30px;background:#fff;border:1px solid var(--line)}.expertise>div:last-child>p{margin:0 0 20px;color:var(--muted);line-height:1.75}.expertise ul{margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 25px;list-style:none}.expertise li{position:relative;padding-left:22px;font-size:13px;font-weight:700}.expertise li:before{content:'✓';position:absolute;left:0;color:var(--blue)}.advisory-cta{margin-bottom:100px;padding:52px 58px;display:flex;align-items:center;justify-content:space-between;gap:40px;border-radius:30px;background:var(--navy);color:#fff}.advisory-cta>div{max-width:800px}.advisory-cta h2{margin:0 0 12px;font-size:36px}.advisory-cta>div>p:last-child{margin:0;color:#ffffffa6;line-height:1.65}
 @media(max-width:1050px){.advisory-hero{grid-template-columns:1fr;padding:56px}.expert-visual{height:500px}.intro{grid-template-columns:1fr;gap:28px}.process-grid{grid-template-columns:1fr 1fr}.services-heading{grid-template-columns:1fr;gap:18px}.expertise{grid-template-columns:1fr;gap:28px}}
 @media(max-width:650px){.shell{width:calc(100% - 32px)}.advisory-hero{min-height:auto;margin-top:25px;padding:38px 22px;border-radius:25px;gap:38px}.hero-copy h1{font-size:39px}.hero-lead{font-size:15px}.hero-actions{align-items:flex-start;flex-direction:column;gap:18px}.trust-row{gap:15px;justify-content:space-between}.trust-row span{font-size:10px}.trust-row strong{font-size:18px}.expert-visual{height:350px}.expert-photo{border-width:4px}.expert-photo-one{width:59%;height:75%}.expert-photo-two{width:62%;height:73%}.expert-note{width:190px;padding:14px 15px}.intro{padding:72px 0 68px}.intro h2,.section-heading h2,.expertise h2{font-size:30px}.intro-copy p{font-size:15px}.process-section{padding:65px 0}.process-grid{display:flex;overflow-x:auto;gap:14px;scroll-snap-type:x mandatory;scrollbar-width:none}.process-grid::-webkit-scrollbar{display:none}.process-grid article{flex:0 0 min(82vw,310px);min-height:245px;scroll-snap-align:start}.services{padding:70px 0}.service-grid{grid-template-columns:1fr}.service-card{min-height:0;padding:26px 22px}.service-card h3{font-size:20px}.service-card a{padding-top:22px}.expertise{margin-bottom:70px;padding:30px 22px}.expertise ul{grid-template-columns:1fr}.advisory-cta{margin-bottom:70px;padding:34px 24px;align-items:flex-start;flex-direction:column}.advisory-cta h2{font-size:29px}.advisory-cta .button{width:100%}}
+
+/* Keep the expertise badge below the portraits so both faces stay unobstructed. */
+.expert-photo-two{bottom:52px}
+.expert-note{top:auto;bottom:0;transform:translateX(-50%)}
+@media(max-width:650px){.expert-photo-two{bottom:40px}}
+
+.trust-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media(max-width:650px){.trust-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}.trust-row span{line-height:1.35}}
+
+.service-card,.service-card.featured{min-height:610px;background:linear-gradient(145deg,#fff,#f7fafc);border-color:var(--line)}
+.service-media{width:calc(100% + 68px);height:225px;margin:-34px -34px 28px;overflow:hidden;border-radius:25px 25px 16px 16px;background:#e8eef3}
+.service-media img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.86) contrast(.98);transition:transform .35s ease}
+.service-card:hover .service-media img{transform:scale(1.025)}
+.service-grid{column-gap:6px;row-gap:10px}
+@media(max-width:650px){.service-card,.service-card.featured{min-height:0}.service-media{width:calc(100% + 44px);height:190px;margin:-26px -22px 24px;border-radius:25px 25px 14px 14px}}
+
+/* One compact, consistent rhythm between all advisory-page sections. */
+:root{--advisory-section-gap:20px}
+.intro{padding-top:var(--advisory-section-gap);padding-bottom:var(--advisory-section-gap)}
+.process-section{padding-top:var(--advisory-section-gap);padding-bottom:var(--advisory-section-gap)}
+.services{padding-top:var(--advisory-section-gap);padding-bottom:var(--advisory-section-gap)}
+.expertise{margin-top:0;margin-bottom:var(--advisory-section-gap)}
+.advisory-cta{margin-top:0;margin-bottom:var(--advisory-section-gap)}
+@media(max-width:650px){:root{--advisory-section-gap:16px}.intro,.process-section,.services{padding-top:var(--advisory-section-gap);padding-bottom:var(--advisory-section-gap)}.expertise,.advisory-cta{margin-top:0;margin-bottom:var(--advisory-section-gap)}}
