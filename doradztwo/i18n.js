@@ -90,6 +90,9 @@
   const servicesHeading = q('.services-heading'); [servicesHeading?.querySelector('.eyebrow'), servicesHeading?.querySelector('h2'), servicesHeading?.querySelector(':scope > p')].forEach((el, i) => { if (el) el.textContent = d.servicesHead[i]; });
   qa('.service-card').forEach((card, i) => { const x = d.services[i]; card.querySelector('.service-label').textContent = x[0]; card.querySelector('h3').textContent = x[1]; card.querySelector(':scope > p:not(.service-label)').textContent = x[2]; card.querySelector('a').textContent = x[3]; });
   const medicalLink = q('.service-card:first-child a'); if (medicalLink) medicalLink.href = `../lokal-medyczny/?lang=${lang}`;
+  const hospitalityLink = q('.service-card:nth-child(2) a'); if (hospitalityLink) hospitalityLink.href = `../lokal-gastronomiczny/?lang=${lang}`;
+  const landLink = q('.service-card:nth-child(3) a'); if (landLink) landLink.href = `../grunt-pod-budowe/?lang=${lang}`;
+  const rentalLink = q('.service-card:nth-child(4) a'); if (rentalLink) rentalLink.href = `../mieszkanie-pod-wynajem/?lang=${lang}`;
   const expertise = q('.expertise'); text('.expertise .eyebrow', d.expertise[0]); text('.expertise h2', d.expertise[1]); expertise.querySelector(':scope > div:last-child > p').textContent = d.expertise[2]; qa('.expertise li').forEach((el, i) => el.textContent = d.expertise[3][i]);
   [q('.advisory-cta .eyebrow'), q('.advisory-cta h2'), q('.advisory-cta p:not(.eyebrow)')].forEach((el, i) => { if (el) el.textContent = d.cta[i]; });
   qa('.expert-photo img,.service-media img').forEach((img, i) => { if (d.alts[i]) img.alt = d.alts[i]; });

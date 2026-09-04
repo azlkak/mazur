@@ -71,12 +71,6 @@
   };
 
   document.documentElement.lang = lang;
-  document.querySelector('.medical-language > button span').textContent = labels[lang];
-  document.querySelector('.medical-brand').href = `../index.html?lang=${lang}`;
-  document.querySelectorAll('.medical-language > div a').forEach(link => {
-    const target = new URL(link.href).searchParams.get('lang');
-    link.setAttribute('aria-current', target === lang ? 'page' : 'false');
-  });
   if (lang === 'pl') return;
   const d = copy[lang];
   const q = selector => document.querySelector(selector);
@@ -84,9 +78,6 @@
   const set = (selector, value) => { const element = q(selector); if (element) element.textContent = value; };
   document.title = d.meta[0];
   q('meta[name="description"]')?.setAttribute('content', d.meta[1]);
-  qa('.medical-nav a').forEach((element, index) => element.textContent = d.nav[index]);
-  q('.medical-header-actions > .button').textContent = d.nav[5];
-  q('.medical-phone').setAttribute('aria-label', `${d.nav[5]}: +48 503 937 749`);
   ['.medical-hero .eyebrow', '.medical-hero h1', '.medical-hero .hero-copy > p:not(.eyebrow)', '.medical-hero .button', '.medical-hero .hero-actions > a:last-child'].forEach((selector, index) => set(selector, d.hero[index]));
   ['.intro .eyebrow', '.intro h2', '.intro > div:last-child p'].forEach((selector, index) => set(selector, d.intro[index]));
   ['.risk-section .section-head .eyebrow', '.risk-section .section-head h2'].forEach((selector, index) => set(selector, d.risksHead[index]));

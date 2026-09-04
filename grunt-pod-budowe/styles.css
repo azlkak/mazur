@@ -1,0 +1,93 @@
+:root{--navy:#172536;--blue:#0870bb;--muted:#687482;--line:#dbe4eb;--bg:#f7fafd;--pale:#edf5fa}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--navy);font-family:Manrope,sans-serif}.shell{width:min(1360px,calc(100% - 80px));margin-inline:auto}a{color:inherit;text-decoration:none}h1,h2,h3{font-family:'Plus Jakarta Sans',sans-serif}.eyebrow{margin:0 0 14px;color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.12em}.button{min-height:50px;padding:0 25px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:14px;font-weight:800}.button-blue{background:var(--blue);color:#fff}.button-white{background:#fff;color:var(--navy)}
+.medical-header{position:sticky;top:12px;z-index:60;width:min(1360px,calc(100% - 80px));min-height:82px;margin:12px auto 0;padding:8px 12px 8px 22px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:999px;background:#fffffff2;box-shadow:0 8px 30px #17324c18;backdrop-filter:blur(14px)}.medical-brand img{height:62px;display:block;mix-blend-mode:multiply}.medical-header-actions{display:flex;align-items:center;gap:25px;font-size:13px;font-weight:750}
+.medical-hero{height:690px;margin-top:28px;position:relative;overflow:hidden;border-radius:34px;background:var(--navy);color:#fff}.medical-hero>img{width:100%;height:100%;object-fit:cover}.hero-overlay{position:absolute;inset:0;background:linear-gradient(90deg,#102032f7 0%,#102032dc 42%,#10203235 72%)}.hero-copy{position:absolute;inset:0;width:59%;padding:70px;display:flex;flex-direction:column;justify-content:center}.hero-copy .eyebrow{color:#8bcef5}.hero-copy h1{margin:0;font-size:clamp(46px,5.25vw,72px);line-height:1.02;letter-spacing:-.055em}.hero-copy>p:not(.eyebrow){max-width:680px;margin:25px 0 30px;color:#ffffffcf;font-size:17px;line-height:1.7}.hero-actions{display:flex;align-items:center;gap:24px}.hero-actions>a:last-child{font-size:13px;font-weight:800}
+.intro{padding:64px 0;display:grid;grid-template-columns:.85fr 1.15fr;gap:100px}.intro h2,.section-head h2,.story h2,.checks h2,.final-cta h2{margin:0;font-size:clamp(34px,4vw,52px);line-height:1.08;letter-spacing:-.04em}.intro>div:last-child p{margin:0 0 19px;color:var(--muted);font-size:16px;line-height:1.75}
+.risk-section{padding:62px 0;background:var(--pale)}.section-head{max-width:850px;margin-bottom:34px}.section-head>p:last-child{color:var(--muted);line-height:1.7}.risk-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.risk-grid article{min-height:270px;padding:27px;border:1px solid #d7e3ec;border-radius:24px;background:#fff}.risk-grid strong,.process-grid b{width:39px;height:39px;display:grid;place-items:center;border-radius:12px;background:#e3f2fc;color:var(--blue);font-size:12px}.risk-grid h3{margin:26px 0 11px;font-size:19px}.risk-grid p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.story{margin-block:24px;padding:58px;display:grid;grid-template-columns:1.2fr .8fr;gap:80px;border-radius:30px;background:var(--navy);color:#fff}.story>div>p:not(.eyebrow){margin:22px 0 28px;color:#ffffffa9;line-height:1.75}.story aside{padding:34px;display:flex;flex-direction:column;justify-content:center;border:1px solid #ffffff1e;border-radius:24px;background:#ffffff08}.story aside span{color:#79c3ef;font-size:12px;font-weight:800}.story aside strong{margin:18px 0;font:800 25px/1.25 'Plus Jakarta Sans'}.story aside small{color:#ffffff80}
+.process-section{padding:62px 0;background:#102032;color:#fff}.process-section .eyebrow{color:#73c4f2}.process-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.process-grid article{min-height:225px;padding:27px;border:1px solid #ffffff1b;border-radius:22px;background:#ffffff08}.process-grid b{border-radius:50%;background:#0870bb;color:#fff}.process-grid h3{margin:24px 0 10px;font-size:19px}.process-grid p{margin:0;color:#ffffffa2;font-size:13px;line-height:1.65}
+.checks{padding:64px 0;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:75px}.checks-image{height:570px;position:relative;overflow:hidden;border-radius:28px}.checks-image img{width:100%;height:100%;object-fit:cover}.checks-image span{position:absolute;left:16px;bottom:16px;padding:7px 10px;border-radius:999px;background:#102032c9;color:#fff;font-size:10px}.checks ul{margin:25px 0;padding:0;display:grid;gap:13px;list-style:none}.checks li{position:relative;padding-left:25px;color:#344455;line-height:1.6}.checks li:before{content:'✓';position:absolute;left:0;color:var(--blue);font-weight:850}.legal-note{padding:17px 19px;border-radius:16px;background:var(--pale);color:var(--muted);font-size:12px;line-height:1.6}.legal-note a{color:var(--blue);font-weight:750;text-decoration:underline;text-underline-offset:2px}
+.stories{padding:62px 0;background:var(--pale)}.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.story-grid article{overflow:hidden;border:1px solid #d7e3ec;border-radius:26px;background:#fff}.story-grid img{width:100%;height:300px;display:block;object-fit:cover}.story-grid article>div{padding:27px}.story-grid span{color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.1em}.story-grid h3{margin:13px 0 10px;font-size:22px}.story-grid p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.7}
+.faq{padding:64px 0}.faq-list{display:grid;gap:10px}.faq details{padding:21px 24px;border:1px solid var(--line);border-radius:18px;background:#fff}.faq summary{cursor:pointer;font-weight:800;list-style:none}.faq summary::-webkit-details-marker{display:none}.faq summary:after{content:'+';float:right;color:var(--blue);font-size:22px}.faq details[open] summary:after{content:'−'}.faq details p{max-width:900px;margin:15px 0 0;color:var(--muted);font-size:13.5px;line-height:1.7}
+.final-cta{margin-bottom:24px;padding:52px 58px;display:flex;align-items:center;justify-content:space-between;gap:45px;border-radius:30px;background:linear-gradient(135deg,#12314a,#0870bb);color:#fff}.final-cta>div:first-child{max-width:830px}.final-cta .eyebrow{color:#8fd4fb}.final-cta>div:first-child>p:last-child{color:#ffffffaa}.final-cta>div:last-child{display:flex;align-items:center;gap:22px;flex-direction:column;font-size:13px;font-weight:700}.site-footer{margin-top:0!important}
+@media(max-width:1050px){.risk-grid{grid-template-columns:1fr 1fr}.story{grid-template-columns:1fr;gap:28px}.process-grid{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}.checks-image{height:440px}.medical-hero{height:650px}.hero-copy{width:72%;padding:55px}}
+@media(max-width:650px){.shell{width:calc(100% - 32px)}.medical-header{top:8px;width:calc(100% - 24px);min-height:64px;padding:5px 8px 5px 12px}.medical-brand img{height:48px}.medical-header-actions>a:not(.button){display:none}.medical-header-actions .button{min-height:40px;padding:0 15px;font-size:12px}.medical-hero{height:720px;margin-top:18px;border-radius:25px}.medical-hero>img{object-position:62% center}.hero-overlay{background:linear-gradient(0deg,#102032fa 4%,#102032dc 58%,#10203222)}.hero-copy{inset:auto 0 0;width:100%;padding:29px 22px}.hero-copy h1{font-size:38px}.hero-copy>p:not(.eyebrow){font-size:14px;margin:18px 0}.hero-actions{align-items:flex-start;flex-direction:column;gap:14px}.intro{padding:42px 0;grid-template-columns:1fr;gap:24px}.intro h2,.section-head h2,.story h2,.checks h2,.final-cta h2{font-size:30px}.intro>div:last-child p{font-size:14px}.risk-section,.process-section,.stories,.faq{padding:42px 0}.risk-grid,.process-grid,.story-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.risk-grid article,.process-grid article,.story-grid article{flex:0 0 min(84vw,320px);scroll-snap-align:start}.story{padding:32px 24px;gap:24px}.story aside{padding:24px}.checks{padding:42px 0;gap:28px}.checks-image{height:340px}.final-cta{padding:34px 24px;align-items:flex-start;flex-direction:column}.final-cta>div:last-child{width:100%;align-items:stretch}.final-cta .button{width:100%}}
+.risk-grid article{min-height:220px}.process-grid{grid-template-columns:repeat(4,1fr)}.process-grid article{min-height:210px}
+@media(max-width:1050px) and (min-width:651px){.process-grid{grid-template-columns:1fr 1fr}}
+.intro{align-items:center}
+.intro>div:last-child p{max-width:690px;margin:0;color:#34485b;font-size:clamp(19px,1.65vw,24px);font-weight:600;line-height:1.6;letter-spacing:-.015em}
+.risk-grid strong svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:650px){.intro>div:last-child p{font-size:17px;line-height:1.55}}
+.testimonial-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px}.testimonial-head .section-head{margin-bottom:28px}.draft-note{font-size:11px!important}.carousel-controls{display:flex;gap:9px;margin-bottom:28px}.carousel-controls button{width:45px;height:45px;border:1px solid var(--line);border-radius:50%;background:#fff;color:var(--navy);font-size:20px;cursor:pointer}.carousel-controls button:hover{background:var(--blue);color:#fff}.testimonial-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.testimonial-track::-webkit-scrollbar{display:none}.testimonial-track article{flex:0 0 calc((100% - 28px)/2.35);overflow:hidden;border:1px solid #d7e3ec;border-radius:26px;background:#fff;scroll-snap-align:start}.testimonial-track img{width:100%;height:245px;display:block;object-fit:cover}.testimonial-track article>div{padding:25px}.testimonial-track span{color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.1em}.testimonial-track blockquote{min-height:120px;margin:15px 0;color:var(--navy);font:700 18px/1.5 'Plus Jakarta Sans'}.testimonial-track article p{margin:0;color:var(--muted);font-size:12px;font-weight:650}
+@media(max-width:650px){.testimonial-head{align-items:flex-start;flex-direction:column;gap:0}.carousel-controls{align-self:flex-end}.testimonial-track article{flex-basis:88%}.testimonial-track img{height:220px}.testimonial-track blockquote{min-height:0;font-size:16px}}
+.case-section{padding:64px 0}.case-section>.section-head{max-width:980px}.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.case-grid article{padding:30px;border:1px solid var(--line);border-radius:25px;background:#fff}.case-tag{display:inline-flex;padding:8px 11px;border-radius:999px;background:#e4f2fc;color:var(--blue);font-size:10px;font-weight:850;letter-spacing:.1em}.case-grid h3{margin:22px 0 13px;font-size:22px;line-height:1.28}.case-grid p{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.7}.case-grid b{display:block;margin-bottom:8px;font-size:13px}.case-grid article p:last-child{margin-bottom:0}.case-footnote{max-width:940px;margin:20px 0 0;color:var(--muted);font-size:11px;line-height:1.6}
+@media(max-width:1050px){.case-grid{grid-template-columns:1fr}}
+@media(max-width:650px){.case-section{padding:42px 0}.case-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}.case-grid article{flex:0 0 88%;scroll-snap-align:start;padding:24px}.case-grid h3{font-size:19px}}
+.case-details{display:grid;gap:0}.case-details>div{padding:15px 0;border-top:1px solid var(--line)}.case-details b{margin:0 0 6px;color:var(--navy);font-size:10px;letter-spacing:.08em;text-transform:uppercase}.case-details p{margin:0}.case-details .case-solution{margin-top:4px;padding:16px;border:0;border-radius:15px;background:#eef7fc}.case-details .case-solution b{color:var(--blue)}
+@media(min-width:1051px){.case-grid h3{min-height:57px}.case-grid article{display:flex;flex-direction:column}.case-details{flex:1;grid-template-rows:repeat(3,auto) 1fr}.case-solution{align-self:end}}
+.case-tag{align-self:flex-start}
+.case-grid article:nth-child(1) .case-tag,.case-grid article:nth-child(2) .case-tag,.case-grid article:nth-child(3) .case-tag{font-size:0}
+.case-grid article:nth-child(1) .case-tag:after{content:'INSTALACJE TECHNICZNE';font-size:10px}
+.case-grid article:nth-child(2) .case-tag:after{content:'UKŁAD I DOSTĘPNOŚĆ';font-size:10px}
+.case-grid article:nth-child(3) .case-tag:after{content:'INSTALACJE STOMATOLOGICZNE';font-size:10px}
+main{display:flex;flex-direction:column;gap:24px}.story,.final-cta{margin-top:0;margin-bottom:0}.site-footer{margin-top:24px!important}
+.final-cta .cta-actions{display:grid;grid-template-columns:1fr;gap:10px;min-width:290px}.final-cta .cta-actions .button{width:100%;white-space:nowrap}.button-outline{border:1px solid #ffffff70;background:#ffffff12;color:#fff}.button-outline:hover{background:#fff;color:var(--navy)}
+.final-cta .cta-actions .button{gap:10px}.final-cta .cta-actions svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.final-cta .cta-actions .button{min-height:50px;padding-inline:28px;justify-content:flex-start}.final-cta .cta-actions .button span{display:block;text-align:left}
+@media(max-width:650px){main{gap:18px}.site-footer{margin-top:18px!important}.final-cta .cta-actions{min-width:0;width:100%}.final-cta .cta-actions .button{font-size:12px}}
+.medical-nav{display:flex;align-items:center;gap:18px;font-size:12px;font-weight:700}.medical-nav a:hover{color:var(--blue)}.medical-language{position:relative}.medical-language>button{height:42px;min-width:76px;padding:0 12px;display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--line);border-radius:999px;background:#fff;color:var(--navy);font:750 12px Manrope;cursor:pointer}.medical-language>button b{transition:.18s}.medical-language.open>button b{transform:rotate(180deg)}.medical-language>div{position:absolute;right:0;top:calc(100% + 8px);z-index:80;width:76px;padding:6px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 14px 34px #14234124;opacity:0;visibility:hidden;transform:translateY(-4px);transition:.18s}.medical-language.open>div{opacity:1;visibility:visible;transform:none}.medical-language>div a{display:block;padding:8px;border-radius:9px;text-align:center;font-size:13px;font-weight:700}.medical-language>div a:hover{background:#f1f6fa;color:var(--blue)}
+@media(max-width:1100px){.medical-nav{display:none}}
+@media(max-width:650px){.medical-header-actions{gap:7px}.medical-header-actions>a.button{display:inline-flex}.medical-language>button{min-width:66px;padding-inline:8px}.medical-header-actions .button{padding-inline:12px}}
+
+/* Jeden rytm pionowy: 28 px, taki jak pomiędzy headerem i hero. */
+main{gap:0}
+.medical-hero{margin-bottom:28px}
+.intro,.case-section,.checks,.faq{padding-top:28px;padding-bottom:28px}
+.risk-section,.process-section,.stories{padding-top:28px;padding-bottom:28px}
+.final-cta{margin-top:28px;margin-bottom:28px}
+.site-footer{margin-top:0!important}
+.medical-phone{white-space:nowrap;font-size:12px;font-weight:800}.medical-phone svg{display:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.medical-phone:hover{color:var(--blue)}
+.medical-language a[aria-current="page"]{background:#f1f6fa;color:var(--blue)}
+.case-tag[data-label]::after{content:attr(data-label)!important}
+:where(a,button,summary):focus-visible{outline:3px solid #66bbed;outline-offset:3px}
+.medical-language{display:none}
+@media(max-width:650px){
+  .intro,.case-section,.checks,.faq,.risk-section,.process-section,.stories{padding-top:28px;padding-bottom:28px}
+  .medical-hero{margin-bottom:28px}
+  .final-cta{margin-top:28px;margin-bottom:28px}
+  .medical-header-actions>a.medical-phone{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:#fff}
+  .medical-phone svg{display:block}.medical-phone span{display:none}
+}
+
+@media(max-width:1050px) and (min-width:651px){
+  .shell{width:calc(100% - 48px)}
+  .medical-header{width:calc(100% - 48px)}
+  .medical-header-actions{gap:14px}
+  .medical-hero{height:590px}
+  .hero-copy{width:80%;padding:44px}
+  .hero-copy h1{font-size:clamp(42px,6vw,58px)}
+  .testimonial-track article{flex-basis:68%}
+  .final-cta{padding:42px;align-items:flex-start;flex-direction:column}
+  .final-cta .cta-actions{width:min(100%,420px)}
+}
+@media(max-width:650px){
+  .medical-header{overflow:visible}
+  .medical-brand img{height:44px}
+  .medical-header-actions .button{min-height:44px}
+  .medical-language>button{height:44px}
+  .medical-hero{height:auto;min-height:min(700px,calc(100svh - 92px));max-height:760px}
+  .hero-copy h1{font-size:clamp(34px,10.5vw,42px);line-height:1.05}
+  .hero-copy{padding:30px 22px 34px}
+  .section-head{margin-bottom:24px}
+  .risk-grid,.process-grid,.case-grid,.testimonial-track{overscroll-behavior-inline:contain;padding-bottom:8px}
+  .risk-grid article,.process-grid article{flex-basis:82vw}
+  .faq details{padding:18px 20px}
+  .faq summary{min-height:28px;padding-right:30px;position:relative;line-height:1.45}
+  .faq summary:after{position:absolute;right:0;top:-4px}
+  .checks-image{height:300px}
+}
+@media(max-width:380px){
+  .medical-header-actions>a.button{display:none}
+  .medical-hero{min-height:640px}
+  .hero-copy h1{font-size:33px}
+}

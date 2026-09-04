@@ -1,3 +1,29 @@
 .site-header{position:sticky!important;top:0;z-index:50;padding-top:20px}.site-header .header-bar{min-height:86px;padding:6px 12px 6px 20px;border:1px solid var(--line,#dfe5eb);border-radius:999px;background:#fffffff0;box-shadow:0 4px 24px #1e325a14;backdrop-filter:blur(14px);display:flex;align-items:center;justify-content:space-between;gap:18px}.site-header .brand img{height:72px;width:auto;display:block;background:transparent;mix-blend-mode:multiply}.site-header .main-nav,.site-header .header-actions{display:flex;align-items:center}.site-header .main-nav{gap:14px;font-size:14px;font-weight:650}.site-header .main-nav a:hover{color:var(--blue,#0870bb)}.site-header .header-actions{gap:8px}.site-header .phone{font-size:12px;font-weight:750;white-space:nowrap}.site-header .button.chrome-primary{min-height:44px;padding:0 22px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--blue,#0870bb);color:#fff;font-size:13px;font-weight:750}.chrome-language{position:relative}.chrome-language>button{height:40px;min-width:76px;padding:0 12px;display:flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--line,#dfe5eb);border-radius:999px;background:#fff;color:var(--navy,#172536);font:750 12px Manrope;cursor:pointer}.chrome-language>button b{font-size:12px;transition:.18s}.chrome-language.open>button b{transform:rotate(180deg)}.chrome-language>div{position:absolute;right:0;top:calc(100% + 8px);z-index:80;width:76px;padding:6px;border:1px solid var(--line,#dfe5eb);border-radius:14px;background:#fff;box-shadow:0 14px 34px #14234124;opacity:0;visibility:hidden;transform:translateY(-4px);transition:.18s}.chrome-language.open>div{opacity:1;visibility:visible;transform:none}.chrome-language>div a{display:block;padding:8px;border-radius:9px;text-align:center;color:var(--navy,#172536);font-size:13px;font-weight:700}.chrome-language>div a:hover{background:#f1f6fa;color:var(--blue,#0870bb)}
 .site-footer{padding:72px 0 32px!important;background:#102032!important;color:#fff}.site-footer .footer-grid{display:grid!important;grid-template-columns:1.6fr repeat(4,1fr)!important;gap:40px!important;padding-bottom:48px}.site-footer .footer-logo{display:inline-flex;padding:7px 10px;border-radius:12px;background:#fff}.site-footer .footer-logo img{height:42px;mix-blend-mode:multiply}.site-footer .footer-grid h2{margin:0 0 18px;font:800 13px 'Plus Jakarta Sans';text-transform:uppercase;letter-spacing:.07em}.site-footer .footer-grid p,.site-footer .footer-grid a{display:block;margin:0 0 11px;color:#ffffffa6;font-size:13px;line-height:1.6}.site-footer .footer-grid>div:first-child p{max-width:320px;margin-top:17px}.site-footer .footer-social{display:flex;gap:9px;margin-top:18px}.site-footer .footer-social a{width:36px;height:36px;margin:0;display:grid;place-items:center;border:1px solid #ffffff24;border-radius:50%;color:#fff;font-weight:800}.site-footer .copyright{padding-top:28px;border-top:1px solid #ffffff1f;color:#ffffff73;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}.site-footer .legal-links{display:flex;gap:24px}.site-footer .legal-links a{color:inherit}.site-footer .legal-links a:hover{color:#fff}
 @media(max-width:1050px){.site-header .main-nav{display:none}.site-footer .footer-grid{grid-template-columns:1fr 1fr!important}}@media(max-width:650px){.site-header{padding-top:10px}.site-header .header-bar{min-height:64px;padding:5px 8px 5px 12px}.site-header .brand img{height:50px}.site-header .phone,.chrome-language{display:none}.site-header .button.chrome-primary{min-height:40px;padding:0 16px;font-size:12px}.site-footer .footer-grid{grid-template-columns:1fr!important;gap:28px!important}.site-footer .copyright{align-items:flex-start;flex-direction:column}}
+
+/* Jeden standard desktopowego headera — zgodny ze stroną główną. */
+@media(min-width:1051px){
+  .site-header .main-nav{font-size:15px}
+  .site-header .phone{font-size:11px}
+  .site-header .header-actions .button{min-height:38px;padding-inline:16px;font-size:12.5px}
+}
+@media(min-width:1101px){
+  .medical-header{min-height:86px;padding:6px 12px 6px 20px}
+  .medical-brand img{height:72px}
+  .medical-nav{gap:14px;font-size:15px;font-weight:650}
+  .medical-header-actions{gap:8px}
+  .medical-phone{font-size:11px;font-weight:700}
+  .medical-header-actions .button{min-height:38px;padding-inline:16px;font-size:12.5px}
+}
+
+/* Geometria headera 1:1 ze stroną główną. */
+@media(min-width:1051px){
+  .site-header{display:flex;justify-content:center;padding:20px 40px 0!important}
+  .site-header .header-bar{width:100%;max-width:1360px;margin:0;min-height:86px;padding:6px 12px 6px 20px;gap:0}
+  .site-header .main-nav{gap:0}
+  .site-header .main-nav a{padding:9px 7px;border-radius:999px;white-space:nowrap}
+  .site-header .header-actions{gap:4px;flex-shrink:0}
+  .site-header .phone{padding:8px 6px;border-radius:999px}
+  .site-header .button.chrome-primary,.site-header .header-actions .button{min-height:38px;padding:0 16px;border-radius:999px}
+}

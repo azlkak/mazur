@@ -9,6 +9,9 @@ require a build step or package manager.
 - `doradztwo/` — real estate advisory hub
 - `dla-deweloperow/` — sales support landing page for property developers
 - `lokal-medyczny/` — multilingual landing page for finding and verifying medical premises
+- `lokal-gastronomiczny/` — multilingual landing page for finding and verifying hospitality premises
+- `grunt-pod-budowe/` — multilingual landing page for development-land acquisition and due diligence
+- `mieszkanie-pod-wynajem/` — multilingual landing page for end-to-end rental apartment investment, fit-out and management
 - `kim-jestesmy/` — about page
 - `wyniki-wyszukiwania/` — search results page
 - `oferta/` — property details page
@@ -19,12 +22,17 @@ require a build step or package manager.
 - `assets/images/` — images and brand assets
 - `assets/images/developers/` — imagery used by the developer landing page
 - `assets/images/medical-premises/` — imagery used by the medical-premises landing page
+- `assets/images/hospitality/` — imagery used by the hospitality-premises landing page
+- `assets/images/development-land/` — imagery used by the development-land landing page
 - `archive/` — archived export files
 - `docs/screenshots/` — development reference screenshots
 
 Each public page folder contains its own `index.html` and, where needed, local
 `styles.css` and `script.js`. Shared files remain in `assets` to avoid
 duplication.
+
+Public content is available in Polish (`pl`), English (`en`), Ukrainian (`uk`)
+and Russian (`ru`) through the `?lang=` query parameter.
 
 ## Repository conventions
 
