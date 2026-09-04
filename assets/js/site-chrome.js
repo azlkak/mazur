@@ -16,6 +16,9 @@
     const currentBase = `${current}${preserved.toString() ? `?${preserved}` : ''}`;
     const home = `../index.html?lang=${lang}`;
     if (header) header.innerHTML = `<div class="header-bar shell"><a class="brand" href="${home}" aria-label="MazurEstate"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></a><nav class="main-nav"><a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a></nav><div class="header-actions"><div class="chrome-language"><button type="button" aria-expanded="false">🌐 <span>${lang==='en'?'ENG':lang==='uk'?'UKR':lang.toUpperCase()}</span><b>⌄</b></button><div>${[['pl','PL'],['uk','UKR'],['en','ENG'],['ru','RU']].map(([code,label])=>`<a href="${withLang(currentBase,code)}">${label}</a>`).join('')}</div></div><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button chrome-primary" href="tel:+48503937749">${t.contactUs}</a></div></div>`;
+    const advisoryUrl = `../doradztwo/?lang=${lang}`;
+    const desktopAdvisory = header?.querySelector('.main-nav a:nth-child(2)');
+    if (desktopAdvisory) desktopAdvisory.href = advisoryUrl;
     if (header) {
       const bar = header.querySelector('.header-bar');
       const menuButton = document.createElement('button');
@@ -29,6 +32,7 @@
       mobileNav.className = 'chrome-mobile-nav shell';
       mobileNav.id = 'chrome-mobile-nav';
       mobileNav.innerHTML = `<a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a><a class="mobile-call" href="tel:+48503937749">+48 503 937 749</a>`;
+      mobileNav.querySelector('a:nth-child(2)').href = advisoryUrl;
       bar.appendChild(menuButton);
       header.appendChild(mobileNav);
       menuButton.addEventListener('click', () => {
@@ -50,6 +54,8 @@
       });
     }
     if (footer) { footer.className = 'site-footer'; footer.innerHTML = `<div class="shell footer-grid"><div><div class="footer-logo"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></div><p>${t.intro}</p><div class="footer-social"><a href="https://www.instagram.com/mazurestate" target="_blank" rel="noopener" aria-label="Instagram">◎</a><a href="https://www.facebook.com/MazurEstate" target="_blank" rel="noopener" aria-label="Facebook">f</a><a href="https://www.threads.com/@mazurestate" target="_blank" rel="noopener" aria-label="Threads">@</a><a href="https://www.youtube.com/@mazurestate" target="_blank" rel="noopener" aria-label="YouTube">▶</a></div></div><div><h2>${t.nav}</h2><a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="../kim-jestesmy/?lang=${lang}">${t.about}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a></div><div><h2>${t.offers}</h2><a href="../wyniki-wyszukiwania/?type=mieszkania&transaction=sprzedaz&lang=${lang}">${t.apartments}</a><a href="../wyniki-wyszukiwania/?type=domy&transaction=sprzedaz&lang=${lang}">${t.houses}</a><a href="../wyniki-wyszukiwania/?type=dzialki&transaction=sprzedaz&lang=${lang}">${t.land}</a><a href="../wyniki-wyszukiwania/?type=lokale&transaction=wynajem&lang=${lang}">${t.commercialPlural}</a></div><div><h2>${t.projects}</h2><a href="${home}#services">${t.investor}</a><a href="../wyniki-wyszukiwania/?transaction=wynajem&lang=${lang}">${t.rent}</a><a href="../wyniki-wyszukiwania/?transaction=sprzedaz&lang=${lang}">${t.sale}</a><a href="${home}#about">${t.agency}</a><a href="../wyniki-wyszukiwania/?type=lokale&lang=${lang}">${t.commercial}</a></div><div><h2>${t.contact}</h2><p>ul. Franciszka Klimczaka 10A, lok. 5<br>02-797 Warszawa</p><a href="tel:+48503937749">+48 503 937 749</a><a href="mailto:info@mazurestate.com">info@mazurestate.com</a></div></div><div class="shell copyright"><span>© 2026 MazurEstate. ${t.rights}</span><span><a href="../polityka-prywatnosci/">${t.privacy}</a> · <a href="../polityka-cookies/">Cookies</a> · <a href="../regulamin/">${t.terms}</a></span></div>`; }
+    const footerAdvisory = footer?.querySelector('.footer-grid>div:nth-child(2) a:nth-of-type(2)');
+    if (footerAdvisory) footerAdvisory.href = advisoryUrl;
     const legalBar=footer?.querySelector('.copyright span:last-child');
     if(legalBar){legalBar.className='legal-links';legalBar.innerHTML=`<a href="../polityka-prywatnosci/?lang=${lang}">${t.privacy}</a><a href="../polityka-cookies/?lang=${lang}">Cookies</a><a href="../regulamin/?lang=${lang}">${t.terms}</a>`;}
     const picker = header?.querySelector('.chrome-language');
