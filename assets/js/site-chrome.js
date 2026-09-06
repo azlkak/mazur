@@ -85,6 +85,8 @@
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.applySiteChrome); else window.applySiteChrome();
   const translations=document.createElement('script');translations.src='../assets/js/page-translations.js';document.body.appendChild(translations);
+  const residual=document.createElement('script');residual.src='../assets/js/residual-i18n.js';document.body.appendChild(residual);
+  document.querySelectorAll('.draft-note').forEach(note => note.remove());
 })();
 
 if (location.protocol === 'file:') {

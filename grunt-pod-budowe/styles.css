@@ -26,9 +26,6 @@
 @media(min-width:1051px){.case-grid h3{min-height:57px}.case-grid article{display:flex;flex-direction:column}.case-details{flex:1;grid-template-rows:repeat(3,auto) 1fr}.case-solution{align-self:end}}
 .case-tag{align-self:flex-start}
 .case-grid article:nth-child(1) .case-tag,.case-grid article:nth-child(2) .case-tag,.case-grid article:nth-child(3) .case-tag{font-size:0}
-.case-grid article:nth-child(1) .case-tag:after{content:'INSTALACJE TECHNICZNE';font-size:10px}
-.case-grid article:nth-child(2) .case-tag:after{content:'UKŁAD I DOSTĘPNOŚĆ';font-size:10px}
-.case-grid article:nth-child(3) .case-tag:after{content:'INSTALACJE STOMATOLOGICZNE';font-size:10px}
 main{display:flex;flex-direction:column;gap:24px}.story,.final-cta{margin-top:0;margin-bottom:0}.site-footer{margin-top:24px!important}
 .final-cta .cta-actions{display:grid;grid-template-columns:1fr;gap:10px;min-width:290px}.final-cta .cta-actions .button{width:100%;white-space:nowrap}.button-outline{border:1px solid #ffffff70;background:#ffffff12;color:#fff}.button-outline:hover{background:#fff;color:var(--navy)}
 .final-cta .cta-actions .button{gap:10px}.final-cta .cta-actions svg{width:18px;height:18px;flex:0 0 18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
