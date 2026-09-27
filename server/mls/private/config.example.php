@@ -13,4 +13,8 @@ return [
     'min_age_seconds' => 600,
     'min_full_offers' => 1,
     'archive_retention_days' => 7,
+    // EstiCRM: Ustawienia -> Dane firmowe. Never expose these values publicly.
+    'esticrm_company' => '',
+    'esticrm_token' => '',
+    'esticrm_agent_email' => '',
 ];

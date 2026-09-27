@@ -27,6 +27,27 @@ jawnie wybrane pola i nie publikuje danych kontaktowych ani dokładnego adresu.
 - Importer jest włączony. Dane dostępowe nie zostały przekazane MLS.
 - Tymczasowy klucz SSH użyty przy wdrożeniu został usunięty.
 
+## Formularz kontaktowy i EstiCRM
+
+Frontend wysyła formularze do `public/api/enquiry.php`. Ten plik sprawdza dane,
+rozpoznaje ofertę po jej lokalnym identyfikatorze i przekazuje zapytanie bezpośrednio
+do `POST https://app.esticrm.pl/apiClient/question/store`. Dane formularza nie są
+zapisywane w lokalnej bazie Hostinger.
+
+W prywatnym `mls/config.php` trzeba uzupełnić:
+
+```php
+'esticrm_company' => 'identyfikator firmy',
+'esticrm_token' => 'sekretny token API',
+'esticrm_agent_email' => 'email opiekuna zapytań',
+```
+
+Identyfikator i token są dostępne dla administratora w EstiCRM w
+`Ustawienia -> Dane firmowe`. Nie wolno dodawać ich do repozytorium ani kodu
+frontendu. Formularz wymaga imienia, wiadomości, zgody oraz co najmniej telefonu
+lub e-maila. Na stronie oferty backend uzupełnia numer oferty, rynek, rodzaj
+nieruchomości i typ transakcji na podstawie już zaimportowanych danych MLS.
+
 ## Zachowanie importera
 
 - Odbiera płaskie paczki ZIP z `definitions.xml`, XML ofert i zdjęciami.

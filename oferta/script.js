@@ -82,7 +82,7 @@ async function loadOffer(){
     document.title=`${offer.title} | MazurEstate`;document.querySelector('meta[name="description"]')?.setAttribute('content',`${offer.title}. ${locationName}. Cena i szczegóły oferty MazurEstate.`);
     text('.property-head .eyebrow',eyebrow);text('.property-head h1',offer.title);text('.property-head .location',locationFull);text('.head-price strong',price);text('.head-price span',[isRent?'miesięcznie':'',unit].filter(Boolean).join(' · '));
     const crumbs=document.querySelectorAll('.breadcrumbs a');if(crumbs[0])crumbs[0].href=`../index.html?lang=${lang}`;if(crumbs[1]){crumbs[1].textContent=`${categoryNames[category]} ${transactionText}`;crumbs[1].href=`../wyniki-wyszukiwania/?type=${category}&transaction=${isRent?'wynajem':'sprzedaz'}&lang=${lang}`};text('.breadcrumbs strong',locationName||offer.title);
-    renderParameters(offer,category);renderDescription(offer);renderFeatures(offer.features||[]);setupGallery(offer.images||[],offer.title);
+    renderParameters(offer,category);renderDescription(offer);renderFeatures(offer.features||[]);setupGallery(offer.images||[],offer.title);window.MazurContactForm?.setOffer({id:offer.id,number:offer.number||offer.id,title:offer.title});
   }catch(error){showUnavailable(error.message||'Spróbuj ponownie za chwilę.')}
 }
 

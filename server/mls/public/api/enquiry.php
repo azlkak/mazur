@@ -1,0 +1,155 @@
+<?php
+declare(strict_types=1);
+
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+header('X-Content-Type-Options: nosniff');
+
+$origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
+if ($origin === 'https://azlkak.github.io') {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Access-Control-Allow-Headers: Content-Type, Accept');
+    header('Access-Control-Allow-Methods: POST, OPTIONS');
+    header('Vary: Origin');
+}
+
+function reply(int $status, string $code): never
+{
+    http_response_code($status);
+    echo json_encode(['code' => $code], JSON_THROW_ON_ERROR);
+    exit;
+}
+
+function inputText(array $input, string $key, int $maxLength): string
+{
+    $value = trim((string)($input[$key] ?? ''));
+    if (mb_strlen($value) > $maxLength) reply(422, 'invalid_input');
+    return $value;
+}
+
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+    http_response_code($origin === 'https://azlkak.github.io' ? 204 : 403);
+    exit;
+}
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') reply(405, 'method_not_allowed');
+if ($origin !== 'https://azlkak.github.io') reply(403, 'origin_not_allowed');
+
+$contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
+if ($contentLength < 1 || $contentLength > 20_000) reply(413, 'invalid_size');
+
+try {
+    try {
+        $input = json_decode((string)file_get_contents('php://input'), true, 32, JSON_THROW_ON_ERROR);
+    } catch (JsonException $error) {
+        reply(400, 'invalid_json');
+    }
+    if (!is_array($input)) reply(400, 'invalid_json');
+
+    // Quietly accept bot submissions caught by the honeypot.
+    if (trim((string)($input['website'] ?? '')) !== '') reply(200, 'accepted');
+
+    $startedAt = (int)($input['started_at'] ?? 0);
+    $nowMs = (int)round(microtime(true) * 1000);
+    if ($startedAt < 1 || $nowMs - $startedAt < 2500 || $nowMs - $startedAt > 86_400_000) {
+        reply(422, 'invalid_timing');
+    }
+
+    $firstName = inputText($input, 'first_name', 80);
+    $lastName = inputText($input, 'last_name', 100);
+    $phone = inputText($input, 'phone', 32);
+    $email = inputText($input, 'email', 190);
+    $message = inputText($input, 'message', 3000);
+    $language = inputText($input, 'language', 5);
+    $sourceUrl = inputText($input, 'source_url', 500);
+    $offerId = inputText($input, 'offer_id', 40);
+
+    if ($firstName === '' || mb_strlen($message) < 10 || ($input['consent'] ?? false) !== true) {
+        reply(422, 'missing_required');
+    }
+    if ($phone === '' && $email === '') reply(422, 'missing_contact');
+    if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) reply(422, 'invalid_email');
+    if ($phone !== '' && !preg_match('/\A[0-9+() .-]{6,32}\z/u', $phone)) reply(422, 'invalid_phone');
+    if (!in_array($language, ['pl', 'en', 'uk', 'ru'], true)) $language = 'pl';
+    if ($sourceUrl !== '' && filter_var($sourceUrl, FILTER_VALIDATE_URL) === false) $sourceUrl = '';
+    if ($offerId !== '' && !preg_match('/\A[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
+
+    $privateRoot = dirname(__DIR__, 2) . '/mls';
+    $config = require $privateRoot . '/config.php';
+    $company = trim((string)($config['esticrm_company'] ?? ''));
+    $token = trim((string)($config['esticrm_token'] ?? ''));
+    $agentEmail = trim((string)($config['esticrm_agent_email'] ?? ''));
+    if ($company === '' || $token === '' || filter_var($agentEmail, FILTER_VALIDATE_EMAIL) === false) {
+        reply(503, 'service_unconfigured');
+    }
+
+    $request = [
+        'company' => $company,
+        'token' => $token,
+        'agent_email' => $agentEmail,
+        'content' => $message . ($sourceUrl !== '' ? "\n\nŹródło: " . $sourceUrl : '') . "\nJęzyk strony: " . $language,
+        'firstname' => $firstName,
+        'lastname' => $lastName,
+        'email' => $email,
+        'phone' => $phone,
+    ];
+
+    if ($offerId !== '') {
+        $db = new PDO($config['dsn'], $config['user'], $config['password'], [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ]);
+        $statement = $db->prepare('SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
+        $statement->execute([$offerId]);
+        $row = $statement->fetch();
+        if (!$row) reply(422, 'invalid_offer');
+
+        $fields = json_decode((string)$row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+        $offerNumber = trim((string)(($fields['numberExport'] ?? '') ?: ($fields['number'] ?? '') ?: $offerId));
+        $transaction = (string)($fields['transaction'] ?? '');
+        $market = (int)($fields['market'] ?? 0);
+        $typeId = (int)($fields['mainTypeId'] ?? 0);
+
+        $request['offer_number'] = $offerNumber;
+        if ($transaction === '131') $request['transaction'] = 133;
+        if ($transaction === '132') $request['transaction'] = 134;
+        if (in_array($market, [10, 11], true)) $request['market'] = $market;
+        if (in_array($typeId, [1, 2, 3, 4], true)) $request['type_id'] = $typeId;
+    }
+
+    if (!function_exists('curl_init')) reply(503, 'service_unavailable');
+    $curl = curl_init('https://app.esticrm.pl/apiClient/question/store');
+    if ($curl === false) reply(503, 'service_unavailable');
+    curl_setopt_array($curl, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => http_build_query($request, '', '&', PHP_QUERY_RFC3986),
+        CURLOPT_HTTPHEADER => ['Accept: application/json', 'Content-Type: application/x-www-form-urlencoded'],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_FOLLOWLOCATION => false,
+        CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_TIMEOUT => 12,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+    ]);
+    $responseBody = curl_exec($curl);
+    $responseStatus = (int)curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+    $curlError = curl_errno($curl);
+    curl_close($curl);
+
+    if ($curlError !== 0 || $responseStatus < 200 || $responseStatus >= 300 || !is_string($responseBody)) {
+        reply(502, 'crm_unavailable');
+    }
+    try {
+        $response = json_decode($responseBody, true, 16, JSON_THROW_ON_ERROR);
+    } catch (JsonException $error) {
+        reply(502, 'crm_invalid_response');
+    }
+    if (!is_array($response) || !in_array($response['result'] ?? null, [true, 1, '1'], true)) {
+        reply(502, 'crm_rejected');
+    }
+
+    reply(201, 'accepted');
+} catch (Throwable $error) {
+    error_log('Mazur contact gateway: ' . $error->getMessage());
+    reply(500, 'server_error');
+}

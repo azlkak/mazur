@@ -66,6 +66,8 @@
     ['Porozmawiajmy o Twojej nieruchomości', 'Поговорімо про Вашу нерухомість', 'Let’s talk about your property', 'Давайте обсудим вашу недвижимость'],
     ['Niezależnie od tego, czy chcesz kupić, sprzedać, wynająć czy zainwestować — zacznijmy od rozmowy.', 'Незалежно від того, чи хочете Ви купити, продати, орендувати або інвестувати — почнімо з розмови.', 'Whether you want to buy, sell, rent or invest, let’s start with a conversation.', 'Хотите купить, продать, арендовать или инвестировать — давайте начнём с разговора.'],
     ['Skontaktuj się z nami', 'Зв’язатися з нами', 'Contact us', 'Связаться с нами'],
+    ['Porozmawiajmy o Twoich planach', 'Поговорімо про Ваші плани', 'Let’s talk about your plans', 'Давайте обсудим ваши планы'],
+    ['Zostaw dane kontaktowe i krótko opisz, czego potrzebujesz. Odpowiemy i zaproponujemy następny krok.', 'Залиште контактні дані й коротко опишіть, що Вам потрібно. Ми відповімо та запропонуємо наступний крок.', 'Leave your contact details and briefly describe what you need. We will reply and suggest the next step.', 'Оставьте контактные данные и кратко опишите, что вам нужно. Мы ответим и предложим следующий шаг.'],
     ['Masz pytania?', 'Є запитання?', 'Questions?', 'Есть вопросы?'],
     ['Najczęściej zadawane pytania', 'Найчастіші запитання', 'Frequently asked questions', 'Часто задаваемые вопросы'],
     ['Jaka jest prowizja za pośrednictwo?', 'Яка комісія за посередництво?', 'What is the agency fee?', 'Какова комиссия агентства?'],
