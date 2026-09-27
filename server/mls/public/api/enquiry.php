@@ -174,7 +174,11 @@ try {
     } catch (JsonException $error) {
         reply(502, 'crm_invalid_response');
     }
-    if (!is_array($response) || !in_array($response['result'] ?? null, [true, 1, '1'], true)) {
+    $crmResult = is_array($response) ? ($response['result'] ?? null) : null;
+    $crmAccepted = $crmResult === true
+        || (is_int($crmResult) && $crmResult > 0)
+        || (is_string($crmResult) && ctype_digit($crmResult) && (int)$crmResult > 0);
+    if (!$crmAccepted) {
         reply(502, 'crm_rejected');
     }
 
