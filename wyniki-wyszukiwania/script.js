@@ -1,4 +1,4 @@
-(() => {
+(async () => {
   const params = new URLSearchParams(location.search);
   const type = ['mieszkania','domy','dzialki','lokale'].includes(params.get('type')) ? params.get('type') : 'mieszkania';
   const transaction = params.get('transaction') === 'wynajem' ? 'wynajem' : 'sprzedaz';
@@ -25,7 +25,7 @@
   const nearbyLocations=['Bąkówka','Falenty','Gdańsk Jasień','Konstancin-Jeziorna','Kraków','Łódź','Marki','Mysiadło','Piaseczno','Pruszków','Radom','Słupno','Wiązowna','Ząbki'].sort((a,b)=>a.localeCompare(b,'pl'));
   const titleSets={pl:{mieszkania:['Apartament z dużym balkonem','Jasne mieszkanie blisko parku','Nowoczesne mieszkanie w spokojnej okolicy','Przestronny apartament gotowy do zamieszkania'],domy:['Nowoczesny dom dla rodziny','Dom z ogrodem blisko Warszawy','Kameralna willa w zielonej okolicy','Energooszczędny dom z garażem'],dzialki:['Działka budowlana z dobrym dojazdem','Grunt inwestycyjny w rozwijającej się okolicy','Działka z mediami przy spokojnej ulicy','Teren pod kameralną zabudowę'],lokale:['Lokal usługowy przy ruchliwej ulicy','Nowoczesne biuro w prestiżowej lokalizacji','Lokal handlowy z dużymi witrynami','Funkcjonalna przestrzeń dla Twojej firmy']},en:{mieszkania:['Apartment with a large balcony','Bright apartment near a park','Modern apartment in a quiet area','Spacious move-in-ready apartment'],domy:['Modern family house','House with a garden near Warsaw','Private villa in a green area','Energy-efficient house with a garage'],dzialki:['Building plot with good access','Investment land in a growing area','Serviced plot on a quiet street','Land for an intimate development'],lokale:['Retail unit on a busy street','Modern office in a prime location','Commercial unit with large windows','Functional space for your business']},uk:{mieszkania:['Квартира з великим балконом','Світла квартира біля парку','Сучасна квартира в тихому районі','Простора квартира, готова до заселення'],domy:['Сучасний будинок для сім’ї','Будинок із садом біля Варшави','Камерна вілла в зеленому районі','Енергоефективний будинок із гаражем'],dzialki:['Ділянка під забудову зі зручним доїздом','Інвестиційна земля в перспективному районі','Ділянка з комунікаціями на тихій вулиці','Земля під камерну забудову'],lokale:['Комерційне приміщення на жвавій вулиці','Сучасний офіс у престижній локації','Торгове приміщення з великими вітринами','Функціональний простір для Вашого бізнесу']},ru:{mieszkania:['Квартира с большим балконом','Светлая квартира рядом с парком','Современная квартира в тихом районе','Просторная квартира, готовая к заселению'],domy:['Современный дом для семьи','Дом с садом рядом с Варшавой','Уютная вилла в зелёном районе','Энергоэффективный дом с гаражом'],dzialki:['Участок под застройку с удобным подъездом','Инвестиционная земля в развивающемся районе','Участок с коммуникациями на тихой улице','Земля под камерную застройку'],lokale:['Коммерческое помещение на оживлённой улице','Современный офис в престижном месте','Торговое помещение с большими витринами','Функциональное пространство для бизнеса']}};
   const titles=titleSets[lang];
-  const offers = Array.from({length:12},(_,i) => {
+  let offers = Array.from({length:12},(_,i) => {
     const isRent = transaction === 'wynajem';
     const base = type === 'domy' ? 145 : type === 'dzialki' ? 980 : type === 'lokale' ? 92 : 48;
     const area = base + (i%6)*(type === 'dzialki' ? 170 : type === 'domy' ? 18 : 7);
@@ -33,6 +33,30 @@
     const gallery = [images[i%images.length],images[(i+1)%images.length],images[(i+3)%images.length]];
     return {id:i+1,title:titles[type][i%4],location:locations[i],area,price,gallery,rooms:type==='dzialki'?t.plot:type==='lokale'?`${3+i%4} ${t.spaces}`:`${type==='domy'?4+i%3:2+i%4} ${t.rooms}`,floor:type==='dzialki'?t.utilities:type==='domy'?t.floors:type==='lokale'?t.ground:`${1+i%7} ${t.floor}`,date:12-i};
   });
+  const apiUrl='https://darkgreen-rabbit-981798.hostingersite.com/api/mls-test.php';
+  const normalize=value=>String(value||'').toLocaleLowerCase('pl').trim();
+  const categoryFor=value=>{const name=normalize(value);if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return null};
+  const fallbackImages={mieszkania:images[0],domy:images[2],dzialki:images[4],lokale:images[3]};
+  let loadError=false;
+  try {
+    const response=await fetch(apiUrl,{headers:{Accept:'application/json'}});
+    if(!response.ok)throw new Error('MLS API unavailable');
+    const payload=await response.json();
+    const maxPrice=Number((params.get('price')||'').replace(/\D/g,''))||Infinity;
+    const minArea=Number((params.get('area')||'').replace(',','.'))||0;
+    offers=payload.offers.map(item=>{
+      const category=categoryFor(item.type);
+      const itemTransaction=item.transaction==='wynajem'?'wynajem':'sprzedaz';
+      const location=[item.city,item.district].filter(Boolean).join(', ');
+      const gallery=item.images?.length?item.images:[fallbackImages[category]||images[0]];
+      const rooms=category==='dzialki'?t.plot:category==='lokale'?(item.rooms?`${item.rooms} ${t.spaces}`:t.spaces):(item.rooms?`${item.rooms} ${t.rooms}`:'');
+      const floor=category==='dzialki'?(item.plotArea?`${item.plotArea} m²`:t.utilities):category==='domy'?t.floors:category==='lokale'?t.ground:(item.floor!==''?`${item.floor} ${t.floor}`:'');
+      return {id:item.id,title:item.title,location,area:Number(item.area)||0,price:Number(item.price)||0,gallery,rooms,floor,date:Date.parse(item.exportedAt)||0,category,transaction:itemTransaction};
+    }).filter(item=>item.category===type&&item.transaction===transaction&&normalize(item.location).includes(normalize(locationFilter))&&item.price<=maxPrice&&item.area>=minArea);
+  } catch(error) {
+    loadError=true;
+    offers=[];
+  }
   let currentPage=1;
   const galleryIndex={};
   const list=document.getElementById('offer-list');
@@ -81,14 +105,15 @@
   document.getElementById('language-current').textContent=langLabels[lang];
   document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
   document.getElementById('results-title').textContent=`${typeLabels[type]} ${transactionLabel}${locationFilter?` — ${locationFilter}`:''}`;
-  document.getElementById('results-summary').textContent=t.found.replace('{n}',offers.length);
+  document.getElementById('results-summary').textContent=loadError?'Nie udało się pobrać ofert MLS. Spróbuj ponownie za chwilę.':`${t.found.replace('{n}',offers.length)} · dane testowe MLS`;
   const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('price')&&`${t.to} ${params.get('price')} PLN`,params.get('area')&&`${t.from} ${params.get('area')} m²`].filter(Boolean);
   document.getElementById('active-filters').innerHTML=chips.map(x=>`<span class="filter-chip">${x}</span>`).join('');
 
   function ordered(){const data=[...offers];if(sort.value==='price-asc')data.sort((a,b)=>a.price-b.price);if(sort.value==='price-desc')data.sort((a,b)=>b.price-a.price);if(sort.value==='area-asc')data.sort((a,b)=>a.area-b.area);if(sort.value==='area-desc')data.sort((a,b)=>b.area-a.area);if(sort.value==='newest')data.sort((a,b)=>b.date-a.date);if(sort.value==='oldest')data.sort((a,b)=>a.date-b.date);return data}
-  function render(){const count=Number(perPage.value);const data=ordered();const pages=Math.ceil(data.length/count);currentPage=Math.min(currentPage,pages);const visible=data.slice((currentPage-1)*count,currentPage*count);list.innerHTML=visible.map(card).join('');pagination.innerHTML=`<button class="page-button" data-page="${Math.max(1,currentPage-1)}" aria-label="${t.prevPage}">‹</button>${Array.from({length:pages},(_,i)=>`<button class="page-button ${currentPage===i+1?'active':''}" data-page="${i+1}">${i+1}</button>`).join('')}<button class="page-button" data-page="${Math.min(pages,currentPage+1)}" aria-label="${t.nextPage}">›</button>`}
-  function card(o){const gi=galleryIndex[o.id]||0;return `<article class="offer-card"><div class="gallery" data-offer="${o.id}"><img src="${o.gallery[gi]}" alt="${o.title}"><button class="gallery-arrow prev" data-gallery="prev" data-id="${o.id}" aria-label="${t.prevPhoto}">‹</button><button class="gallery-arrow next" data-gallery="next" data-id="${o.id}" aria-label="${t.nextPhoto}">›</button><div class="gallery-dots">${o.gallery.map((_,i)=>`<span class="${i===gi?'active':''}"></span>`).join('')}</div><span class="gallery-count">▣ ${gi+1}/${o.gallery.length}</span></div><div class="offer-content"><div class="offer-top"><div><span class="price">${money(o.price)}</span><span class="unit-price">${unit(o)}</span></div><button class="favorite" aria-label="${t.favorite}">♡</button></div><h2>${o.title}</h2><p class="address">${o.location}, mazowieckie</p><div class="details"><span class="detail"><i class="detail-icon">⌂</i>${o.rooms}</span><span class="detail"><i class="detail-icon">↗</i>${o.area} m²</span><span class="detail"><i class="detail-icon">▦</i>${o.floor}</span></div><div class="offer-footer"><span class="offer-kind">${typeLabels[type]} ${transactionLabel}</span><span>${t.offer}</span></div></div></article>`}
-  list.addEventListener('click',e=>{const arrow=e.target.closest('[data-gallery]');if(arrow){const id=Number(arrow.dataset.id),o=offers.find(x=>x.id===id),delta=arrow.dataset.gallery==='next'?1:-1;galleryIndex[id]=((galleryIndex[id]||0)+delta+o.gallery.length)%o.gallery.length;render();return}const fav=e.target.closest('.favorite');if(fav){fav.classList.toggle('active');fav.textContent=fav.classList.contains('active')?'♥':'♡';return}if(e.target.closest('.offer-card'))location.href=`../oferta/?id=4374&lang=${lang}`});
+  const escapeHtml=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+  function render(){const count=Number(perPage.value);const data=ordered();const pages=Math.ceil(data.length/count);if(!pages){currentPage=1;list.innerHTML='<p>Brak ofert spełniających wybrane kryteria.</p>';pagination.innerHTML='';return}currentPage=Math.min(currentPage,pages);const visible=data.slice((currentPage-1)*count,currentPage*count);list.innerHTML=visible.map(card).join('');pagination.innerHTML=`<button class="page-button" data-page="${Math.max(1,currentPage-1)}" aria-label="${t.prevPage}">‹</button>${Array.from({length:pages},(_,i)=>`<button class="page-button ${currentPage===i+1?'active':''}" data-page="${i+1}">${i+1}</button>`).join('')}<button class="page-button" data-page="${Math.min(pages,currentPage+1)}" aria-label="${t.nextPage}">›</button>`}
+  function card(o){const gi=galleryIndex[o.id]||0;return `<article class="offer-card"><div class="gallery" data-offer="${escapeHtml(o.id)}"><img src="${escapeHtml(o.gallery[gi])}" alt="${escapeHtml(o.title)}"><button class="gallery-arrow prev" data-gallery="prev" data-id="${escapeHtml(o.id)}" aria-label="${t.prevPhoto}">‹</button><button class="gallery-arrow next" data-gallery="next" data-id="${escapeHtml(o.id)}" aria-label="${t.nextPhoto}">›</button><div class="gallery-dots">${o.gallery.map((_,i)=>`<span class="${i===gi?'active':''}"></span>`).join('')}</div><span class="gallery-count">▣ ${gi+1}/${o.gallery.length}</span></div><div class="offer-content"><div class="offer-top"><div><span class="price">${money(o.price)}</span><span class="unit-price">${unit(o)}</span></div><button class="favorite" aria-label="${t.favorite}">♡</button></div><h2>${escapeHtml(o.title)}</h2><p class="address">${escapeHtml(o.location)}</p><div class="details"><span class="detail"><i class="detail-icon">⌂</i>${escapeHtml(o.rooms)}</span><span class="detail"><i class="detail-icon">↗</i>${escapeHtml(o.area)} m²</span><span class="detail"><i class="detail-icon">▦</i>${escapeHtml(o.floor)}</span></div><div class="offer-footer"><span class="offer-kind">${typeLabels[type]} ${transactionLabel}</span><span>Dane testowe MLS</span></div></div></article>`}
+  list.addEventListener('click',e=>{const arrow=e.target.closest('[data-gallery]');if(arrow){const id=arrow.dataset.id,o=offers.find(x=>String(x.id)===id),delta=arrow.dataset.gallery==='next'?1:-1;if(!o)return;galleryIndex[id]=((galleryIndex[id]||0)+delta+o.gallery.length)%o.gallery.length;render();return}const fav=e.target.closest('.favorite');if(fav){fav.classList.toggle('active');fav.textContent=fav.classList.contains('active')?'♥':'♡'}});
   pagination.addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b){currentPage=Number(b.dataset.page);render();scrollTo({top:0,behavior:'smooth'})}});
   perPage.addEventListener('change',()=>{currentPage=1;render()});sort.addEventListener('change',()=>{currentPage=1;render()});
   const picker=document.getElementById('language-picker'),trigger=picker.querySelector('.language-trigger');
