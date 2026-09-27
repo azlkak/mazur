@@ -118,10 +118,10 @@ try {
         'agent_email' => $agentEmail,
         'content' => $message . ($sourceUrl !== '' ? "\n\nŹródło: " . $sourceUrl : '') . "\nJęzyk strony: " . $language,
         'firstname' => $firstName,
-        'lastname' => $lastName,
-        'email' => $email,
-        'phone' => $phone,
     ];
+    if ($lastName !== '') $request['lastname'] = $lastName;
+    if ($email !== '') $request['email'] = $email;
+    if ($phone !== '') $request['phone'] = $phone;
 
     if ($offerId !== '') {
         $db = new PDO($config['dsn'], $config['user'], $config['password'], [
