@@ -102,8 +102,9 @@
   document.querySelectorAll('[href^="../index.html"]').forEach(a=>{const parts=a.getAttribute('href').split('#');a.href=`../index.html?lang=${lang}${parts[1]?`#${parts[1]}`:''}`});
   document.querySelectorAll('[data-type-link]').forEach(a=>{const q=new URLSearchParams(a.search);q.set('lang',lang);a.search=q.toString();a.textContent=typeLabels[a.dataset.typeLink]});
   const langLabels={pl:'PL',uk:'UKR',en:'ENG',ru:'RU'};
-  document.getElementById('language-current').textContent=langLabels[lang];
-  document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
+  const languageCurrent=document.getElementById('language-current');
+  if(languageCurrent)languageCurrent.textContent=langLabels[lang];
+  document.querySelector(`[data-lang="${lang}"]`)?.classList.add('active');
   document.getElementById('results-title').textContent=`${typeLabels[type]} ${transactionLabel}${locationFilter?` — ${locationFilter}`:''}`;
   document.getElementById('results-summary').textContent=loadError?'Nie udało się pobrać ofert MLS. Spróbuj ponownie za chwilę.':`${t.found.replace('{n}',offers.length)} · dane testowe MLS`;
   const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('price')&&`${t.to} ${params.get('price')} PLN`,params.get('area')&&`${t.from} ${params.get('area')} m²`].filter(Boolean);
@@ -116,10 +117,8 @@
   list.addEventListener('click',e=>{const arrow=e.target.closest('[data-gallery]');if(arrow){const id=arrow.dataset.id,o=offers.find(x=>String(x.id)===id),delta=arrow.dataset.gallery==='next'?1:-1;if(!o)return;galleryIndex[id]=((galleryIndex[id]||0)+delta+o.gallery.length)%o.gallery.length;render();return}const fav=e.target.closest('.favorite');if(fav){fav.classList.toggle('active');fav.textContent=fav.classList.contains('active')?'♥':'♡'}});
   pagination.addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b){currentPage=Number(b.dataset.page);render();scrollTo({top:0,behavior:'smooth'})}});
   perPage.addEventListener('change',()=>{currentPage=1;render()});sort.addEventListener('change',()=>{currentPage=1;render()});
-  const picker=document.getElementById('language-picker'),trigger=picker.querySelector('.language-trigger');
-  trigger.addEventListener('click',()=>{const open=picker.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open))});
-  picker.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{params.set('lang',button.dataset.lang);location.search=params.toString()}));
-  document.addEventListener('click',e=>{if(!picker.contains(e.target)){picker.classList.remove('open');trigger.setAttribute('aria-expanded','false')}});
+  const picker=document.getElementById('language-picker');
+  if(picker){const trigger=picker.querySelector('.language-trigger');trigger.addEventListener('click',()=>{const open=picker.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open))});picker.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{params.set('lang',button.dataset.lang);location.search=params.toString()}));document.addEventListener('click',e=>{if(!picker.contains(e.target)){picker.classList.remove('open');trigger.setAttribute('aria-expanded','false')}})}
   render();
 })();
 
