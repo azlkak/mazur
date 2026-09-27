@@ -1,7 +1,7 @@
 const languageParams = new URLSearchParams(location.search);
 const queryLang = languageParams.has('lang')
   ? languageParams.get('lang')
-  : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0];
+  : 'pl';
 const lang = ['pl','uk','en','ru'].includes(queryLang) ? queryLang : 'pl';
 
 const ui = {

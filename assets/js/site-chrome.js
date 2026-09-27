@@ -73,6 +73,20 @@
     if (footerAdvisory) footerAdvisory.href = advisoryUrl;
     const footerDevelopers = footer?.querySelector('.footer-grid>div:nth-child(2) a:nth-of-type(4)');
     if (footerDevelopers) footerDevelopers.href = developersUrl;
+    const serviceColumn = footer?.querySelector('.footer-grid>div:nth-child(4)');
+    if (serviceColumn && window.MAZUR_SEO) {
+      const routes = ['mieszkanie-pod-wynajem/', 'lokal-medyczny/', 'lokal-gastronomiczny/', 'grunt-pod-budowe/'];
+      serviceColumn.replaceChildren();
+      const heading = document.createElement('h2');
+      heading.textContent = {pl:'Usługi',en:'Services',uk:'Послуги',ru:'Услуги'}[lang];
+      serviceColumn.appendChild(heading);
+      routes.forEach(route => {
+        const link = document.createElement('a');
+        link.href = '../' + route + '?lang=' + lang;
+        link.textContent = window.MAZUR_SEO.pages[route].names[lang];
+        serviceColumn.appendChild(link);
+      });
+    }
     const legalBar=footer?.querySelector('.copyright span:last-child');
     if(legalBar){legalBar.className='legal-links';legalBar.innerHTML=`<a href="../polityka-prywatnosci/?lang=${lang}">${t.privacy}</a><a href="../polityka-cookies/?lang=${lang}">Cookies</a><a href="../regulamin/?lang=${lang}">${t.terms}</a>`;}
     const picker = header?.querySelector('.chrome-language');

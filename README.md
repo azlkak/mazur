@@ -56,6 +56,14 @@ Then open `http://127.0.0.1:4173/`.
 
 ## Deployment
 
+## SEO maintenance
+
+Run `python3 scripts/prepare-seo.py` after changing SEO copy or the production domain. The generator owns the marked head blocks, `assets/js/seo-config.js`, `sitemap.xml` and `robots.txt`. Edit the generator, not generated metadata. Query-based languages are preserved; shared `seo.js` sets same-language canonical and structured data at runtime. Demo search/listing pages remain noindex.
+
+On GitHub project Pages, `/mazur/robots.txt` is not the host-root robots policy: submit the sitemap directly in Search Console. On a custom domain, update `BASE` in the generator and serve robots at the origin root. See [SEO plan and 36 blog topics](docs/seo-plan.md) for limitations and next steps.
+
+## Deployment
+
 GitHub Pages publishes the `main` branch. The QA preview is available at:
 
 https://azlkak.github.io/mazur/

@@ -1,0 +1,8 @@
+private/config.php
+private/import.lock
+private/incoming/*
+private/processing/*
+private/archive/*
+private/errors/*
+private/images/*
+private/logs/*

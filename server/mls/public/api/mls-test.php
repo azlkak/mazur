@@ -1,0 +1,72 @@
+<?php
+declare(strict_types=1);
+
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: no-store');
+$origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
+if ($origin === 'https://azlkak.github.io') {
+    header('Access-Control-Allow-Origin: ' . $origin);
+    header('Vary: Origin');
+}
+
+try {
+    $privateRoot = dirname(__DIR__, 2) . '/mls';
+    $config = require $privateRoot . '/config.php';
+    $db = new PDO($config['dsn'], $config['user'], $config['password'], [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]);
+    $rows = $db->query(
+        'SELECT source_id, source_export_at, fields_json, images_json
+         FROM mls_offers
+         WHERE publishable = 1
+         ORDER BY source_export_at DESC, source_id DESC
+         LIMIT 100'
+    )->fetchAll();
+
+    $offers = [];
+    foreach ($rows as $row) {
+        $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+        $images = json_decode($row['images_json'], true, 512, JSON_THROW_ON_ERROR);
+        $city = trim((string)(($fields['locationExportCityName'] ?? '') ?: ($fields['locationCityName'] ?? '')));
+        $district = trim((string)(($fields['locationExportPrecinctName'] ?? '') ?: ($fields['locationPrecinctName'] ?? '')));
+        $type = trim((string)($fields['typeName'] ?? 'Nieruchomość'));
+        $title = trim((string)($fields['portalTitle'] ?? ''));
+        if ($title === '') $title = $type . ($city !== '' ? ' — ' . $city : '');
+
+        $offers[] = [
+            'id' => (string)$row['source_id'],
+            'number' => (string)($fields['numberExport'] ?? $fields['number'] ?? ''),
+            'title' => $title,
+            'type' => $type,
+            'transaction' => match ((string)($fields['transaction'] ?? '')) {
+                '131' => 'sprzedaż',
+                '132' => 'wynajem',
+                default => '',
+            },
+            'city' => $city,
+            'district' => $district,
+            'price' => (float)($fields['price'] ?? 0),
+            'currency' => ((string)($fields['priceCurrency'] ?? '')) === '2' ? 'PLN' : '',
+            'area' => (float)($fields['areaTotal'] ?? 0),
+            'plotArea' => (float)($fields['areaPlot'] ?? 0),
+            'rooms' => (int)($fields['apartmentRoomNumber'] ?? 0),
+            'floor' => (string)($fields['apartmentFloor'] ?? ''),
+            'exportedAt' => (string)$row['source_export_at'],
+            'images' => array_map(
+                static fn(string $name): string => 'https://darkgreen-rabbit-981798.hostingersite.com/api/mls-image.php?name=' . rawurlencode($name),
+                array_values(array_filter($images, static fn($name): bool => is_string($name)))
+            ),
+        ];
+    }
+
+    echo json_encode([
+        'demo' => true,
+        'count' => count($offers),
+        'offers' => $offers,
+    ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+} catch (Throwable $error) {
+    http_response_code(500);
+    echo '{"error":"Nie udało się pobrać ofert testowych"}';
+}

@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MazurEstate | Nieruchomości w Warszawie</title>
+
 <link rel="icon" type="image/png" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
 <link rel="apple-touch-icon" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
 <script src="assets/js/support.js"></script>
   <link rel="stylesheet" href="assets/css/cookie-consent.css">
+
+
+
+<!-- SEO START -->
+<title>Agencja nieruchomości Warszawa | MazurEstate</title>
+<meta name="description" content="Sprzedaż, zakup, wynajem i zarządzanie nieruchomościami w Warszawie. Obsługa w języku polskim, angielskim, ukraińskim i rosyjskim.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="alternate" hreflang="pl" href="https://azlkak.github.io/mazur/?lang=pl">
+<link rel="alternate" hreflang="en" href="https://azlkak.github.io/mazur/?lang=en">
+<link rel="alternate" hreflang="uk" href="https://azlkak.github.io/mazur/?lang=uk">
+<link rel="alternate" hreflang="ru" href="https://azlkak.github.io/mazur/?lang=ru">
+<link rel="alternate" hreflang="x-default" href="https://azlkak.github.io/mazur/?lang=pl">
+<script src="assets/js/seo-config.js"></script>
+<script src="assets/js/seo.js"></script>
+<!-- SEO END -->
 </head>
 <body>
 <x-dc>
@@ -99,7 +114,7 @@
     <div id="header-bar" style="width: 100%; max-width: 1360px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-radius: 999px; padding: 6px 12px 6px 20px; box-shadow: 0 4px 24px rgba(30,50,90,0.08); border: 1px solid oklch(0.93 0.01 250);">
 
       <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: transparent; border-radius: 12px; padding: 0px 4px;">
-        <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: multiply;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" />
+        <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: multiply;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" decoding="async">
         <div style="display: none; align-items: center; gap: 8px;">
           <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
             <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
@@ -164,6 +179,7 @@
     </div>
   </div>
 
+  <main>
   <!-- HERO -->
   <section id="hero-section" style="position: relative; display: flex; justify-content: center; padding: 28px 40px 140px;">
     <div id="hero-inner" style="width: 100%; max-width: 1360px; position: relative; border-radius: 32px; overflow: hidden; min-height: 620px; display: flex; align-items: center;">
@@ -277,7 +293,7 @@
         <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
           <a href="{{ cat.href }}" aria-label="{{ cat.title }} — zobacz oferty" style="display: flex; flex-direction: column; color: inherit; transition: transform .2s ease;" style-hover="transform: translateY(-4px);">
             <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
-              <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" />
+              <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" decoding="async">
             </div>
             <div style="padding: 24px 4px 0; display: flex; flex-direction: column; flex: 1;">
               <h3 style="min-height: 28px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">{{ cat.title }}</h3>
@@ -301,7 +317,7 @@
         <div id="featured-track" style="display: flex; gap: 22px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 2px 2px 16px; scroll-snap-type: x mandatory;">
           <sc-for list="{{ featuredOffers }}" as="offer" hint-placeholder-count="6">
             <a href="oferta/?id=4374&amp;lang={{ pageLang }}" data-offer-card style="display: block; flex: 0 0 min(390px, 82vw); overflow: hidden; border: 1px solid oklch(0.9 0.01 250); border-radius: 22px; background: white; scroll-snap-align: start; color: inherit;">
-              <div style="position: relative; height: 230px; overflow: hidden;"><img src="{{ offer.image }}" alt="{{ offer.title }}" style="width: 100%; height: 100%; object-fit: cover;"><span style="position: absolute; right: 14px; bottom: 14px; padding: 9px 12px; border-radius: 10px; background: white; color: oklch(0.25 0.03 250); font-size: 13px; font-weight: 800; box-shadow: 0 6px 18px rgba(20,35,65,0.12);">{{ offer.price }}</span></div>
+              <div style="position: relative; height: 230px; overflow: hidden;"><img src="{{ offer.image }}" alt="{{ offer.title }}" style="width: 100%; height: 100%; object-fit: cover;" decoding="async"><span style="position: absolute; right: 14px; bottom: 14px; padding: 9px 12px; border-radius: 10px; background: white; color: oklch(0.25 0.03 250); font-size: 13px; font-weight: 800; box-shadow: 0 6px 18px rgba(20,35,65,0.12);">{{ offer.price }}</span></div>
               <div style="padding: 22px;">
                 <span style="display: block; margin-bottom: 8px; color: oklch(0.5 0.14 250); font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">{{ offer.location }}</span>
                 <h3 style="min-height: 48px; margin: 0 0 17px; color: oklch(0.26 0.03 250); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.28; font-weight: 800;">{{ offer.title }}</h3>
@@ -453,13 +469,14 @@
     </div>
   </section>
 
+  </main>
   <!-- FOOTER -->
   <footer id="footer" style="display: flex; justify-content: center; background: oklch(0.2 0.035 255); padding: 72px 40px 32px;">
     <div style="width: 100%; max-width: 1360px;">
       <div id="footer-grid" style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
         <div>
           <div style="display: flex; align-items: center; gap: 10px; background: white; border-radius: 12px; padding: 8px 10px; width: fit-content; margin-bottom: 20px;">
-            <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 40px; width: auto; object-fit: contain;" />
+            <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 40px; width: auto; object-fit: contain;" loading="lazy" decoding="async">
           </div>
           <p style="font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.6); margin: 0 0 20px; max-width: 300px; text-wrap: pretty;">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i zarządzanie nieruchomościami dla klientów lokalnych i zagranicznych.</p>
           <div style="display: flex; flex-wrap: wrap; gap: 10px;">
@@ -502,12 +519,12 @@
         <div>
           <h4 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 800; color: white; text-transform: uppercase; letter-spacing: 0.06em; margin: 0 0 20px;">Projekty</h4>
           <div style="display: flex; flex-direction: column; gap: 13px;">
-            <a href="#services" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Dla inwestora</a>
+            <a data-seo-service="mieszkanie-pod-wynajem/" href="mieszkanie-pod-wynajem/?lang=pl" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Zakup mieszkania pod wynajem</a>
             <a href="wyniki-wyszukiwania/?transaction=wynajem" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Wynajem</a>
             <a href="wyniki-wyszukiwania/?type=mieszkania&amp;transaction=sprzedaz" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Sprzedaż mieszkań</a>
-            <a href="#about" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Pośrednictwo</a>
-            <a href="wyniki-wyszukiwania/?type=lokale" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Nieruchomość komercyjna</a>
-            <a href="wyniki-wyszukiwania/?type=lokale&amp;transaction=wynajem" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Biura</a>
+            <a data-seo-service="lokal-medyczny/" href="lokal-medyczny/?lang=pl" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Lokal pod gabinet medyczny</a>
+            <a data-seo-service="lokal-gastronomiczny/" href="lokal-gastronomiczny/?lang=pl" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Lokal pod restaurację, kawiarnię i bar</a>
+            <a data-seo-service="grunt-pod-budowe/" href="grunt-pod-budowe/?lang=pl" style="font-size: 14.5px; font-weight: 500; color: rgba(255,255,255,0.65);" style-hover="color: white;">Zakup gruntu pod budowę</a>
           </div>
         </div>
 
