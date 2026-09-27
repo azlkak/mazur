@@ -8,7 +8,7 @@ header('X-Content-Type-Options: nosniff');
 $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
 if ($origin === 'https://azlkak.github.io') {
     header('Access-Control-Allow-Origin: ' . $origin);
-    header('Access-Control-Allow-Headers: Content-Type, Accept');
+    header('Access-Control-Allow-Headers: Content-Type, Accept, X-Requested-With');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
     header('Vary: Origin');
 }
@@ -33,6 +33,7 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
 }
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') reply(405, 'method_not_allowed');
 if ($origin !== 'https://azlkak.github.io') reply(403, 'origin_not_allowed');
+if (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'MazurEstateContact') reply(403, 'request_not_allowed');
 
 $contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
 if ($contentLength < 1 || $contentLength > 20_000) reply(413, 'invalid_size');
@@ -54,6 +55,36 @@ try {
         reply(422, 'invalid_timing');
     }
 
+    // Limit automated retries per address. The files contain timestamps only,
+    // never enquiry data, and live outside the public web directory.
+    $privateRoot = dirname(__DIR__, 2) . '/mls';
+    $rateDirectory = $privateRoot . '/runtime/enquiry-rate';
+    if (!is_dir($rateDirectory) && !mkdir($rateDirectory, 0700, true) && !is_dir($rateDirectory)) {
+        throw new RuntimeException('Cannot create enquiry rate directory');
+    }
+    $clientAddress = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
+    $rateFile = $rateDirectory . '/' . hash('sha256', $clientAddress) . '.json';
+    $rateHandle = fopen($rateFile, 'c+');
+    if ($rateHandle === false || !flock($rateHandle, LOCK_EX)) throw new RuntimeException('Cannot lock enquiry rate file');
+    $rateContents = stream_get_contents($rateHandle);
+    $attempts = is_string($rateContents) && $rateContents !== '' ? json_decode($rateContents, true) : [];
+    if (!is_array($attempts)) $attempts = [];
+    $windowStart = time() - 900;
+    $attempts = array_values(array_filter($attempts, static fn($timestamp): bool => is_int($timestamp) && $timestamp >= $windowStart));
+    if (count($attempts) >= 8) {
+        flock($rateHandle, LOCK_UN);
+        fclose($rateHandle);
+        header('Retry-After: 900');
+        reply(429, 'rate_limited');
+    }
+    $attempts[] = time();
+    rewind($rateHandle);
+    ftruncate($rateHandle, 0);
+    fwrite($rateHandle, json_encode($attempts, JSON_THROW_ON_ERROR));
+    fflush($rateHandle);
+    flock($rateHandle, LOCK_UN);
+    fclose($rateHandle);
+
     $firstName = inputText($input, 'first_name', 80);
     $lastName = inputText($input, 'last_name', 100);
     $phone = inputText($input, 'phone', 32);
@@ -73,7 +104,6 @@ try {
     if ($sourceUrl !== '' && filter_var($sourceUrl, FILTER_VALIDATE_URL) === false) $sourceUrl = '';
     if ($offerId !== '' && !preg_match('/\A[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
 
-    $privateRoot = dirname(__DIR__, 2) . '/mls';
     $config = require $privateRoot . '/config.php';
     $company = trim((string)($config['esticrm_company'] ?? ''));
     $token = trim((string)($config['esticrm_token'] ?? ''));
