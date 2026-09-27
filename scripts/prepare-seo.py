@@ -55,10 +55,11 @@ config = {'base': BASE, 'languages': LANGS, 'pages': pages}
 for route, page in pages.items():
     path = ROOT / route / 'index.html'
     source = path.read_text()
-    source = re.sub(r'<!-- SEO START -->.*?<!-- SEO END -->\s*', '', source, flags=re.S)
+    source = re.sub(r'\s*<!-- SEO START -->.*?<!-- SEO END -->\s*', '\n', source, flags=re.S)
     source = re.sub(r'<title>.*?</title>', '', source, flags=re.S | re.I)
     source = re.sub(r'<meta\s+name=["\'](?:description|robots)["\'][^>]*>', '', source, flags=re.I)
     source = re.sub(r'^[ \t]+$', '', source, flags=re.M)
+    source = re.sub(r'\n{3,}', '\n\n', source)
     prefix = '../' if route else ''
     tags = ['<!-- SEO START -->', f'<title>{escape(page["names"]["pl"])} | MazurEstate</title>',
             f'<meta name="description" content="{escape(page["descriptions"]["pl"], quote=True)}">',
