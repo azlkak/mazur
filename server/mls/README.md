@@ -15,7 +15,8 @@ Hostingerze.
 - `private/config.example.php` — wzór konfiguracji bez sekretów.
 
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
-pozostają wyłącznie na Hostingerze i nie trafiają do GitHub.
+nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
+bezpieczeństwa mogą być przechowywane lokalnie przez administratora.
 
 ### Indeks lokalizacji — wdrożony 28.09.2026
 
