@@ -109,4 +109,4 @@ if (location.protocol === 'file:') {
   makeLocalLinksExplicit();
 }
 
-const chromeResponsiveStyles=document.createElement('link');chromeResponsiveStyles.rel='stylesheet';chromeResponsiveStyles.href='../assets/css/responsive.css';document.head.appendChild(chromeResponsiveStyles);
+const chromeResponsiveStyles=document.createElement('link');chromeResponsiveStyles.rel='stylesheet';chromeResponsiveStyles.href='../assets/css/responsive.css?v=4';document.head.appendChild(chromeResponsiveStyles);
