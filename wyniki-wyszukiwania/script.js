@@ -76,8 +76,11 @@
     const trigger=document.getElementById(triggerId),menu=document.getElementById(menuId),wrapper=trigger.closest('.custom-filter');
     const paint=()=>{trigger.querySelector('span').textContent=options.find(option=>option.value===input.value)?.label||'';menu.innerHTML=options.map(option=>`<button type="button" role="option" aria-selected="${option.value===input.value}" class="${option.value===input.value?'selected':''}" data-value="${option.value}">${option.label}</button>`).join('')};
     const close=()=>{wrapper.classList.remove('open');trigger.setAttribute('aria-expanded','false')};
-    paint();trigger.addEventListener('click',()=>{const willOpen=!wrapper.classList.contains('open');document.querySelectorAll('.custom-filter.open').forEach(element=>element.classList.remove('open'));wrapper.classList.toggle('open',willOpen);trigger.setAttribute('aria-expanded',String(willOpen))});
+    const toggle=()=>{const willOpen=!wrapper.classList.contains('open');document.querySelectorAll('.custom-filter.open').forEach(element=>{element.classList.remove('open');element.querySelector('.filter-trigger')?.setAttribute('aria-expanded','false')});wrapper.classList.toggle('open',willOpen);trigger.setAttribute('aria-expanded',String(willOpen));if(willOpen)requestAnimationFrame(()=>menu.querySelector('.selected')?.focus())};
+    paint();trigger.addEventListener('pointerdown',event=>{event.preventDefault();event.stopPropagation();toggle()});
+    trigger.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '||event.key==='ArrowDown'){event.preventDefault();toggle()}if(event.key==='Escape')close()});
     menu.addEventListener('click',event=>{const option=event.target.closest('[data-value]');if(!option)return;input.value=option.dataset.value;paint();close();input.dispatchEvent(new Event('change',{bubbles:true}))});
+    menu.addEventListener('keydown',event=>{const buttons=[...menu.querySelectorAll('[data-value]')],index=buttons.indexOf(document.activeElement);if(event.key==='Escape'){event.preventDefault();close();trigger.focus()}else if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();buttons[(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus()}});
     document.addEventListener('click',event=>{if(!wrapper.contains(event.target))close()});
   }
   setupFilterMenu(filterType,'filter-type-trigger','filter-type-menu',Object.entries(typeLabels).map(([value,label])=>({value,label})));
