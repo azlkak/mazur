@@ -56,6 +56,7 @@
     return {id:i+1,title:titles[type][i%4],location:locations[i],area,price,gallery,rooms:type==='dzialki'?t.plot:type==='lokale'?`${3+i%4} ${t.spaces}`:`${type==='domy'?4+i%3:2+i%4} ${t.rooms}`,floor:type==='dzialki'?t.utilities:type==='domy'?t.floors:type==='lokale'?t.ground:`${1+i%7} ${t.floor}`,date:12-i};
   });
   const apiUrl='https://api.mazurestate.pl/api/mls-test.php';
+  const locationsUrl='https://api.mazurestate.pl/api/mls-locations.php';
   const normalize=value=>String(value||'').toLocaleLowerCase('pl').trim();
   const normalizeLocation=value=>normalize(value).replace(/ł/g,'l').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   const categoryFor=value=>{const name=normalize(value);if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return null};
@@ -63,11 +64,16 @@
   let loadError=false;
   let availableLocations=[];
   try {
-    const response=await fetch(apiUrl,{headers:{Accept:'application/json'}});
+    const [response,locationsResponse]=await Promise.all([
+      fetch(apiUrl,{headers:{Accept:'application/json'}}),
+      fetch(locationsUrl,{headers:{Accept:'application/json'}}).catch(()=>null)
+    ]);
     if(!response.ok)throw new Error('MLS API unavailable');
     const payload=await response.json();
+    let locationRows=payload.offers;
+    if(locationsResponse?.ok){try{const index=await locationsResponse.json();if(Array.isArray(index.locations))locationRows=index.locations}catch(error){/* Keep the offer-list fallback. */}}
     const cityMap=new Map();
-    payload.offers.forEach(item=>{const city=String(item.city||'').trim(),district=String(item.district||'').trim();if(!city)return;const key=normalizeLocation(city);if(!cityMap.has(key))cityMap.set(key,{city,districts:new Set()});if(district)cityMap.get(key).districts.add(district)});
+    locationRows.forEach(item=>{const city=String(item.city||'').trim(),district=String(item.district||'').trim();if(!city)return;const key=normalizeLocation(city);if(!cityMap.has(key))cityMap.set(key,{city,districts:new Set()});if(district)cityMap.get(key).districts.add(district)});
     availableLocations=[...cityMap.values()].map(entry=>({city:entry.city,districts:[...entry.districts].sort((a,b)=>a.localeCompare(b,'pl'))})).sort((a,b)=>a.city.localeCompare(b.city,'pl'));
     offers=payload.offers.map(item=>{
       const category=categoryFor(item.type);

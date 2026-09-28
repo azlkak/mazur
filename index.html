@@ -583,11 +583,12 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this._locationsAbort = new AbortController();
-    fetch('https://api.mazurestate.pl/api/mls-test.php', { signal: this._locationsAbort.signal })
+    fetch('https://api.mazurestate.pl/api/mls-locations.php', { signal: this._locationsAbort.signal })
       .then(response => response.ok ? response.json() : Promise.reject(new Error('MLS locations unavailable')))
+      .catch(() => fetch('https://api.mazurestate.pl/api/mls-test.php', { signal: this._locationsAbort.signal }).then(response => response.ok ? response.json() : Promise.reject(new Error('MLS fallback unavailable'))))
       .then(payload => {
         const locations = new Set();
-        (payload.offers || []).forEach(offer => {
+        (payload.locations || payload.offers || []).forEach(offer => {
           const city = String(offer.city || '').trim();
           const district = String(offer.district || '').trim();
           if (city) locations.add(city);
