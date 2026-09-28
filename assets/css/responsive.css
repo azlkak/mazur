@@ -68,3 +68,56 @@ button,a,input,select{touch-action:manipulation}
   #header-bar{padding-left:12px!important;padding-right:8px!important;gap:7px!important}#header-bar>div:first-child img{height:44px!important}#language-picker-home>button{width:64px!important;padding-inline:5px!important}#header-actions{gap:3px!important}#header-actions .me-cta{padding-inline:8px!important;font-size:10.5px!important}#mobile-menu-btn{width:40px!important;height:40px!important}
   .site-header .header-bar{padding-left:12px!important;padding-right:8px!important;gap:7px!important}.site-header .brand img{height:44px!important}.site-header .header-actions{gap:4px!important}.chrome-language>button{min-width:64px!important;padding-inline:7px!important}.site-header .button.chrome-primary{padding-inline:8px!important;font-size:10.5px!important}.site-header .chrome-menu-button{flex-basis:40px;width:40px;height:40px;padding:10px}
 }
+
+/* One vertical rhythm across every page type. */
+:root{--me-section-space:48px;--me-section-half:24px}
+
+/* Homepage */
+#hero-section{padding-top:var(--me-section-space)!important}
+#featured-offers{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-half)!important}
+#why-us,#faq,#testimonials{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-half)!important}
+#why-us>div>#categories{padding-top:var(--me-section-space)!important;padding-bottom:0!important}
+#services{margin-top:var(--me-section-space)!important}
+.contact-section{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-space)!important}
+
+/* Search, offer detail, legal pages and property category pages */
+.results-main,.property-main,.legal-main{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-space)!important}
+body[data-property-type] .hero{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-half)!important}
+body[data-property-type] .content{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-space)!important}
+
+/* Advisory and developer landing pages */
+.advisory-hero,.developer-hero,.medical-hero{margin-top:var(--me-section-space)!important}
+main:has(>.advisory-hero) .intro,
+main:has(>.advisory-hero) .process-section,
+main:has(>.advisory-hero) .services{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-half)!important}
+main:has(>.advisory-hero) .expertise{margin-bottom:var(--me-section-half)!important}
+main:has(>.advisory-hero) .advisory-cta{margin-bottom:var(--me-section-space)!important}
+main:has(>.developer-hero){gap:var(--me-section-space)!important}
+main:has(>.developer-hero) .scope-section,
+main:has(>.developer-hero) .process-section{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-half)!important}
+main:has(>.developer-hero) .developer-cta{margin-bottom:var(--me-section-space)!important}
+
+/* Medical, hospitality, land and rental-investment landing pages */
+main:has(>.medical-hero){gap:0!important}
+main:has(>.medical-hero) .medical-hero{margin-bottom:var(--me-section-half)!important}
+main:has(>.medical-hero) :is(.intro,.case-section,.checks,.faq,.risk-section,.process-section,.stories){padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-half)!important}
+main:has(>.medical-hero) .final-cta{margin-top:var(--me-section-half)!important;margin-bottom:var(--me-section-space)!important}
+
+/* About page */
+.intro-section{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-space)!important}
+.numbers-section,.values{padding-bottom:var(--me-section-space)!important}
+.cta{margin-bottom:var(--me-section-space)!important}
+
+@media(max-width:650px){
+  :root{--me-section-space:28px;--me-section-half:14px}
+  #hero-section{padding-top:var(--me-section-space)!important}
+  #featured-offers{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-half)!important}
+  #why-us,#faq,#testimonials{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-half)!important}
+  #why-us>div>#categories{padding-top:var(--me-section-space)!important}
+  #services{margin-top:var(--me-section-space)!important}
+  .contact-section{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-space)!important}
+  .results-main,.property-main,.legal-main{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-space)!important}
+  body[data-property-type] .hero{padding-top:var(--me-section-space)!important;padding-bottom:var(--me-section-half)!important}
+  body[data-property-type] .content{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-space)!important}
+  .advisory-hero,.developer-hero,.medical-hero{margin-top:var(--me-section-space)!important}
+}
