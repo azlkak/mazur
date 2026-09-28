@@ -145,7 +145,7 @@ try {
                 if (hash_file('sha256', $path) !== $sha) fail('Package changed during import');
                 $db->beginTransaction();
                 $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source_id=? FOR UPDATE');
-                $put = $db->prepare('INSERT INTO mls_offers (source_id,source_export_at,batch_sha256,publishable,fields_json,images_json) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
+                $put = $db->prepare('INSERT INTO mls_offers (source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
                 $delete = $db->prepare('DELETE FROM mls_offers WHERE source_id=?');
                 if ($exportType === 'full') {
                     $db->exec('CREATE TEMPORARY TABLE mls_full_ids (source_id VARCHAR(40) CHARACTER SET ascii PRIMARY KEY) ENGINE=MEMORY');
@@ -163,11 +163,17 @@ try {
                     $f = $r['fields'];
                     // Conservative candidate flag. Public API remains disabled separately.
                     $visible = ($f['offerExport'] ?? '') === '1' && ($f['status'] ?? '') === '3';
-                    $put->execute([$id,$r['stamp'],$sha,(int)$visible,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
+                    $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
+                    $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
+                    $put->execute([$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
                 }
                 if ($exportType === 'full') $db->exec('DELETE o FROM mls_offers o LEFT JOIN mls_full_ids f ON f.source_id=o.source_id WHERE f.source_id IS NULL');
+                // The location API reads these columns, so the same transaction
+                // adds, updates and removes suggestions with the offers.
+                $locationCheck = $db->query("SELECT COUNT(*) AS total, SUM(location_city = '') AS missing_city FROM mls_offers WHERE publishable = 1")->fetch(PDO::FETCH_ASSOC);
                 $q = $db->prepare('INSERT INTO mls_batches (sha256,file_name,export_type,offer_count) VALUES (?,?,?,?)');
                 $q->execute([$sha,basename($path),$exportType,count($rows)]); $db->commit();
+                event(((int)$locationCheck['missing_city'] > 0 ? 'WARNING ' : '') . 'Location search checked: ' . (int)$locationCheck['total'] . ' publishable offers, ' . (int)$locationCheck['missing_city'] . ' without city');
             }
             $archivePath = ROOT . '/archive/' . $sha . '.zip';
             if (is_file($archivePath)) {

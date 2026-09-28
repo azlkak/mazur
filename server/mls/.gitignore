@@ -6,3 +6,8 @@ private/archive/*
 private/errors/*
 private/images/*
 private/logs/*
+private/runtime/*
+private/*.bak*
+private/**/*.bak*
+*.sql.gz
+*.sql.zip

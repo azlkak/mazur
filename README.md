@@ -20,6 +20,7 @@ require a build step or package manager.
 - `assets/css/` — shared styles
 - `assets/js/` — shared scripts and translations
 - `assets/images/` — images and brand assets
+- `server/mls/` — versioned Hostinger importer, database migrations and API; see its README for deployment
 - `assets/images/developers/` — imagery used by the developer landing page
 - `assets/images/medical-premises/` — imagery used by the medical-premises landing page
 - `assets/images/hospitality/` — imagery used by the hospitality-premises landing page
@@ -54,8 +55,6 @@ python3 -m http.server 4173
 
 Then open `http://127.0.0.1:4173/`.
 
-## Deployment
-
 ## SEO maintenance
 
 Run `python3 scripts/prepare-seo.py` after changing SEO copy or the production domain. The generator owns the marked head blocks, `assets/js/seo-config.js`, `sitemap.xml` and `robots.txt`. Edit the generator, not generated metadata. Query-based languages are preserved; shared `seo.js` sets same-language canonical and structured data at runtime. Demo search/listing pages remain noindex.
@@ -67,6 +66,12 @@ On GitHub project Pages, `/mazur/robots.txt` is not the host-root robots policy:
 GitHub Pages publishes the `main` branch. The QA preview is available at:
 
 https://mazurestate.pl/
+
+GitHub is the source of truth for application code. Pushing `main` publishes
+the static frontend through GitHub Pages; it does **not** deploy `server/mls/`
+to Hostinger. The Hostinger installation uses a separate private `config.php`
+and receives reviewed server changes separately. Never commit that file, MLS
+ZIP packages, imported images, database exports or API credentials.
 
 Before committing, check that the working tree contains only intentional files:
 

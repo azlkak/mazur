@@ -1,5 +1,39 @@
 # MLS — środowisko Hostinger
 
+## Jedno źródło kodu
+
+Ten katalog w repozytorium GitHub jest źródłem kodu importera i API. Hostinger
+uruchamia wdrożoną kopię. Zmiany wprowadzamy najpierw tutaj, a po sprawdzeniu
+wdrażamy tylko potrzebne pliki na serwer. Samo wypchnięcie repozytorium na GitHub
+publikuje frontend przez GitHub Pages, ale **nie** aktualizuje PHP ani bazy na
+Hostingerze.
+
+- `private/bin/import.php` — importer uruchamiany przez cron.
+- `private/schema.sql` — schemat dla nowej instalacji; nie aktualizuje istniejącej bazy.
+- `private/migrations/` — jednorazowe zmiany istniejącej bazy.
+- `public/api/` — jawne punkty API; tylko ten podkatalog trafia pod `public_html/api`.
+- `private/config.example.php` — wzór konfiguracji bez sekretów.
+
+Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
+pozostają wyłącznie na Hostingerze i nie trafiają do GitHub.
+
+### Oczekujące wdrożenie: indeks lokalizacji
+
+Frontend korzysta z `mls-locations.php`, a do chwili jego wdrożenia używa
+dotychczasowej listy ofert. Aby uruchomić pełny indeks na istniejącej bazie:
+
+1. Zrobić kopię bazy `u101822986_mls`.
+2. Wykonać `private/migrations/20260928_offer_locations.sql` tylko raz.
+3. Wgrać `private/bin/import.php` do prywatnego `mls/bin/` oraz
+   `public/api/mls-locations.php` do `public_html/api/`.
+4. Sprawdzić liczbę ofert bez miasta w wyniku migracji (oczekiwane zero),
+   odpowiedź API oraz kolejny import z crona. Każdy import zapisuje miasto i
+   dzielnicę, a w logu zgłasza brak miasta w ofercie do publikacji.
+
+Obecna lista wyników nadal pobiera maksymalnie 100 ofert. Przed pokazaniem
+wszystkich około 9000 ofert trzeba wdrożyć stronicowanie i filtrowanie po
+stronie API, aby podpowiedziane lokalizacje miały odpowiadające im wyniki.
+
 Status: importer wdrożony i uruchomiony 27.09.2026 na hostingu Hostinger dla
 `darkgreen-rabbit-981798.hostingersite.com`. Ograniczone publiczne API oraz frontend
 zostały uruchomione na danych z przykładowej paczki EstiCRM. API zwraca wyłącznie
