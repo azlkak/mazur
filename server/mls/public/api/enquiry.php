@@ -149,8 +149,10 @@ try {
             $request['offer_number'] = $offerNumber;
             $contentLines[] = '';
             $contentLines[] = 'Oferta: ' . ($offerTitle !== '' ? $offerTitle : 'oferta MLS');
-            $contentLines[] = 'Numer oferty: ' . $offerNumber;
-            $contentLines[] = 'ID MLS: ' . $offerId;
+            $contentLines[] = '';
+            $contentLines[] = 'DANE TECHNICZNE';
+            $contentLines[] = 'Numer oferty MLS: ' . $offerNumber;
+            $contentLines[] = 'ID rekordu MLS: ' . $offerId;
             if ($transaction === '131') $request['transaction'] = 133;
             if ($transaction === '132') $request['transaction'] = 134;
             if (in_array($market, [10, 11], true)) $request['market'] = $market;
@@ -159,13 +161,17 @@ try {
             $offerNumber = $submittedOfferNumber !== '' ? $submittedOfferNumber : $offerId;
             $contentLines[] = '';
             $contentLines[] = 'Oferta ze strony: ' . ($submittedOfferTitle !== '' ? $submittedOfferTitle : 'oferta nr ' . $offerNumber);
-            $contentLines[] = 'Numer oferty: ' . $offerNumber;
+            $contentLines[] = '';
+            $contentLines[] = 'DANE TECHNICZNE';
+            $contentLines[] = 'Numer oferty MLS: ' . $offerNumber;
+            $contentLines[] = 'ID rekordu strony: ' . $offerId;
         }
     }
 
     if ($offerId === '' && $submittedOfferNumber !== '') {
         $contentLines[] = '';
-        $contentLines[] = 'Numer oferty przekazany przez stronę: ' . $submittedOfferNumber;
+        $contentLines[] = 'DANE TECHNICZNE';
+        $contentLines[] = 'Numer oferty MLS: ' . $submittedOfferNumber;
     }
     if ($sourceUrl !== '') $contentLines[] = 'Strona formularza: ' . $sourceUrl;
     $contentLines[] = 'Język strony: ' . $language;
