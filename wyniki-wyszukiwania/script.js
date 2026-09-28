@@ -17,6 +17,18 @@
     uk:['Тип нерухомості','Розташування','Операція','Макс. ціна','Площа','Місто або район','Шукати','Продаж','Оренда','Варшава — райони','Міста та околиці','Немає відповідних локацій'],
     ru:['Тип недвижимости','Расположение','Сделка','Макс. цена','Площадь','Город или район','Найти','Продажа','Аренда','Варшава — районы','Города и окрестности','Подходящих локаций нет']
   }[lang];
+  const advancedCopy={
+    pl:{price:'Cena',area:'Powierzchnia',rooms:'Liczba pokoi',priceMin:'Cena od',priceMax:'Cena do',areaMin:'Powierzchnia od',areaMax:'Powierzchnia do',from:'od',to:'do',clear:'Wyczyść filtry',show:'Pokaż oferty',roomsChip:'pok.',empty:'Brak ofert spełniających wybrane kryteria.'},
+    en:{price:'Price',area:'Area',rooms:'Rooms',priceMin:'Price from',priceMax:'Price to',areaMin:'Area from',areaMax:'Area to',from:'from',to:'to',clear:'Clear filters',show:'Show properties',roomsChip:'rooms',empty:'No properties match these filters.'},
+    uk:{price:'Ціна',area:'Площа',rooms:'Кімнати',priceMin:'Ціна від',priceMax:'Ціна до',areaMin:'Площа від',areaMax:'Площа до',from:'від',to:'до',clear:'Очистити фільтри',show:'Показати пропозиції',roomsChip:'кімн.',empty:'Немає пропозицій за цими критеріями.'},
+    ru:{price:'Цена',area:'Площадь',rooms:'Комнаты',priceMin:'Цена от',priceMax:'Цена до',areaMin:'Площадь от',areaMax:'Площадь до',from:'от',to:'до',clear:'Сбросить фильтры',show:'Показать предложения',roomsChip:'комн.',empty:'По этим критериям предложений нет.'}
+  }[lang];
+  const numericValue=(value,decimal=false)=>Number(decimal?String(value||'').replace(/\s/g,'').replace(',','.').replace(/[^\d.]/g,''):String(value||'').replace(/\D/g,''))||0;
+  const minPrice=numericValue(params.get('priceMin'));
+  const maxPrice=numericValue(params.get('priceMax')||params.get('price'))||Infinity;
+  const minArea=numericValue(params.get('areaMin')||params.get('area'),true);
+  const maxArea=numericValue(params.get('areaMax'),true)||Infinity;
+  const selectedRooms=(params.get('rooms')||'').split(',').filter(value=>/^[1-6]$/.test(value)).map(Number);
   const typeLabels=t.types;
   const transactionLabel = transaction === 'wynajem' ? t.rent : t.sale;
   const images = ['../assets/images/category-apartments.webp','../assets/images/hf_20260726_144524_c09ad56f-4bf3-454e-ad5c-3ebd0166d985.png','../assets/images/category-houses.webp','../assets/images/category-commercial.webp','../assets/images/individual-approach-v2.png','../assets/images/hf_20260726_144517_90fd2149-4cca-4eef-974e-74aa570050e6.png'];
@@ -42,8 +54,6 @@
     const response=await fetch(apiUrl,{headers:{Accept:'application/json'}});
     if(!response.ok)throw new Error('MLS API unavailable');
     const payload=await response.json();
-    const maxPrice=Number((params.get('price')||'').replace(/\D/g,''))||Infinity;
-    const minArea=Number((params.get('area')||'').replace(',','.'))||0;
     offers=payload.offers.map(item=>{
       const category=categoryFor(item.type);
       const itemTransaction=item.transaction==='wynajem'?'wynajem':'sprzedaz';
@@ -51,8 +61,8 @@
       const gallery=item.images?.length?item.images:[fallbackImages[category]||images[0]];
       const rooms=category==='dzialki'?t.plot:category==='lokale'?(item.rooms?`${item.rooms} ${t.spaces}`:t.spaces):(item.rooms?`${item.rooms} ${t.rooms}`:'');
       const floor=category==='dzialki'?(item.plotArea?`${item.plotArea} m²`:t.utilities):category==='domy'?t.floors:category==='lokale'?t.ground:(item.floor!==''?`${item.floor} ${t.floor}`:'');
-      return {id:item.id,title:item.title,location,area:Number(item.area)||0,price:Number(item.price)||0,gallery,rooms,floor,date:Date.parse(item.exportedAt)||0,category,transaction:itemTransaction};
-    }).filter(item=>item.category===type&&item.transaction===transaction&&normalize(item.location).includes(normalize(locationFilter))&&item.price<=maxPrice&&item.area>=minArea);
+      return {id:item.id,title:item.title,location,area:Number(item.area)||0,price:Number(item.price)||0,gallery,rooms,roomsCount:Number(item.rooms)||0,floor,date:Date.parse(item.exportedAt)||0,category,transaction:itemTransaction};
+    }).filter(item=>item.category===type&&item.transaction===transaction&&normalize(item.location).includes(normalize(locationFilter))&&item.price>=minPrice&&item.price<=maxPrice&&item.area>=minArea&&item.area<=maxArea&&(!selectedRooms.length||type!=='mieszkania'||selectedRooms.some(count=>count===6?item.roomsCount>=6:item.roomsCount===count)));
   } catch(error) {
     loadError=true;
     offers=[];
@@ -66,10 +76,17 @@
   const money=n=>new Intl.NumberFormat(lang==='en'?'en-GB':lang==='uk'?'uk-UA':lang==='ru'?'ru-RU':'pl-PL').format(n)+' zł'+(transaction==='wynajem'?(lang==='en'?' / month':lang==='uk'?' / міс.':lang==='ru'?' / мес.':' / mies.'):'');
   const unit=o=>Math.round(o.price/o.area).toLocaleString(lang==='en'?'en-GB':'pl-PL')+' zł/m²';
   document.documentElement.lang=lang;
-  const filterIds=['filter-type-label','filter-location-label','filter-transaction-label','filter-price-label','filter-area-label'];
+  const filterIds=['filter-type-label','filter-location-label','filter-transaction-label'];
   filterIds.forEach((id,i)=>document.getElementById(id).textContent=filterCopy[i]);
+  document.getElementById('filter-price-label').textContent=advancedCopy.price;
+  document.getElementById('filter-area-label').textContent=advancedCopy.area;
+  document.getElementById('rooms-label').textContent=advancedCopy.rooms;
+  [['price-min-label',advancedCopy.priceMin],['price-max-label',advancedCopy.priceMax],['area-min-label',advancedCopy.areaMin],['area-max-label',advancedCopy.areaMax]].forEach(([id,label])=>document.getElementById(id).textContent=label);
+  document.querySelectorAll('.range-inputs input').forEach(input=>input.placeholder=input.id.endsWith('max')||input.id==='filter-price'?advancedCopy.to:advancedCopy.from);
+  document.getElementById('filter-clear').textContent=advancedCopy.clear;
+  document.getElementById('filter-submit').textContent=advancedCopy.show;
+  document.getElementById('rooms-filter').hidden=type!=='mieszkania';
   document.getElementById('filter-location').placeholder=filterCopy[5];
-  document.getElementById('filter-submit').textContent=filterCopy[6];
   const filterType=document.getElementById('filter-type'),filterTransaction=document.getElementById('filter-transaction');
   filterType.value=type;filterTransaction.value=transaction;
   function setupFilterMenu(input,triggerId,menuId,options){
@@ -90,8 +107,12 @@
   perPageMenu.addEventListener('click',event=>{const option=event.target.closest('[data-value]');if(!option)return;perPage.value=option.dataset.value;perPageCurrent.textContent=option.dataset.value;perPageMenu.querySelectorAll('[data-value]').forEach(button=>{const selected=button===option;button.classList.toggle('selected',selected);button.setAttribute('aria-selected',String(selected))});perPageControl.removeAttribute('open');perPage.dispatchEvent(new Event('change',{bubbles:true}))});
   document.addEventListener('click',event=>{if(!perPageControl.contains(event.target))perPageControl.removeAttribute('open')});
   document.getElementById('filter-location').value=locationFilter;
-  document.getElementById('filter-price').value=params.get('price')||'';
-  document.getElementById('filter-area').value=params.get('area')||'';
+  document.getElementById('filter-price-min').value=params.get('priceMin')||'';
+  document.getElementById('filter-price').value=params.get('priceMax')||params.get('price')||'';
+  document.getElementById('filter-area').value=params.get('areaMin')||params.get('area')||'';
+  document.getElementById('filter-area-max').value=params.get('areaMax')||'';
+  document.querySelectorAll('#room-options input').forEach(input=>{input.checked=selectedRooms.includes(Number(input.value))});
+  filterType.addEventListener('change',()=>{document.getElementById('rooms-filter').hidden=filterType.value!=='mieszkania'});
   const locationInput=document.getElementById('filter-location'),locationMenu=document.getElementById('filter-locations'),locationToggle=document.getElementById('location-toggle');
   const normalized=value=>value.toLocaleLowerCase('pl').trim();
   function locationGroup(title,items,prefix=''){return items.length?`<div class="location-group"><strong>${title}</strong>${items.map(name=>`<button type="button" role="option" data-location="${prefix}${name}"><span>${name}</span>${prefix?'<small>Warszawa</small>':''}</button>`).join('')}</div>`:''}
@@ -102,7 +123,9 @@
   locationToggle.addEventListener('click',()=>locationMenu.classList.contains('open')?closeLocations():(locationInput.focus(),openLocations()));
   locationMenu.addEventListener('click',event=>{const option=event.target.closest('[data-location]');if(!option)return;locationInput.value=option.dataset.location;closeLocations()});
   document.addEventListener('click',event=>{if(!event.target.closest('.location-filter'))closeLocations()});
-  document.getElementById('results-search').addEventListener('submit',event=>{event.preventDefault();const next=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,location:document.getElementById('filter-location').value.trim(),price:document.getElementById('filter-price').value.trim(),area:document.getElementById('filter-area').value.trim(),lang});location.search=next.toString()});
+  const searchForm=document.getElementById('results-search');
+  searchForm.addEventListener('submit',event=>{event.preventDefault();const next=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,lang});const values={location:locationInput.value.trim(),priceMin:document.getElementById('filter-price-min').value.trim(),priceMax:document.getElementById('filter-price').value.trim(),areaMin:document.getElementById('filter-area').value.trim(),areaMax:document.getElementById('filter-area-max').value.trim(),rooms:[...document.querySelectorAll('#room-options input:checked')].map(input=>input.value).join(',')};if(filterType.value!=='mieszkania')values.rooms='';Object.entries(values).forEach(([key,value])=>{if(value)next.set(key,value)});location.search=next.toString()});
+  searchForm.addEventListener('reset',event=>{event.preventDefault();location.search=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,lang}).toString()});
   document.title=`${typeLabels[type]} ${transactionLabel} | MazurEstate`;
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t[el.dataset.i18n]});
   document.querySelectorAll('[href^="../index.html"]').forEach(a=>{const parts=a.getAttribute('href').split('#');a.href=`../index.html?lang=${lang}${parts[1]?`#${parts[1]}`:''}`});
@@ -113,12 +136,12 @@
   document.querySelector(`[data-lang="${lang}"]`)?.classList.add('active');
   document.getElementById('results-title').textContent=`${typeLabels[type]} ${transactionLabel}${locationFilter?` — ${locationFilter}`:''}`;
   document.getElementById('results-summary').textContent=loadError?'Nie udało się pobrać ofert MLS. Spróbuj ponownie za chwilę.':`${t.found.replace('{n}',offers.length)} · dane testowe MLS`;
-  const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('price')&&`${t.to} ${params.get('price')} PLN`,params.get('area')&&`${t.from} ${params.get('area')} m²`].filter(Boolean);
-  document.getElementById('active-filters').innerHTML=chips.map(x=>`<span class="filter-chip">${x}</span>`).join('');
+  const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('priceMin')&&`${advancedCopy.price} ${advancedCopy.from} ${params.get('priceMin')} zł`,(params.get('priceMax')||params.get('price'))&&`${advancedCopy.price} ${advancedCopy.to} ${params.get('priceMax')||params.get('price')} zł`,(params.get('areaMin')||params.get('area'))&&`${advancedCopy.area} ${advancedCopy.from} ${params.get('areaMin')||params.get('area')} m²`,params.get('areaMax')&&`${advancedCopy.area} ${advancedCopy.to} ${params.get('areaMax')} m²`,selectedRooms.length&&`${selectedRooms.map(n=>n===6?'6+':n).join(', ')} ${advancedCopy.roomsChip}`].filter(Boolean);
 
   function ordered(){const data=[...offers];if(sort.value==='price-asc')data.sort((a,b)=>a.price-b.price);if(sort.value==='price-desc')data.sort((a,b)=>b.price-a.price);if(sort.value==='area-asc')data.sort((a,b)=>a.area-b.area);if(sort.value==='area-desc')data.sort((a,b)=>b.area-a.area);if(sort.value==='newest')data.sort((a,b)=>b.date-a.date);if(sort.value==='oldest')data.sort((a,b)=>a.date-b.date);return data}
   const escapeHtml=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
-  function render(){const count=Number(perPage.value);const data=ordered();const pages=Math.ceil(data.length/count);if(!pages){currentPage=1;list.innerHTML='<p>Brak ofert spełniających wybrane kryteria.</p>';pagination.innerHTML='';return}currentPage=Math.min(currentPage,pages);const visible=data.slice((currentPage-1)*count,currentPage*count);list.innerHTML=visible.map(card).join('');pagination.innerHTML=`<button class="page-button" data-page="${Math.max(1,currentPage-1)}" aria-label="${t.prevPage}">‹</button>${Array.from({length:pages},(_,i)=>`<button class="page-button ${currentPage===i+1?'active':''}" data-page="${i+1}">${i+1}</button>`).join('')}<button class="page-button" data-page="${Math.min(pages,currentPage+1)}" aria-label="${t.nextPage}">›</button>`}
+  document.getElementById('active-filters').innerHTML=chips.map(x=>`<span class="filter-chip">${escapeHtml(x)}</span>`).join('');
+  function render(){const count=Number(perPage.value);const data=ordered();const pages=Math.ceil(data.length/count);if(!pages){currentPage=1;list.innerHTML=`<p>${advancedCopy.empty}</p>`;pagination.innerHTML='';return}currentPage=Math.min(currentPage,pages);const visible=data.slice((currentPage-1)*count,currentPage*count);list.innerHTML=visible.map(card).join('');pagination.innerHTML=`<button class="page-button" data-page="${Math.max(1,currentPage-1)}" aria-label="${t.prevPage}">‹</button>${Array.from({length:pages},(_,i)=>`<button class="page-button ${currentPage===i+1?'active':''}" data-page="${i+1}">${i+1}</button>`).join('')}<button class="page-button" data-page="${Math.min(pages,currentPage+1)}" aria-label="${t.nextPage}">›</button>`}
   function card(o){const gi=galleryIndex[o.id]||0;return `<article class="offer-card" data-offer-card="${escapeHtml(o.id)}"><div class="gallery" data-offer="${escapeHtml(o.id)}"><img src="${escapeHtml(o.gallery[gi])}" alt="${escapeHtml(o.title)}"><button class="gallery-arrow prev" data-gallery="prev" data-id="${escapeHtml(o.id)}" aria-label="${t.prevPhoto}">‹</button><button class="gallery-arrow next" data-gallery="next" data-id="${escapeHtml(o.id)}" aria-label="${t.nextPhoto}">›</button><div class="gallery-dots">${o.gallery.map((_,i)=>`<span class="${i===gi?'active':''}"></span>`).join('')}</div><span class="gallery-count">▣ ${gi+1}/${o.gallery.length}</span></div><div class="offer-content"><div class="offer-top"><div><span class="price">${money(o.price)}</span><span class="unit-price">${unit(o)}</span></div><button class="favorite" aria-label="${t.favorite}">♡</button></div><h2>${escapeHtml(o.title)}</h2><p class="address">${escapeHtml(o.location)}</p><div class="details"><span class="detail"><i class="detail-icon">⌂</i>${escapeHtml(o.rooms)}</span><span class="detail"><i class="detail-icon">↗</i>${escapeHtml(o.area)} m²</span><span class="detail"><i class="detail-icon">▦</i>${escapeHtml(o.floor)}</span></div><div class="offer-footer"><span class="offer-kind">${typeLabels[type]} ${transactionLabel}</span><span>Dane testowe MLS</span></div></div></article>`}
   list.addEventListener('click',e=>{const arrow=e.target.closest('[data-gallery]');if(arrow){const id=arrow.dataset.id,o=offers.find(x=>String(x.id)===id),delta=arrow.dataset.gallery==='next'?1:-1;if(!o)return;galleryIndex[id]=((galleryIndex[id]||0)+delta+o.gallery.length)%o.gallery.length;render();return}const fav=e.target.closest('.favorite');if(fav){fav.classList.toggle('active');fav.textContent=fav.classList.contains('active')?'♥':'♡';return}const card=e.target.closest('[data-offer-card]');if(card)location.href=`../oferta/?id=${encodeURIComponent(card.dataset.offerCard)}&lang=${lang}`});
   pagination.addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b){currentPage=Number(b.dataset.page);render();scrollTo({top:0,behavior:'smooth'})}});
