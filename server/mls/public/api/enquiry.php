@@ -94,8 +94,10 @@ try {
     $language = inputText($input, 'language', 5);
     $sourceUrl = inputText($input, 'source_url', 500);
     $offerId = inputText($input, 'offer_id', 40);
+    $submittedOfferNumber = inputText($input, 'offer_number', 80);
+    $submittedOfferTitle = inputText($input, 'offer_title', 250);
 
-    if ($firstName === '' || mb_strlen($message) < 10 || ($input['consent'] ?? false) !== true) {
+    if ($firstName === '' || $lastName === '' || mb_strlen($message) < 10 || ($input['consent'] ?? false) !== true) {
         reply(422, 'missing_required');
     }
     if ($phone === '' && $email === '') reply(422, 'missing_contact');
@@ -113,14 +115,14 @@ try {
         reply(503, 'service_unconfigured');
     }
 
+    $contentLines = [$message];
     $request = [
         'company' => $company,
         'token' => $token,
         'agent_email' => $agentEmail,
-        'content' => $message . ($sourceUrl !== '' ? "\n\nŹródło: " . $sourceUrl : '') . "\nJęzyk strony: " . $language,
         'firstname' => $firstName,
+        'lastname' => $lastName,
     ];
-    if ($lastName !== '') $request['lastname'] = $lastName;
     if ($email !== '') $request['email'] = $email;
     if ($phone !== '') $request['phone'] = $phone;
 
@@ -140,13 +142,27 @@ try {
         $transaction = (string)($fields['transaction'] ?? '');
         $market = (int)($fields['market'] ?? 0);
         $typeId = (int)($fields['mainTypeId'] ?? 0);
+        $offerTitle = trim((string)($fields['portalTitle'] ?? ''));
+        if ($offerTitle === '') $offerTitle = $submittedOfferTitle;
 
         $request['offer_number'] = $offerNumber;
+        $contentLines[] = '';
+        $contentLines[] = 'Oferta: ' . ($offerTitle !== '' ? $offerTitle : 'oferta MLS');
+        $contentLines[] = 'Numer oferty: ' . $offerNumber;
+        $contentLines[] = 'ID MLS: ' . $offerId;
         if ($transaction === '131') $request['transaction'] = 133;
         if ($transaction === '132') $request['transaction'] = 134;
         if (in_array($market, [10, 11], true)) $request['market'] = $market;
         if (in_array($typeId, [1, 2, 3, 4], true)) $request['type_id'] = $typeId;
     }
+
+    if ($offerId === '' && $submittedOfferNumber !== '') {
+        $contentLines[] = '';
+        $contentLines[] = 'Numer oferty przekazany przez stronę: ' . $submittedOfferNumber;
+    }
+    if ($sourceUrl !== '') $contentLines[] = 'Strona formularza: ' . $sourceUrl;
+    $contentLines[] = 'Język strony: ' . $language;
+    $request['content'] = implode("\n", $contentLines);
 
     if (!function_exists('curl_init')) reply(503, 'service_unavailable');
     $curl = curl_init('https://app.esticrm.pl/apiClient/question/store');
