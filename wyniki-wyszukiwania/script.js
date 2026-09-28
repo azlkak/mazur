@@ -86,7 +86,9 @@
   setupFilterMenu(filterType,'filter-type-trigger','filter-type-menu',Object.entries(typeLabels).map(([value,label])=>({value,label})));
   setupFilterMenu(filterTransaction,'filter-transaction-trigger','filter-transaction-menu',[{value:'sprzedaz',label:filterCopy[7]},{value:'wynajem',label:filterCopy[8]}]);
   setupFilterMenu(sort,'sort-trigger','sort-menu',[{value:'newest',label:t.newest},{value:'oldest',label:t.oldest},{value:'price-asc',label:t.priceAsc},{value:'price-desc',label:t.priceDesc},{value:'area-asc',label:t.areaAsc},{value:'area-desc',label:t.areaDesc}]);
-  setupFilterMenu(perPage,'per-page-trigger','per-page-menu',[5,10,20,50].map(value=>({value:String(value),label:String(value)})));
+  const perPageControl=document.querySelector('.per-page-control'),perPageMenu=document.getElementById('per-page-menu'),perPageCurrent=document.getElementById('per-page-current');
+  perPageMenu.addEventListener('click',event=>{const option=event.target.closest('[data-value]');if(!option)return;perPage.value=option.dataset.value;perPageCurrent.textContent=option.dataset.value;perPageMenu.querySelectorAll('[data-value]').forEach(button=>{const selected=button===option;button.classList.toggle('selected',selected);button.setAttribute('aria-selected',String(selected))});perPageControl.removeAttribute('open');perPage.dispatchEvent(new Event('change',{bubbles:true}))});
+  document.addEventListener('click',event=>{if(!perPageControl.contains(event.target))perPageControl.removeAttribute('open')});
   document.getElementById('filter-location').value=locationFilter;
   document.getElementById('filter-price').value=params.get('price')||'';
   document.getElementById('filter-area').value=params.get('area')||'';
