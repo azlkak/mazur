@@ -91,13 +91,9 @@ try {
     $phone = inputText($input, 'phone', 32);
     $email = inputText($input, 'email', 190);
     $message = inputText($input, 'message', 3000);
-    $language = inputText($input, 'language', 5);
-    $sourceUrl = inputText($input, 'source_url', 500);
     $offerId = inputText($input, 'offer_id', 40);
     $submittedOfferNumber = inputText($input, 'offer_number', 80);
-    $submittedOfferTitle = inputText($input, 'offer_title', 250);
     $submittedOfferNumber = preg_replace('/\s+/u', ' ', $submittedOfferNumber) ?? '';
-    $submittedOfferTitle = preg_replace('/\s+/u', ' ', $submittedOfferTitle) ?? '';
 
     if ($firstName === '' || $lastName === '' || mb_strlen($message) < 10 || ($input['consent'] ?? false) !== true) {
         reply(422, 'missing_required');
@@ -105,8 +101,6 @@ try {
     if ($phone === '' && $email === '') reply(422, 'missing_contact');
     if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) reply(422, 'invalid_email');
     if ($phone !== '' && !preg_match('/\A[0-9+() .-]{6,32}\z/u', $phone)) reply(422, 'invalid_phone');
-    if (!in_array($language, ['pl', 'en', 'uk', 'ru'], true)) $language = 'pl';
-    if ($sourceUrl !== '' && filter_var($sourceUrl, FILTER_VALIDATE_URL) === false) $sourceUrl = '';
     if ($offerId !== '' && !preg_match('/\A[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
 
     $config = require $privateRoot . '/config.php';
@@ -143,16 +137,10 @@ try {
             $transaction = (string)($fields['transaction'] ?? '');
             $market = (int)($fields['market'] ?? 0);
             $typeId = (int)($fields['mainTypeId'] ?? 0);
-            $offerTitle = trim((string)($fields['portalTitle'] ?? ''));
-            if ($offerTitle === '') $offerTitle = $submittedOfferTitle;
 
             $request['offer_number'] = $offerNumber;
             $contentLines[] = '';
-            $contentLines[] = 'Oferta: ' . ($offerTitle !== '' ? $offerTitle : 'oferta MLS');
-            $contentLines[] = '';
-            $contentLines[] = 'DANE TECHNICZNE';
-            $contentLines[] = 'Numer oferty MLS: ' . $offerNumber;
-            $contentLines[] = 'ID rekordu MLS: ' . $offerId;
+            $contentLines[] = 'Numer oferty: ' . $offerNumber;
             if ($transaction === '131') $request['transaction'] = 133;
             if ($transaction === '132') $request['transaction'] = 134;
             if (in_array($market, [10, 11], true)) $request['market'] = $market;
@@ -160,21 +148,14 @@ try {
         } else {
             $offerNumber = $submittedOfferNumber !== '' ? $submittedOfferNumber : $offerId;
             $contentLines[] = '';
-            $contentLines[] = 'Oferta ze strony: ' . ($submittedOfferTitle !== '' ? $submittedOfferTitle : 'oferta nr ' . $offerNumber);
-            $contentLines[] = '';
-            $contentLines[] = 'DANE TECHNICZNE';
-            $contentLines[] = 'Numer oferty MLS: ' . $offerNumber;
-            $contentLines[] = 'ID rekordu strony: ' . $offerId;
+            $contentLines[] = 'Numer oferty: ' . $offerNumber;
         }
     }
 
     if ($offerId === '' && $submittedOfferNumber !== '') {
         $contentLines[] = '';
-        $contentLines[] = 'DANE TECHNICZNE';
-        $contentLines[] = 'Numer oferty MLS: ' . $submittedOfferNumber;
+        $contentLines[] = 'Numer oferty: ' . $submittedOfferNumber;
     }
-    if ($sourceUrl !== '') $contentLines[] = 'Strona formularza: ' . $sourceUrl;
-    $contentLines[] = 'Język strony: ' . $language;
     $request['content'] = implode("\n", $contentLines);
 
     if (!function_exists('curl_init')) reply(503, 'service_unavailable');
