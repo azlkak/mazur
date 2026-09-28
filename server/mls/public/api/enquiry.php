@@ -96,6 +96,8 @@ try {
     $offerId = inputText($input, 'offer_id', 40);
     $submittedOfferNumber = inputText($input, 'offer_number', 80);
     $submittedOfferTitle = inputText($input, 'offer_title', 250);
+    $submittedOfferNumber = preg_replace('/\s+/u', ' ', $submittedOfferNumber) ?? '';
+    $submittedOfferTitle = preg_replace('/\s+/u', ' ', $submittedOfferTitle) ?? '';
 
     if ($firstName === '' || $lastName === '' || mb_strlen($message) < 10 || ($input['consent'] ?? false) !== true) {
         reply(422, 'missing_required');
@@ -135,25 +137,31 @@ try {
         $statement = $db->prepare('SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
         $statement->execute([$offerId]);
         $row = $statement->fetch();
-        if (!$row) reply(422, 'invalid_offer');
+        if ($row) {
+            $fields = json_decode((string)$row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+            $offerNumber = trim((string)(($fields['numberExport'] ?? '') ?: ($fields['number'] ?? '') ?: $offerId));
+            $transaction = (string)($fields['transaction'] ?? '');
+            $market = (int)($fields['market'] ?? 0);
+            $typeId = (int)($fields['mainTypeId'] ?? 0);
+            $offerTitle = trim((string)($fields['portalTitle'] ?? ''));
+            if ($offerTitle === '') $offerTitle = $submittedOfferTitle;
 
-        $fields = json_decode((string)$row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
-        $offerNumber = trim((string)(($fields['numberExport'] ?? '') ?: ($fields['number'] ?? '') ?: $offerId));
-        $transaction = (string)($fields['transaction'] ?? '');
-        $market = (int)($fields['market'] ?? 0);
-        $typeId = (int)($fields['mainTypeId'] ?? 0);
-        $offerTitle = trim((string)($fields['portalTitle'] ?? ''));
-        if ($offerTitle === '') $offerTitle = $submittedOfferTitle;
-
-        $request['offer_number'] = $offerNumber;
-        $contentLines[] = '';
-        $contentLines[] = 'Oferta: ' . ($offerTitle !== '' ? $offerTitle : 'oferta MLS');
-        $contentLines[] = 'Numer oferty: ' . $offerNumber;
-        $contentLines[] = 'ID MLS: ' . $offerId;
-        if ($transaction === '131') $request['transaction'] = 133;
-        if ($transaction === '132') $request['transaction'] = 134;
-        if (in_array($market, [10, 11], true)) $request['market'] = $market;
-        if (in_array($typeId, [1, 2, 3, 4], true)) $request['type_id'] = $typeId;
+            $request['offer_number'] = $offerNumber;
+            $contentLines[] = '';
+            $contentLines[] = 'Oferta: ' . ($offerTitle !== '' ? $offerTitle : 'oferta MLS');
+            $contentLines[] = 'Numer oferty: ' . $offerNumber;
+            $contentLines[] = 'ID MLS: ' . $offerId;
+            if ($transaction === '131') $request['transaction'] = 133;
+            if ($transaction === '132') $request['transaction'] = 134;
+            if (in_array($market, [10, 11], true)) $request['market'] = $market;
+            if (in_array($typeId, [1, 2, 3, 4], true)) $request['type_id'] = $typeId;
+        } else {
+            $offerNumber = $submittedOfferNumber !== '' ? $submittedOfferNumber : $offerId;
+            $request['offer_number'] = $offerNumber;
+            $contentLines[] = '';
+            $contentLines[] = 'Oferta ze strony: ' . ($submittedOfferTitle !== '' ? $submittedOfferTitle : 'oferta nr ' . $offerNumber);
+            $contentLines[] = 'Numer oferty: ' . $offerNumber;
+        }
     }
 
     if ($offerId === '' && $submittedOfferNumber !== '') {
