@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260928-advanced2">
+  <link rel="stylesheet" href="styles.css?v=20260928-location1">
   <link rel="stylesheet" href="../assets/css/site-chrome.css">
   <link rel="stylesheet" href="../assets/css/cookie-consent.css">
 
@@ -60,7 +60,7 @@
     <a class="back-link" data-i18n="back" href="../index.html#categories">← Wróć do wyszukiwarki</a>
     <form class="results-search" id="results-search">
       <div class="filter-field custom-filter"><label id="filter-type-label">Typ nieruchomości</label><input type="hidden" id="filter-type" value="mieszkania"><button class="filter-trigger" type="button" id="filter-type-trigger" aria-expanded="false" aria-controls="filter-type-menu"><span>Mieszkania</span><i>⌄</i></button><div class="filter-menu" id="filter-type-menu" role="listbox"></div></div>
-      <div class="filter-field location-filter"><label id="filter-location-label" for="filter-location">Lokalizacja</label><div class="location-control"><input id="filter-location" autocomplete="off" placeholder="Miasto lub dzielnica" aria-expanded="false" aria-controls="filter-locations"><button type="button" id="location-toggle" aria-label="Pokaż lokalizacje">⌄</button></div><div class="location-suggestions" id="filter-locations" role="listbox"></div></div>
+      <div class="filter-field location-filter"><label id="filter-location-label" for="filter-location">Lokalizacja</label><div class="location-control"><input id="filter-location" autocomplete="off" placeholder="Miasto lub dzielnica" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="filter-locations"><button type="button" id="location-toggle" aria-label="Pokaż lokalizacje">⌄</button></div><div class="location-suggestions" id="filter-locations" role="listbox"></div></div>
       <div class="filter-field custom-filter"><label id="filter-transaction-label">Transakcja</label><input type="hidden" id="filter-transaction" value="sprzedaz"><button class="filter-trigger" type="button" id="filter-transaction-trigger" aria-expanded="false" aria-controls="filter-transaction-menu"><span>Sprzedaż</span><i>⌄</i></button><div class="filter-menu" id="filter-transaction-menu" role="listbox"></div></div>
       <div class="filter-range"><span id="filter-price-label">Cena</span><div class="range-inputs"><label><span class="sr-only" id="price-min-label">Cena od</span><input id="filter-price-min" inputmode="numeric" aria-labelledby="price-min-label" placeholder="od" autocomplete="off"><small>zł</small></label><label><span class="sr-only" id="price-max-label">Cena do</span><input id="filter-price" inputmode="numeric" aria-labelledby="price-max-label" placeholder="do" autocomplete="off"><small>zł</small></label></div></div>
       <div class="filter-range"><span id="filter-area-label">Powierzchnia</span><div class="range-inputs"><label><span class="sr-only" id="area-min-label">Powierzchnia od</span><input id="filter-area" inputmode="decimal" aria-labelledby="area-min-label" placeholder="od" autocomplete="off"><small>m²</small></label><label><span class="sr-only" id="area-max-label">Powierzchnia do</span><input id="filter-area-max" inputmode="decimal" aria-labelledby="area-max-label" placeholder="do" autocomplete="off"><small>m²</small></label></div></div>
@@ -100,7 +100,7 @@
     </div>
     <div class="shell copyright">© 2026 MazurEstate. <span data-i18n="rights">Wszelkie prawa zastrzeżone.</span></div>
   </footer>
-  <script src="script.js?v=20260928-advanced2"></script>
+  <script src="script.js?v=20260928-location1"></script>
   <script src="../assets/js/site-chrome.js?v=20260928-logo-legal2"></script>
 <script src="../assets/js/cookie-consent.js?v=ga4-20260928"></script>
 </body>

@@ -579,9 +579,22 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
+  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, availableLocations: [], langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
+    this._locationsAbort = new AbortController();
+    fetch('https://api.mazurestate.pl/api/mls-test.php', { signal: this._locationsAbort.signal })
+      .then(response => response.ok ? response.json() : Promise.reject(new Error('MLS locations unavailable')))
+      .then(payload => {
+        const locations = new Set();
+        (payload.offers || []).forEach(offer => {
+          const city = String(offer.city || '').trim();
+          const district = String(offer.district || '').trim();
+          if (city) locations.add(city);
+          if (city && district) locations.add(`${city}, ${district}`);
+        });
+        this.setState({ availableLocations: [...locations].sort((a, b) => a.localeCompare(b, 'pl')) });
+      }).catch(() => {});
     const categoriesSection = document.getElementById('categories');
     const featuredOffersSection = document.getElementById('featured-offers');
     const whyUsSection = document.getElementById('why-us');
@@ -616,6 +629,7 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
+    this._locationsAbort?.abort();
     clearInterval(this._testimonialTimer);
     document.removeEventListener('pointerdown', this._outsideDropdownHandler);
   }
@@ -627,16 +641,10 @@ class Component extends DCLogic {
       { id: 'dzialki', label: 'Działki' },
       { id: 'lokale', label: 'Lokale komercyjne' },
     ];
-    const locations = [
-      'Bąkówka', 'Bemowo', 'Białołęka', 'Bielany', 'Czyste', 'Falenty', 'Gdańsk Jasień', 'Gocław',
-      'Klimczaka', 'Konstancin-Jeziorna', 'Kraków', 'Łódź', 'Marki', 'Mokotów', 'Mysiadło', 'Ochota', 'Piaseczno',
-      'Praga Południe', 'Praga Północ', 'Pruszków', 'Radom', 'Rembertów', 'Słupno', 'Śródmieście',
-      'Targówek', 'Ursus', 'Ursynów', 'Warszawa', 'Wawer', 'Wesoła', 'Wiązowna', 'Wilanów', 'Włochy',
-      'Wola', 'Ząbki', 'Żoliborz'
-    ].sort((a, b) => a.localeCompare(b, 'pl'));
-    const normalizedLocationQuery = this.state.locationQuery.trim().toLocaleLowerCase('pl');
-    const filteredLocations = locations
-      .filter(name => name.toLocaleLowerCase('pl').includes(normalizedLocationQuery))
+    const normalizeLocation = value => String(value || '').toLocaleLowerCase('pl').replace(/ł/g, 'l').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
+    const normalizedLocationQuery = normalizeLocation(this.state.locationQuery);
+    const filteredLocations = this.state.availableLocations
+      .filter(name => normalizeLocation(name).includes(normalizedLocationQuery))
       .map(name => ({ name }));
     const langs = [
       { code: 'PL', label: 'PL', href: 'index.html?lang=pl' },
