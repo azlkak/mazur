@@ -4,7 +4,8 @@ declare(strict_types=1);
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: public, max-age=300');
 $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
-if ($origin === 'https://azlkak.github.io') {
+$allowedOrigins = ['https://mazurestate.pl', 'https://www.mazurestate.pl', 'https://azlkak.github.io'];
+if (in_array($origin, $allowedOrigins, true)) {
     header('Access-Control-Allow-Origin: ' . $origin);
     header('Vary: Origin');
 }
@@ -111,7 +112,7 @@ try {
         'features' => array_slice($features, 0, 20),
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
-            static fn(string $name): string => 'https://darkgreen-rabbit-981798.hostingersite.com/api/mls-image.php?name=' . rawurlencode($name),
+            static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
             array_values(array_filter($images, static fn($name): bool => is_string($name)))
         ),
     ];

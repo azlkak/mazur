@@ -6,7 +6,8 @@ header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
 
 $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
-if ($origin === 'https://azlkak.github.io') {
+$allowedOrigins = ['https://mazurestate.pl', 'https://www.mazurestate.pl', 'https://azlkak.github.io'];
+if (in_array($origin, $allowedOrigins, true)) {
     header('Access-Control-Allow-Origin: ' . $origin);
     header('Access-Control-Allow-Headers: Content-Type, Accept, X-Requested-With');
     header('Access-Control-Allow-Methods: POST, OPTIONS');
@@ -28,11 +29,11 @@ function inputText(array $input, string $key, int $maxLength): string
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
-    http_response_code($origin === 'https://azlkak.github.io' ? 204 : 403);
+    http_response_code(in_array($origin, $allowedOrigins, true) ? 204 : 403);
     exit;
 }
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') reply(405, 'method_not_allowed');
-if ($origin !== 'https://azlkak.github.io') reply(403, 'origin_not_allowed');
+if (!in_array($origin, $allowedOrigins, true)) reply(403, 'origin_not_allowed');
 if (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'MazurEstateContact') reply(403, 'request_not_allowed');
 
 $contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);

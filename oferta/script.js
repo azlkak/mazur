@@ -1,4 +1,4 @@
-const MLS_DETAIL_API='https://darkgreen-rabbit-981798.hostingersite.com/api/mls-offer.php';
+const MLS_DETAIL_API='https://api.mazurestate.pl/api/mls-offer.php';
 
 const text=(selector,value)=>{const element=document.querySelector(selector);if(element)element.textContent=value};
 const categoryFor=value=>{const name=String(value||'').toLocaleLowerCase('pl');if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return 'mieszkania'};

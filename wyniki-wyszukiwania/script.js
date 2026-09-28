@@ -33,7 +33,7 @@
     const gallery = [images[i%images.length],images[(i+1)%images.length],images[(i+3)%images.length]];
     return {id:i+1,title:titles[type][i%4],location:locations[i],area,price,gallery,rooms:type==='dzialki'?t.plot:type==='lokale'?`${3+i%4} ${t.spaces}`:`${type==='domy'?4+i%3:2+i%4} ${t.rooms}`,floor:type==='dzialki'?t.utilities:type==='domy'?t.floors:type==='lokale'?t.ground:`${1+i%7} ${t.floor}`,date:12-i};
   });
-  const apiUrl='https://darkgreen-rabbit-981798.hostingersite.com/api/mls-test.php';
+  const apiUrl='https://api.mazurestate.pl/api/mls-test.php';
   const normalize=value=>String(value||'').toLocaleLowerCase('pl').trim();
   const categoryFor=value=>{const name=normalize(value);if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return null};
   const fallbackImages={mieszkania:images[0],domy:images[2],dzialki:images[4],lokale:images[3]};

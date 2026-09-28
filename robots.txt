@@ -2,4 +2,4 @@
 # Submit sitemap.xml directly in Search Console; install this policy at /robots.txt on the final domain.
 User-agent: *
 Allow: /
-Sitemap: https://azlkak.github.io/mazur/sitemap.xml
+Sitemap: https://mazurestate.pl/sitemap.xml

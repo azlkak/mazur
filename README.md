@@ -66,7 +66,7 @@ On GitHub project Pages, `/mazur/robots.txt` is not the host-root robots policy:
 
 GitHub Pages publishes the `main` branch. The QA preview is available at:
 
-https://azlkak.github.io/mazur/
+https://mazurestate.pl/
 
 Before committing, check that the working tree contains only intentional files:
 

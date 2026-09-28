@@ -1,5 +1,5 @@
 (() => {
-  const API='https://darkgreen-rabbit-981798.hostingersite.com/api/enquiry.php';
+  const API='https://api.mazurestate.pl/api/enquiry.php';
   const params=new URLSearchParams(location.search);
   const lang=['pl','en','uk','ru'].includes(params.get('lang'))?params.get('lang'):'pl';
   const copy={

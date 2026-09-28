@@ -10,7 +10,7 @@ from html import escape
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = 'https://azlkak.github.io/mazur/'
+BASE = 'https://mazurestate.pl/'
 LANGS = ['pl', 'en', 'uk', 'ru']
 NAMES = {
     '': ['Agencja nieruchomości Warszawa', 'Real estate agency in Warsaw', 'Агенція нерухомості у Варшаві', 'Агентство недвижимости в Варшаве'],
