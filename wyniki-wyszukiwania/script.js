@@ -83,6 +83,7 @@
   setupFilterMenu(filterType,'filter-type-trigger','filter-type-menu',Object.entries(typeLabels).map(([value,label])=>({value,label})));
   setupFilterMenu(filterTransaction,'filter-transaction-trigger','filter-transaction-menu',[{value:'sprzedaz',label:filterCopy[7]},{value:'wynajem',label:filterCopy[8]}]);
   setupFilterMenu(sort,'sort-trigger','sort-menu',[{value:'newest',label:t.newest},{value:'oldest',label:t.oldest},{value:'price-asc',label:t.priceAsc},{value:'price-desc',label:t.priceDesc},{value:'area-asc',label:t.areaAsc},{value:'area-desc',label:t.areaDesc}]);
+  setupFilterMenu(perPage,'per-page-trigger','per-page-menu',[5,10,20,50].map(value=>({value:String(value),label:String(value)})));
   document.getElementById('filter-location').value=locationFilter;
   document.getElementById('filter-price').value=params.get('price')||'';
   document.getElementById('filter-area').value=params.get('area')||'';
