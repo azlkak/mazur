@@ -23,7 +23,7 @@
 <script src="assets/js/seo.js"></script>
 <!-- SEO END -->
 </head>
-<body>
+<body id="top">
 <x-dc>
 <helmet>
   <script src="assets/js/image-slot.js"></script>
@@ -113,13 +113,15 @@
     <div id="header-bar" style="width: 100%; max-width: 1360px; display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-radius: 999px; padding: 6px 12px 6px 20px; box-shadow: 0 4px 24px rgba(30,50,90,0.08); border: 1px solid oklch(0.93 0.01 250);">
 
       <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: transparent; border-radius: 12px; padding: 0px 4px;">
-        <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: multiply;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" decoding="async">
-        <div style="display: none; align-items: center; gap: 8px;">
-          <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
-            <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
+        <a href="#top" aria-label="MazurEstate — strona główna" style="display: flex; align-items: center; color: inherit; text-decoration: none;">
+          <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: multiply;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" decoding="async">
+          <div style="display: none; align-items: center; gap: 8px;">
+            <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
+              <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
+            </div>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: oklch(0.28 0.03 250); letter-spacing: -0.01em;">MazurEstate</span>
           </div>
-          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: oklch(0.28 0.03 250); letter-spacing: -0.01em;">MazurEstate</span>
-        </div>
+        </a>
       </div>
 
       <button id="mobile-menu-btn" type="button" aria-label="Otwórz menu" aria-expanded="false" onClick="{{ toggleMobileMenu }}" style="display: none; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; border: none; background: oklch(0.95 0.01 250); cursor: pointer; flex-shrink: 0;">

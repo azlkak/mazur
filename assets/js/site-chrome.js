@@ -15,7 +15,7 @@
     const preserved = new URLSearchParams(location.search); preserved.delete('lang');
     const currentBase = `${current}${preserved.toString() ? `?${preserved}` : ''}`;
     const home = `../index.html?lang=${lang}`;
-    if (header) header.innerHTML = `<div class="header-bar shell"><a class="brand" href="${home}" aria-label="MazurEstate"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></a><nav class="main-nav"><a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a></nav><div class="header-actions"><div class="chrome-language"><button type="button" aria-expanded="false">🌐 <span>${lang==='en'?'ENG':lang==='uk'?'UKR':lang.toUpperCase()}</span><b>⌄</b></button><div>${[['pl','PL'],['uk','UKR'],['en','ENG'],['ru','RU']].map(([code,label])=>`<a href="${withLang(currentBase,code)}">${label}</a>`).join('')}</div></div><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button chrome-primary" href="tel:+48503937749">${t.contactUs}</a></div></div>`;
+    if (header) header.innerHTML = `<div class="header-bar shell"><a class="brand" href="${home}#top" aria-label="MazurEstate — strona główna"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate"></a><nav class="main-nav"><a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="tel:+48503937749">${t.contact}</a></nav><div class="header-actions"><div class="chrome-language"><button type="button" aria-expanded="false">🌐 <span>${lang==='en'?'ENG':lang==='uk'?'UKR':lang.toUpperCase()}</span><b>⌄</b></button><div>${[['pl','PL'],['uk','UKR'],['en','ENG'],['ru','RU']].map(([code,label])=>`<a href="${withLang(currentBase,code)}">${label}</a>`).join('')}</div></div><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button chrome-primary" href="tel:+48503937749">${t.contactUs}</a></div></div>`;
     const advisoryUrl = `../doradztwo/?lang=${lang}`;
     const developersUrl = `../dla-deweloperow/?lang=${lang}`;
     const desktopAdvisory = header?.querySelector('.main-nav a:nth-child(2)');
@@ -98,7 +98,7 @@
     });
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.applySiteChrome); else window.applySiteChrome();
-  const translations=document.createElement('script');translations.src='../assets/js/page-translations.js';document.body.appendChild(translations);
+  const translations=document.createElement('script');translations.src='../assets/js/page-translations.js?v=20260928-legal2';document.body.appendChild(translations);
   const residual=document.createElement('script');residual.src='../assets/js/residual-i18n.js';document.body.appendChild(residual);
   document.querySelectorAll('.draft-note').forEach(note => note.remove());
 })();
