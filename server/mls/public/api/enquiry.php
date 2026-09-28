@@ -157,7 +157,6 @@ try {
             if (in_array($typeId, [1, 2, 3, 4], true)) $request['type_id'] = $typeId;
         } else {
             $offerNumber = $submittedOfferNumber !== '' ? $submittedOfferNumber : $offerId;
-            $request['offer_number'] = $offerNumber;
             $contentLines[] = '';
             $contentLines[] = 'Oferta ze strony: ' . ($submittedOfferTitle !== '' ? $submittedOfferTitle : 'oferta nr ' . $offerNumber);
             $contentLines[] = 'Numer oferty: ' . $offerNumber;
