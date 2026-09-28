@@ -23,12 +23,24 @@
     uk:{price:'Ціна',area:'Площа',rooms:'Кімнати',priceMin:'Ціна від',priceMax:'Ціна до',areaMin:'Площа від',areaMax:'Площа до',from:'від',to:'до',clear:'Очистити фільтри',show:'Показати пропозиції',roomsChip:'кімн.',empty:'Немає пропозицій за цими критеріями.'},
     ru:{price:'Цена',area:'Площадь',rooms:'Комнаты',priceMin:'Цена от',priceMax:'Цена до',areaMin:'Площадь от',areaMax:'Площадь до',from:'от',to:'до',clear:'Сбросить фильтры',show:'Показать предложения',roomsChip:'комн.',empty:'По этим критериям предложений нет.'}
   }[lang];
+  const moreCopy={
+    pl:{any:'Dowolna',more:'Więcej filtrów',less:'Mniej filtrów',floor:'Piętro',anyFloor:'Dowolne',ground:'Parter',higher:'4 i wyżej',unitPrice:'Cena za m²',plot:'Powierzchnia działki',photos:'Tylko oferty ze zdjęciami',roomNames:['1 pokój','2 pokoje','3 pokoje','4 pokoje','5 pokoi','6+ pokoi']},
+    en:{any:'Any',more:'More filters',less:'Fewer filters',floor:'Floor',anyFloor:'Any floor',ground:'Ground floor',higher:'4 or higher',unitPrice:'Price per m²',plot:'Plot area',photos:'Only with photos',roomNames:['1 room','2 rooms','3 rooms','4 rooms','5 rooms','6+ rooms']},
+    uk:{any:'Будь-яка',more:'Більше фільтрів',less:'Менше фільтрів',floor:'Поверх',anyFloor:'Будь-який',ground:'Перший поверх',higher:'4 і вище',unitPrice:'Ціна за м²',plot:'Площа ділянки',photos:'Лише з фото',roomNames:['1 кімната','2 кімнати','3 кімнати','4 кімнати','5 кімнат','6+ кімнат']},
+    ru:{any:'Любая',more:'Больше фильтров',less:'Меньше фильтров',floor:'Этаж',anyFloor:'Любой',ground:'Первый этаж',higher:'4 и выше',unitPrice:'Цена за м²',plot:'Площадь участка',photos:'Только с фото',roomNames:['1 комната','2 комнаты','3 комнаты','4 комнаты','5 комнат','6+ комнат']}
+  }[lang];
   const numericValue=(value,decimal=false)=>Number(decimal?String(value||'').replace(/\s/g,'').replace(',','.').replace(/[^\d.]/g,''):String(value||'').replace(/\D/g,''))||0;
   const minPrice=numericValue(params.get('priceMin'));
   const maxPrice=numericValue(params.get('priceMax')||params.get('price'))||Infinity;
   const minArea=numericValue(params.get('areaMin')||params.get('area'),true);
   const maxArea=numericValue(params.get('areaMax'),true)||Infinity;
   const selectedRooms=(params.get('rooms')||'').split(',').filter(value=>/^[1-6]$/.test(value)).map(Number);
+  const selectedFloor=params.get('floor')||'';
+  const minUnitPrice=numericValue(params.get('unitMin'));
+  const maxUnitPrice=numericValue(params.get('unitMax'))||Infinity;
+  const minPlot=numericValue(params.get('plotMin'));
+  const maxPlot=numericValue(params.get('plotMax'))||Infinity;
+  const photosOnly=params.get('photos')==='1';
   const typeLabels=t.types;
   const transactionLabel = transaction === 'wynajem' ? t.rent : t.sale;
   const images = ['../assets/images/category-apartments.webp','../assets/images/hf_20260726_144524_c09ad56f-4bf3-454e-ad5c-3ebd0166d985.png','../assets/images/category-houses.webp','../assets/images/category-commercial.webp','../assets/images/individual-approach-v2.png','../assets/images/hf_20260726_144517_90fd2149-4cca-4eef-974e-74aa570050e6.png'];
@@ -61,8 +73,10 @@
       const gallery=item.images?.length?item.images:[fallbackImages[category]||images[0]];
       const rooms=category==='dzialki'?t.plot:category==='lokale'?(item.rooms?`${item.rooms} ${t.spaces}`:t.spaces):(item.rooms?`${item.rooms} ${t.rooms}`:'');
       const floor=category==='dzialki'?(item.plotArea?`${item.plotArea} m²`:t.utilities):category==='domy'?t.floors:category==='lokale'?t.ground:(item.floor!==''?`${item.floor} ${t.floor}`:'');
-      return {id:item.id,title:item.title,location,area:Number(item.area)||0,price:Number(item.price)||0,gallery,rooms,roomsCount:Number(item.rooms)||0,floor,date:Date.parse(item.exportedAt)||0,category,transaction:itemTransaction};
-    }).filter(item=>item.category===type&&item.transaction===transaction&&normalize(item.location).includes(normalize(locationFilter))&&item.price>=minPrice&&item.price<=maxPrice&&item.area>=minArea&&item.area<=maxArea&&(!selectedRooms.length||type!=='mieszkania'||selectedRooms.some(count=>count===6?item.roomsCount>=6:item.roomsCount===count)));
+      const floorRaw=String(item.floor??'').toLocaleLowerCase('pl');
+      const floorNumber=/parter|ground/.test(floorRaw)?0:/^\d+$/.test(floorRaw)?Number(floorRaw):null;
+      return {id:item.id,title:item.title,location,area:Number(item.area)||0,price:Number(item.price)||0,plotArea:Number(item.plotArea)||0,gallery,hasPhotos:!!item.images?.length,rooms,roomsCount:Number(item.rooms)||0,floor,floorNumber,date:Date.parse(item.exportedAt)||0,category,transaction:itemTransaction};
+    }).filter(item=>item.category===type&&item.transaction===transaction&&normalize(item.location).includes(normalize(locationFilter))&&item.price>=minPrice&&item.price<=maxPrice&&item.area>=minArea&&item.area<=maxArea&&(!selectedRooms.length||type!=='mieszkania'||selectedRooms.some(count=>count===6?item.roomsCount>=6:item.roomsCount===count))&&(!selectedFloor||type!=='mieszkania'||(item.floorNumber!==null&&(selectedFloor==='4'?item.floorNumber>=4:item.floorNumber===Number(selectedFloor))))&&(!minUnitPrice||item.area>0&&item.price/item.area>=minUnitPrice)&&(!Number.isFinite(maxUnitPrice)||item.area>0&&item.price/item.area<=maxUnitPrice)&&(type!=='dzialki'||item.plotArea>=minPlot&&item.plotArea<=maxPlot)&&(!photosOnly||item.hasPhotos));
   } catch(error) {
     loadError=true;
     offers=[];
@@ -85,10 +99,14 @@
   document.querySelectorAll('.range-inputs input').forEach(input=>input.placeholder=input.id.endsWith('max')||input.id==='filter-price'?advancedCopy.to:advancedCopy.from);
   document.getElementById('filter-clear').textContent=advancedCopy.clear;
   document.getElementById('filter-submit').textContent=advancedCopy.show;
-  document.getElementById('rooms-filter').hidden=type!=='mieszkania';
+  [['floor-label',moreCopy.floor],['unit-price-label',moreCopy.unitPrice],['plot-label',moreCopy.plot],['photos-label',moreCopy.photos],['unit-min-label',`${moreCopy.unitPrice} ${advancedCopy.from}`],['unit-max-label',`${moreCopy.unitPrice} ${advancedCopy.to}`],['plot-min-label',`${moreCopy.plot} ${advancedCopy.from}`],['plot-max-label',`${moreCopy.plot} ${advancedCopy.to}`]].forEach(([id,label])=>document.getElementById(id).textContent=label);
+  const floorSelect=document.getElementById('filter-floor');
+  floorSelect.options[0].textContent=moreCopy.anyFloor;floorSelect.options[1].textContent=moreCopy.ground;floorSelect.options[5].textContent=moreCopy.higher;
+  document.querySelectorAll('#room-options label>span').forEach((span,i)=>{span.textContent=moreCopy.roomNames[i]});
+  const syncTypeFilters=()=>{document.getElementById('rooms-filter').hidden=filterType.value!=='mieszkania';document.getElementById('floor-filter').hidden=filterType.value!=='mieszkania';document.getElementById('plot-filter').hidden=filterType.value!=='dzialki'};
   document.getElementById('filter-location').placeholder=filterCopy[5];
   const filterType=document.getElementById('filter-type'),filterTransaction=document.getElementById('filter-transaction');
-  filterType.value=type;filterTransaction.value=transaction;
+  filterType.value=type;filterTransaction.value=transaction;syncTypeFilters();
   function setupFilterMenu(input,triggerId,menuId,options){
     const trigger=document.getElementById(triggerId),menu=document.getElementById(menuId),wrapper=trigger.closest('.custom-filter');
     const paint=()=>{trigger.querySelector('span').textContent=options.find(option=>option.value===input.value)?.label||'';menu.innerHTML=options.map(option=>`<button type="button" role="option" aria-selected="${option.value===input.value}" class="${option.value===input.value?'selected':''}" data-value="${option.value}">${option.label}</button>`).join('')};
@@ -112,7 +130,17 @@
   document.getElementById('filter-area').value=params.get('areaMin')||params.get('area')||'';
   document.getElementById('filter-area-max').value=params.get('areaMax')||'';
   document.querySelectorAll('#room-options input').forEach(input=>{input.checked=selectedRooms.includes(Number(input.value))});
-  filterType.addEventListener('change',()=>{document.getElementById('rooms-filter').hidden=filterType.value!=='mieszkania'});
+  const roomsDropdown=document.querySelector('.rooms-dropdown'),roomCurrent=document.getElementById('rooms-current');
+  const updateRooms=()=>{const values=[...document.querySelectorAll('#room-options input:checked')].map(input=>Number(input.value));roomCurrent.textContent=values.length?values.map(n=>n===6?'6+':n).join(', ')+` ${advancedCopy.roomsChip}`:moreCopy.any};
+  document.getElementById('room-options').addEventListener('change',updateRooms);updateRooms();
+  document.addEventListener('click',event=>{if(!roomsDropdown.contains(event.target))roomsDropdown.removeAttribute('open')});
+  floorSelect.value=selectedFloor;
+  [['filter-unit-min','unitMin'],['filter-unit-max','unitMax'],['filter-plot-min','plotMin'],['filter-plot-max','plotMax']].forEach(([id,key])=>{document.getElementById(id).value=params.get(key)||''});
+  document.getElementById('filter-photos').checked=photosOnly;
+  filterType.addEventListener('change',syncTypeFilters);
+  const moreButton=document.getElementById('more-filters'),advancedPanel=document.getElementById('advanced-panel');
+  const updateMore=()=>{const open=!advancedPanel.hidden;moreButton.setAttribute('aria-expanded',String(open));moreButton.innerHTML=`${open?moreCopy.less:moreCopy.more} <span aria-hidden="true">${open?'⌃':'⌄'}</span>`};
+  moreButton.addEventListener('click',()=>{advancedPanel.hidden=!advancedPanel.hidden;updateMore()});updateMore();
   const locationInput=document.getElementById('filter-location'),locationMenu=document.getElementById('filter-locations'),locationToggle=document.getElementById('location-toggle');
   const normalized=value=>value.toLocaleLowerCase('pl').trim();
   function locationGroup(title,items,prefix=''){return items.length?`<div class="location-group"><strong>${title}</strong>${items.map(name=>`<button type="button" role="option" data-location="${prefix}${name}"><span>${name}</span>${prefix?'<small>Warszawa</small>':''}</button>`).join('')}</div>`:''}
@@ -124,7 +152,7 @@
   locationMenu.addEventListener('click',event=>{const option=event.target.closest('[data-location]');if(!option)return;locationInput.value=option.dataset.location;closeLocations()});
   document.addEventListener('click',event=>{if(!event.target.closest('.location-filter'))closeLocations()});
   const searchForm=document.getElementById('results-search');
-  searchForm.addEventListener('submit',event=>{event.preventDefault();const next=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,lang});const values={location:locationInput.value.trim(),priceMin:document.getElementById('filter-price-min').value.trim(),priceMax:document.getElementById('filter-price').value.trim(),areaMin:document.getElementById('filter-area').value.trim(),areaMax:document.getElementById('filter-area-max').value.trim(),rooms:[...document.querySelectorAll('#room-options input:checked')].map(input=>input.value).join(',')};if(filterType.value!=='mieszkania')values.rooms='';Object.entries(values).forEach(([key,value])=>{if(value)next.set(key,value)});location.search=next.toString()});
+  searchForm.addEventListener('submit',event=>{event.preventDefault();const next=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,lang});const values={location:locationInput.value.trim(),priceMin:document.getElementById('filter-price-min').value.trim(),priceMax:document.getElementById('filter-price').value.trim(),areaMin:document.getElementById('filter-area').value.trim(),areaMax:document.getElementById('filter-area-max').value.trim(),rooms:[...document.querySelectorAll('#room-options input:checked')].map(input=>input.value).join(','),floor:floorSelect.value,unitMin:document.getElementById('filter-unit-min').value.trim(),unitMax:document.getElementById('filter-unit-max').value.trim(),plotMin:document.getElementById('filter-plot-min').value.trim(),plotMax:document.getElementById('filter-plot-max').value.trim(),photos:document.getElementById('filter-photos').checked?'1':''};if(filterType.value!=='mieszkania'){values.rooms='';values.floor=''}if(filterType.value!=='dzialki'){values.plotMin='';values.plotMax=''}Object.entries(values).forEach(([key,value])=>{if(value)next.set(key,value)});location.search=next.toString()});
   searchForm.addEventListener('reset',event=>{event.preventDefault();location.search=new URLSearchParams({type:filterType.value,transaction:filterTransaction.value,lang}).toString()});
   document.title=`${typeLabels[type]} ${transactionLabel} | MazurEstate`;
   document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t[el.dataset.i18n]});
@@ -136,7 +164,7 @@
   document.querySelector(`[data-lang="${lang}"]`)?.classList.add('active');
   document.getElementById('results-title').textContent=`${typeLabels[type]} ${transactionLabel}${locationFilter?` — ${locationFilter}`:''}`;
   document.getElementById('results-summary').textContent=loadError?'Nie udało się pobrać ofert MLS. Spróbuj ponownie za chwilę.':`${t.found.replace('{n}',offers.length)} · dane testowe MLS`;
-  const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('priceMin')&&`${advancedCopy.price} ${advancedCopy.from} ${params.get('priceMin')} zł`,(params.get('priceMax')||params.get('price'))&&`${advancedCopy.price} ${advancedCopy.to} ${params.get('priceMax')||params.get('price')} zł`,(params.get('areaMin')||params.get('area'))&&`${advancedCopy.area} ${advancedCopy.from} ${params.get('areaMin')||params.get('area')} m²`,params.get('areaMax')&&`${advancedCopy.area} ${advancedCopy.to} ${params.get('areaMax')} m²`,selectedRooms.length&&`${selectedRooms.map(n=>n===6?'6+':n).join(', ')} ${advancedCopy.roomsChip}`].filter(Boolean);
+  const chips=[typeLabels[type],transactionLabel,locationFilter,params.get('priceMin')&&`${advancedCopy.price} ${advancedCopy.from} ${params.get('priceMin')} zł`,(params.get('priceMax')||params.get('price'))&&`${advancedCopy.price} ${advancedCopy.to} ${params.get('priceMax')||params.get('price')} zł`,(params.get('areaMin')||params.get('area'))&&`${advancedCopy.area} ${advancedCopy.from} ${params.get('areaMin')||params.get('area')} m²`,params.get('areaMax')&&`${advancedCopy.area} ${advancedCopy.to} ${params.get('areaMax')} m²`,selectedRooms.length&&`${selectedRooms.map(n=>n===6?'6+':n).join(', ')} ${advancedCopy.roomsChip}`,selectedFloor&&`${moreCopy.floor}: ${selectedFloor==='0'?moreCopy.ground:selectedFloor==='4'?moreCopy.higher:selectedFloor}`,params.get('unitMin')&&`${moreCopy.unitPrice} ${advancedCopy.from} ${params.get('unitMin')}`,params.get('unitMax')&&`${moreCopy.unitPrice} ${advancedCopy.to} ${params.get('unitMax')}`,params.get('plotMin')&&`${moreCopy.plot} ${advancedCopy.from} ${params.get('plotMin')} m²`,params.get('plotMax')&&`${moreCopy.plot} ${advancedCopy.to} ${params.get('plotMax')} m²`,photosOnly&&moreCopy.photos].filter(Boolean);
 
   function ordered(){const data=[...offers];if(sort.value==='price-asc')data.sort((a,b)=>a.price-b.price);if(sort.value==='price-desc')data.sort((a,b)=>b.price-a.price);if(sort.value==='area-asc')data.sort((a,b)=>a.area-b.area);if(sort.value==='area-desc')data.sort((a,b)=>b.area-a.area);if(sort.value==='newest')data.sort((a,b)=>b.date-a.date);if(sort.value==='oldest')data.sort((a,b)=>a.date-b.date);return data}
   const escapeHtml=value=>String(value??'').replace(/[&<>'"]/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
