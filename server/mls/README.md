@@ -17,18 +17,17 @@ Hostingerze.
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 pozostają wyłącznie na Hostingerze i nie trafiają do GitHub.
 
-### Oczekujące wdrożenie: indeks lokalizacji
+### Indeks lokalizacji — wdrożony 28.09.2026
 
-Frontend korzysta z `mls-locations.php`, a do chwili jego wdrożenia używa
-dotychczasowej listy ofert. Aby uruchomić pełny indeks na istniejącej bazie:
-
-1. Zrobić kopię bazy `u101822986_mls`.
-2. Wykonać `private/migrations/20260928_offer_locations.sql` tylko raz.
-3. Wgrać `private/bin/import.php` do prywatnego `mls/bin/` oraz
-   `public/api/mls-locations.php` do `public_html/api/`.
-4. Sprawdzić liczbę ofert bez miasta w wyniku migracji (oczekiwane zero),
-   odpowiedź API oraz kolejny import z crona. Każdy import zapisuje miasto i
-   dzielnicę, a w logu zgłasza brak miasta w ofercie do publikacji.
+Zrobiono kopię bazy `u101822986_mls` przed migracją, wykonano
+`private/migrations/20260928_offer_locations.sql` i wdrożono
+`private/bin/import.php` do prywatnego `mls/bin/` oraz
+`public/api/mls-locations.php` do `public_html/api/`. Po migracji wszystkie
+19 ofert do publikacji mają miasto; API zwraca 7 kombinacji miasta i dzielnicy
+z 4 miast. Zapisany importer ma tę samą sumę SHA-256 co wersja w repozytorium.
+Każdy kolejny import zapisze miasto i dzielnicę, a w logu zgłosi brak miasta
+w ofercie do publikacji. Działanie następnego importu z crona wymaga jeszcze
+sprawdzenia po nadejściu kolejnej paczki MLS.
 
 Obecna lista wyników nadal pobiera maksymalnie 100 ofert. Przed pokazaniem
 wszystkich około 9000 ofert trzeba wdrożyć stronicowanie i filtrowanie po
