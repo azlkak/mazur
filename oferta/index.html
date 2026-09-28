@@ -7,6 +7,23 @@
 <script src="../assets/js/seo-config.js"></script>
 <script src="../assets/js/seo.js"></script>
 <!-- SEO END -->
+
+<!-- Google tag (gtag.js) with Consent Mode -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQDFZ9T9DC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+  let mazurAnalyticsGranted = false;
+  try { mazurAnalyticsGranted = localStorage.getItem('mazurestate-cookie-consent') === 'accept'; } catch (error) {}
+  window.gtag('consent', 'default', {
+    analytics_storage: mazurAnalyticsGranted ? 'granted' : 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-YQDFZ9T9DC', { send_page_view: mazurAnalyticsGranted });
+</script>
 </head><body>
 <header class="site-header"><div class="header-bar shell"><a class="brand" href="../index.html?lang=pl#top"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" decoding="async"></a><nav class="main-nav"><a href="../index.html?lang=pl#categories">Wybierz nieruchomość</a><a href="../index.html?lang=pl#about">Doradztwo</a><a href="../index.html?lang=pl#why-us">Dlaczego my</a><a href="../index.html?lang=pl#services">Dla deweloperów</a><a href="tel:+48503937749">Kontakt</a></nav><div class="header-actions"><details class="language-picker"><summary>🌐 PL <span>⌄</span></summary><div><a href="../oferta/?id=4374&lang=pl">PL</a><a href="../oferta/?id=4374&lang=en">EN</a><a href="../oferta/?id=4374&lang=uk">UKR</a><a href="../oferta/?id=4374&lang=ru">RU</a></div></details><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button primary" href="tel:+48503937749">Skontaktuj się</a></div></div></header>
 <main class="shell property-main"><nav class="breadcrumbs"><a href="../index.html?lang=pl">Strona główna</a><span>›</span><a href="../wyniki-wyszukiwania/?type=mieszkania&transaction=wynajem&lang=pl">Mieszkania na wynajem</a><span>›</span><strong>Gdańsk Jasień</strong></nav>

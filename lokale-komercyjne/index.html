@@ -12,5 +12,22 @@
 <script src="../assets/js/seo-config.js"></script>
 <script src="../assets/js/seo.js"></script>
 <!-- SEO END -->
+
+<!-- Google tag (gtag.js) with Consent Mode -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQDFZ9T9DC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+  let mazurAnalyticsGranted = false;
+  try { mazurAnalyticsGranted = localStorage.getItem('mazurestate-cookie-consent') === 'accept'; } catch (error) {}
+  window.gtag('consent', 'default', {
+    analytics_storage: mazurAnalyticsGranted ? 'granted' : 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-YQDFZ9T9DC', { send_page_view: mazurAnalyticsGranted });
+</script>
 </head><body data-property-type="lokale"><script src="../assets/js/property-page.js"></script><script src="../assets/js/cookie-consent.js?v=ga4-20260928"></script>
 </body></html>
