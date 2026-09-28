@@ -8,6 +8,12 @@
     uk:{first:'Ім’я',last:'Прізвище',phone:'Телефон',email:'Електронна пошта',contactLegend:'Контактні дані — потрібен телефон або e-mail',message:'Повідомлення',send:'Надіслати повідомлення',consent:'Я ознайомився(-лась) із {privacy} та погоджуюся на зв’язок щодо мого запиту.',privacy:'політикою конфіденційності',offerLabel:'Запит щодо цієї пропозиції',offerNumber:'Номер пропозиції: {number}',sending:'Надсилання…',success:'Дякуємо. Повідомлення надіслано — ми зв’яжемося з вами.',error:'Не вдалося надіслати повідомлення. Спробуйте ще раз пізніше.',contactRequired:'Вкажіть номер телефону або електронну пошту.',invalidPhone:'Вкажіть правильний номер телефону (щонайменше 6 символів).',invalidEmail:'Вкажіть правильну електронну адресу.',rateLimited:'Забагато спроб. Зачекайте 15 хвилин і спробуйте ще раз.',invalidTiming:'Зачекайте мить і спробуйте надіслати форму ще раз.'},
     ru:{first:'Имя',last:'Фамилия',phone:'Телефон',email:'Электронная почта',contactLegend:'Контактные данные — требуется телефон или e-mail',message:'Сообщение',send:'Отправить сообщение',consent:'Я ознакомился(-лась) с {privacy} и согласен(-на) на связь по моему запросу.',privacy:'политикой конфиденциальности',offerLabel:'Запрос по этому предложению',offerNumber:'Номер предложения: {number}',sending:'Отправка…',success:'Спасибо. Сообщение отправлено — мы свяжемся с вами.',error:'Не удалось отправить сообщение. Попробуйте ещё раз позже.',contactRequired:'Укажите номер телефона или адрес электронной почты.',invalidPhone:'Укажите правильный номер телефона (не менее 6 символов).',invalidEmail:'Укажите правильный адрес электронной почты.',rateLimited:'Слишком много попыток. Подождите 15 минут и попробуйте снова.',invalidTiming:'Подождите немного и попробуйте отправить форму ещё раз.'}
   }[lang];
+  copy.contactLegend={
+    pl:'Telefon lub e-mail',
+    en:'Phone or email',
+    uk:'Телефон або e-mail',
+    ru:'Телефон или e-mail'
+  }[lang];
   const validationCopy={
     pl:{first:'Wpisz imię.',last:'Wpisz nazwisko.',message:'Wpisz wiadomość — co najmniej 10 znaków.',consent:'Zaznacz zgodę, aby wysłać wiadomość.'},
     en:{first:'Enter your first name.',last:'Enter your last name.',message:'Enter a message of at least 10 characters.',consent:'Accept the consent to send the message.'},
@@ -23,6 +29,13 @@
     root.dataset.startedAt=String(Date.now());
     updateContext(root,{id:offerId,number:root.dataset.offerNumber||offerId,title:root.dataset.offerTitle||''});
     const form=root.querySelector('form');
+    form.querySelectorAll('.mazur-contact__field').forEach((field,index)=>{
+      const label=field.querySelector('label');
+      const control=field.querySelector('input,textarea');
+      if(!label||!control)return;
+      control.id=`mazur-contact-${root.dataset.context||'website'}-${index}`;
+      label.htmlFor=control.id;
+    });
     form.addEventListener('submit',event=>submit(event,root));
     form.addEventListener('input',()=>clearHelp(form));
     form.addEventListener('change',()=>clearHelp(form));
