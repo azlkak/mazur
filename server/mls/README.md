@@ -18,17 +18,21 @@ Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
 bezpieczeństwa mogą być przechowywane lokalnie przez administratora.
 
-### Indeks lokalizacji — wdrożony 28.09.2026
+### Indeks lokalizacji — wdrożony i uzupełniony 29.09.2026
 
 Zrobiono kopię bazy `u101822986_mls` przed migracją, wykonano
 `private/migrations/20260928_offer_locations.sql` i wdrożono
 `private/bin/import.php` do prywatnego `mls/bin/` oraz
-`public/api/mls-locations.php` do `public_html/api/`. Po migracji wszystkie
-19 ofert do publikacji mają miasto; API zwraca 7 kombinacji miasta i dzielnicy
-z 4 miast. Zapisany importer ma tę samą sumę SHA-256 co wersja w repozytorium.
-Każdy kolejny import zapisze miasto i dzielnicę, a w logu zgłosi brak miasta
-w ofercie do publikacji. Działanie następnego importu z crona wymaga jeszcze
-sprawdzenia po nadejściu kolejnej paczki MLS.
+`public/api/mls-locations.php` do `public_html/api/`. Po imporcie rzeczywistego
+eksportu uzupełniono miasto i dzielnicę w istniejących rekordach bez zmiany
+danych oferty. Miasto jest dostępne w 5 054 z 5 071 rekordów (1 597 różnych
+miast); 17 rekordów nie ma nazwy miasta w danych źródłowych. Dzielnicy nie
+podano w 3 115 rekordach. Podpowiedzi w wyszukiwarce zostały sprawdzone dla
+Warszawy i jej dzielnic; filtr wskazał 523 mieszkania na sprzedaż w Warszawie.
+Importer na serwerze zapisuje te pola także przy następnych paczkach, co
+potwierdził automatyczny import 29.09.2026 o 11:00 UTC. Jego produkcyjna
+wersja nadal obsługuje wyłącznie MLS;
+kod drugiego źródła w repozytorium wymaga osobnej migracji przed wdrożeniem.
 
 ### Pierwszy rzeczywisty eksport MLS — 29.09.2026
 
@@ -38,8 +42,12 @@ przyrostowe (4,6, 43,43 i 60,79 MiB). Po ich zatwierdzeniu baza zawierała
 paczki. Jedno powtórzenie identycznej oferty `377499` pominięto; raport
 `logs/skipped-<sha>.json` został zapisany na serwerze. Importer przekazał
 raport do dwóch adresów powiadomień wskazanych w prywatnym `config.php`.
-Samo przyjęcie wiadomości przez funkcję `mail()` nie potwierdza dostarczenia
-jej do skrzynek.
+Właściciel potwierdził otrzymanie wiadomości e-mail z raportem.
+
+Następna paczka przyrostowa (93,71 MiB) została pobrana przez cron o 11:00
+UTC i przeniesiona do archiwum. Po niej baza zawierała 5 078 ofert, z czego
+5 073 do publikacji, oraz pięć zarejestrowanych paczek. Liczba rekordów bez
+miasta pozostała równa 17.
 
 Rzeczywiste nazwy paczek mają sufiks `_YYYYMMDDHHMMSS.zip`, a akcje w
 przyrostach obejmują `create`, `update` i `delete`. Importer akceptuje te
