@@ -51,6 +51,10 @@ function batchTimestamp(string $path): string {
     if (!preg_match('/_([0-9]{8})_?([0-9]{6})\.zip\z/', basename($path), $match)) fail('Unrecognized batch timestamp');
     return $match[1] . $match[2];
 }
+function isMazowieckie(array $fields): bool {
+    $province = trim((string)(($fields['locationExportProvinceName'] ?? '') ?: ($fields['locationProvinceName'] ?? '')));
+    return strtoupper($province) === 'MAZOWIECKIE';
+}
 function inspect(string $path, array $c): array {
     if (is_link($path) || filesize($path) > $c['max_zip_bytes']) fail('ZIP exceeds limit or is a symlink');
     $z = new ZipArchive();
@@ -131,6 +135,12 @@ function inspect(string $path, array $c): array {
                     $fields[$key] = (string)$value;
                 }
             }
+            // Keep the ID in a full-feed snapshot, but do not read or store
+            // pictures for MLS offers outside the region. Deletes are ID-only.
+            if ($action !== 'delete' && !isMazowieckie($fields)) {
+                $rows[$id] = ['action'=>$action, 'stamp'=>$stamp, 'fields'=>$fields, 'gallery'=>null, 'out_of_region'=>true];
+                continue;
+            }
             $gallery = null;
             if ($action !== 'delete' && isset($o->pictures)) {
                 $gallery = [];
@@ -168,7 +178,8 @@ try {
     if ($dry) {
         if ($checkPath === null) fail('Usage: php import.php [--source=esticrm] --check /absolute/package.zip');
         [$rows, $images, $bytes, $exportType, $skipped] = inspect($checkPath, $c);
-        echo json_encode(['export'=>$exportType,'offers'=>count($rows),'images'=>count($images),'expanded_bytes'=>$bytes,'skipped_count'=>count($skipped),'skipped'=>array_slice($skipped,0,30)], JSON_PRETTY_PRINT) . "\n";
+        $inRegion = count(array_filter($rows, fn($row) => empty($row['out_of_region']) && $row['action'] !== 'delete'));
+        echo json_encode(['export'=>$exportType,'offers'=>count($rows),'offers_in_region'=>$inRegion,'images'=>count($images),'expanded_bytes'=>$bytes,'skipped_count'=>count($skipped),'skipped'=>array_slice($skipped,0,30)], JSON_PRETTY_PRINT) . "\n";
         exit;
     }
     if ($source === 'mls' && !$c['enabled']) fail('MLS importer disabled');
@@ -217,6 +228,7 @@ try {
                 $db->beginTransaction();
                 $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source=? AND source_id=? FOR UPDATE');
                 $put = $db->prepare('INSERT INTO mls_offers (source,source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
+                $hideOutsideRegion = $db->prepare('UPDATE mls_offers SET source_export_at=?, batch_sha256=?, publishable=0, fields_json=? WHERE source=? AND source_id=?');
                 $delete = $db->prepare('DELETE FROM mls_offers WHERE source=? AND source_id=?');
                 if ($exportType === 'full') {
                     $db->exec('DROP TEMPORARY TABLE IF EXISTS mls_full_ids');
@@ -231,10 +243,14 @@ try {
                         continue;
                     }
                     if ($old && $old['source_export_at'] > $r['stamp']) continue;
+                    if (!empty($r['out_of_region'])) {
+                        if ($old) $hideOutsideRegion->execute([$r['stamp'],$sha,json_encode($r['fields'],JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),$source,$id]);
+                        continue;
+                    }
                     $gallery = $r['gallery'] ?? ($old ? json_decode($old['images_json'],true,512,JSON_THROW_ON_ERROR) : []);
                     $f = $r['fields'];
                     // Conservative candidate flag. Public API remains disabled separately.
-                    $visible = ($f['status'] ?? '') === '3' && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
+                    $visible = ($f['status'] ?? '') === '3' && isMazowieckie($f) && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
                     $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
                     $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
                     $put->execute([$source,$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
