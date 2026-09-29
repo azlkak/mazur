@@ -52,7 +52,8 @@ function batchTimestamp(string $path): string {
     return $match[1] . $match[2];
 }
 function isMazowieckie(array $fields): bool {
-    $province = trim((string)(($fields['locationExportProvinceName'] ?? '') ?: ($fields['locationProvinceName'] ?? '')));
+    $exportProvince = trim((string)($fields['locationExportProvinceName'] ?? ''));
+    $province = $exportProvince !== '' ? $exportProvince : trim((string)($fields['locationProvinceName'] ?? ''));
     return strtoupper($province) === 'MAZOWIECKIE';
 }
 function inspect(string $path, array $c): array {
@@ -136,7 +137,7 @@ function inspect(string $path, array $c): array {
                 }
             }
             // Keep the ID in a full-feed snapshot, but do not read or store
-            // pictures for MLS offers outside the region. Deletes are ID-only.
+            // pictures for offers outside the region. Deletes are ID-only.
             if ($action !== 'delete' && !isMazowieckie($fields)) {
                 $rows[$id] = ['action'=>$action, 'stamp'=>$stamp, 'fields'=>$fields, 'gallery'=>null, 'out_of_region'=>true];
                 continue;
