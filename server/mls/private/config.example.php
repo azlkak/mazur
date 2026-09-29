@@ -13,7 +13,9 @@ return [
     'max_image_bytes' => 20 * 1024 ** 2,
     'min_age_seconds' => 600,
     'min_full_offers' => 1,
-    'archive_retention_days' => 7,
+    // Cleanup runs after a successful import; 2 days keeps replay time
+    // without accumulating a week of hourly ZIPs on a 50 GiB account.
+    'archive_retention_days' => 2,
     // One summary email per imported package when offer records are skipped.
     'notification_emails' => [],
     // EstiCRM: Ustawienia -> Dane firmowe. Never expose these values publicly.

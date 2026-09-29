@@ -258,7 +258,7 @@ try {
             event($source . ': imported batch ' . $sha);
             try { reportSkipped($sha, basename($path), $skipped, $c); }
             catch (Throwable $notificationError) { event('WARNING: could not send skipped-offer report for ' . $sha); }
-            $keepDays = max(1, (int)($c['archive_retention_days'] ?? 7));
+            $keepDays = max(1, (int)($c['archive_retention_days'] ?? 2));
             foreach (glob($feedRoot . '/archive/*.zip') as $oldArchive) {
                 if (filemtime($oldArchive) < time() - $keepDays * 86400) @unlink($oldArchive);
             }

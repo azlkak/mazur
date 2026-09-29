@@ -57,6 +57,17 @@ Połączenie z bazą jest odnawiane po długich etapach odczytu ZIP i zdjęć, �
 nie wygasło przed transakcją. Konto ma 50 GiB; po imporcie zajęte było około
 29,36 GiB.
 
+### Retencja paczek (przygotowana, nieaktywna na Hostingerze)
+
+Obecnie prywatny `config.php` na Hostingerze przechowuje już zaimportowane ZIP-y
+przez 7 dni. Proponowana zmiana skraca ten czas do 2 dni. Importer uruchamia
+czyszczenie tylko po udanym imporcie: usuwa z `archive` ZIP-y starsze niż okres
+retencji. Nie usuwa paczek z `incoming`, `processing` ani `errors` i nie zmienia
+bazy ofert. Zdjęcia osierocone są nadal usuwane po eksporcie całościowym.
+Przy ostatnim sprawdzeniu zajęte było 29,39 z 50 GiB. Wdrożenie wymaga zmiany
+wartości `archive_retention_days` w prywatnym pliku na serwerze po zgodzie
+właściciela; sama zmiana kodu w GitHub nie aktualizuje konfiguracji Hostinger.
+
 ### Drugi eksport: własne oferty EstiCRM (kod przygotowany, jeszcze nie wdrożony)
 
 Eksport własnych ofert powinien używać opcji **„Dowolny – format EstiCRMXml”**
