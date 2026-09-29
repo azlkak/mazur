@@ -70,7 +70,8 @@ try {
         if (!$authorized) respond(200, ['authorized' => false]);
         $db = db($config);
         [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-        $rows = $db->query("SELECT f.source_id, o.publishable, o.fields_json FROM featured_offers f LEFT JOIN mls_offers o ON o.source = 'mls' AND o.source_id = f.source_id ORDER BY f.display_order")->fetchAll();
+        $sourceCondition = portalOffersHaveSource($db) ? "o.source = 'mls' AND " : '';
+        $rows = $db->query("SELECT f.source_id, o.publishable, o.fields_json FROM featured_offers f LEFT JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id ORDER BY f.display_order")->fetchAll();
         foreach ($rows as &$row) {
             if ($row['fields_json'] !== null) {
                 $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
@@ -143,12 +144,16 @@ try {
         $source = str_starts_with($id, 'esti-') ? 'esticrm' : 'mls';
         $sourceId = $source === 'esticrm' ? substr($id, 5) : $id;
         $db = db($config);
+        $hasSource = portalOffersHaveSource($db);
         if ($action === 'restore') {
             $db->prepare('DELETE FROM portal_hidden_offers WHERE source = ? AND source_id = ?')->execute([$source, $sourceId]);
             respond(200, ['ok' => true]);
         }
-        $lookup = $db->prepare('SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1');
-        $lookup->execute([$source, $sourceId]);
+        if ($source === 'esticrm' && !$hasSource) respond(404, ['error' => 'offer_unavailable']);
+        $lookup = $db->prepare($hasSource
+            ? 'SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1'
+            : 'SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
+        $lookup->execute($hasSource ? [$source, $sourceId] : [$sourceId]);
         $row = $lookup->fetch();
         if (!$row) respond(404, ['error' => 'offer_unavailable']);
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
@@ -158,7 +163,8 @@ try {
         $db->beginTransaction();
         $db->prepare('INSERT INTO portal_hidden_offers (source, source_id, property_key, offer_number, title) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE property_key = VALUES(property_key), offer_number = VALUES(offer_number), title = VALUES(title)')
             ->execute([$source, $sourceId, $propertyKey, $number, $title]);
-        $featured = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON o.source = 'mls' AND o.source_id = f.source_id")->fetchAll();
+        $sourceCondition = $hasSource ? "o.source = 'mls' AND " : '';
+        $featured = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id")->fetchAll();
         $remove = $db->prepare('DELETE FROM featured_offers WHERE source_id = ?');
         foreach ($featured as $item) {
             $itemFields = json_decode($item['fields_json'], true, 512, JSON_THROW_ON_ERROR);
@@ -179,7 +185,8 @@ try {
     $db = db($config);
     $db->beginTransaction();
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-    $check = $db->prepare("SELECT fields_json FROM mls_offers WHERE source = 'mls' AND source_id = ? AND publishable = 1 LIMIT 1");
+    $sourceCondition = portalOffersHaveSource($db) ? "source = 'mls' AND " : '';
+    $check = $db->prepare("SELECT fields_json FROM mls_offers WHERE $sourceCondition source_id = ? AND publishable = 1 LIMIT 1");
     foreach ($ids as $id) {
         $check->execute([$id]);
         $fieldsJson = $check->fetchColumn();

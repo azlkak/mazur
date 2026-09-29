@@ -21,11 +21,10 @@ try {
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
     ]);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-    $rows = $db->query(
-        'SELECT source, source_id, source_export_at, fields_json, images_json
-         FROM mls_offers
-         WHERE publishable = 1
-         ORDER BY (source = \'esticrm\') DESC, source_export_at DESC, source_id DESC'
+    $hasSource = portalOffersHaveSource($db);
+    $rows = $db->query($hasSource
+        ? "SELECT source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE publishable = 1 ORDER BY (source = 'esticrm') DESC, source_export_at DESC, source_id DESC"
+        : "SELECT 'mls' AS source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE publishable = 1 ORDER BY source_export_at DESC, source_id DESC"
     );
 
     $offers = [];

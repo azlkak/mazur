@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+function portalOffersHaveSource(PDO $db): bool
+{
+    static $hasSource = null;
+    if ($hasSource === null) $hasSource = $db->query("SHOW COLUMNS FROM mls_offers LIKE 'source'")->fetch() !== false;
+    return $hasSource;
+}
+
 function portalPropertyKey(array $fields): string
 {
     $company = trim((string)($fields['companyId'] ?? ''));

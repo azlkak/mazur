@@ -19,8 +19,9 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+    $sourceColumn = portalOffersHaveSource($db) ? 'source' : "'mls' AS source";
     $rows = [];
-    foreach ($db->query("SELECT source, source_id, location_city AS city, location_district AS district, fields_json FROM mls_offers WHERE publishable = 1 AND location_city <> '' ORDER BY location_city, location_district") as $row) {
+    foreach ($db->query("SELECT $sourceColumn, source_id, location_city AS city, location_district AS district, fields_json FROM mls_offers WHERE publishable = 1 AND location_city <> '' ORDER BY location_city, location_district") as $row) {
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
         if (portalIsHidden($hiddenIds, $hiddenProperties, (string)$row['source'], (string)$row['source_id'], $fields)) continue;
         $key = $row['city'] . "\0" . $row['district'];

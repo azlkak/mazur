@@ -54,8 +54,13 @@
       const add = text(actions, 'button', !canFeature ? 'Tylko MLS w wybranych' : selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = !canFeature || selected.includes(id) || selected.length >= 10;
       add.onclick = () => { selected.push(id); renderSelected(); renderResults(); };
       const hide = text(actions, 'button', 'Ukryj z portalu'); hide.type = 'button'; hide.className = 'danger';
+      let hideConfirmed = false;
       hide.onclick = async () => {
-        if (!window.confirm(`Ukryć ofertę nr ${offer.number || id} na całym portalu? Możesz ją później przywrócić w tym panelu.`)) return;
+        if (!hideConfirmed) {
+          hideConfirmed = true;
+          hide.textContent = 'Potwierdź ukrycie';
+          return;
+        }
         hide.disabled = true;
         try { await post('hide', {id}); notice('Oferta ukryta na portalu. Możesz ją przywrócić poniżej.'); await initialize(); }
         catch { notice('Nie udało się ukryć oferty. Spróbuj ponownie.', true); hide.disabled = false; }

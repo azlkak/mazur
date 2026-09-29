@@ -47,13 +47,17 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
-    $statement = $db->prepare(
-        'SELECT source, source_id, source_export_at, fields_json, images_json
-         FROM mls_offers
-         WHERE source = ? AND source_id = ? AND publishable = 1
-         LIMIT 1'
+    $hasSource = portalOffersHaveSource($db);
+    if ($source === 'esticrm' && !$hasSource) {
+        http_response_code(404);
+        echo '{"error":"Oferta nie jest dostępna"}';
+        exit;
+    }
+    $statement = $db->prepare($hasSource
+        ? 'SELECT source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1'
+        : "SELECT 'mls' AS source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1"
     );
-    $statement->execute([$source, $sourceId]);
+    $statement->execute($hasSource ? [$source, $sourceId] : [$sourceId]);
     $row = $statement->fetch();
     if (!$row) {
         http_response_code(404);

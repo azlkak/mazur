@@ -55,6 +55,8 @@ nieruchomość (`companyId:number`), ukrycie obejmuje oba rekordy. Ukrycie
 usuwa ofertę z zapisanej listy wybranych, żeby nie wróciła tam automatycznie
 po przywróceniu. Przed wdrożeniem nowych plików PHP uruchomić migrację
 `private/migrations/20260929_portal_hidden_offers.sql` na bazie `u101822986_mls`.
+Publiczne API i panel obsługują zarówno obecny schemat `mls_offers` bez kolumny
+`source`, jak i schemat po planowanej migracji `20260929_offer_sources.sql`.
 
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie

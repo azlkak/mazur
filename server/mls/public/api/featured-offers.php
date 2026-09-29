@@ -20,7 +20,8 @@ try {
     ]);
     // Deleted or withdrawn MLS offers are omitted immediately without changing the selection.
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-    $rows = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON o.source = 'mls' AND o.source_id = f.source_id AND o.publishable = 1 ORDER BY f.display_order");
+    $sourceCondition = portalOffersHaveSource($db) ? "o.source = 'mls' AND " : '';
+    $rows = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id AND o.publishable = 1 ORDER BY f.display_order");
     $ids = [];
     foreach ($rows as $row) {
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
