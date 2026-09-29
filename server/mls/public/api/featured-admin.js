@@ -123,5 +123,15 @@
     finally { $('save').disabled = false; }
   };
   $('logout').onclick = async () => { try { await post('logout'); location.reload(); } catch { notice('Nie udało się wylogować.', true); } };
-  initialize().catch(() => notice('Panel jest chwilowo niedostępny.', true));
+  if (location.protocol === 'file:') {
+    const message = $('message');
+    message.classList.add('error');
+    message.textContent = 'To jest lokalny podgląd pliku. Aby korzystać z panelu, otwórz ';
+    const link = document.createElement('a');
+    link.href = 'https://api.mazurestate.pl/api/featured-admin.php';
+    link.textContent = 'panel ofert na stronie MazurEstate';
+    message.append(link, '.');
+  } else {
+    initialize().catch(() => notice('Panel jest chwilowo niedostępny.', true));
+  }
 })();
