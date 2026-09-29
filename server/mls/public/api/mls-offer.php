@@ -31,11 +31,13 @@ function publicDescription(string $value): string
 
 try {
     $id = (string)($_GET['id'] ?? '');
-    if (!preg_match('/\A[0-9]{1,40}\z/', $id)) {
+    if (!preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $id)) {
         http_response_code(400);
         echo '{"error":"Nieprawidłowy numer oferty"}';
         exit;
     }
+    $source = str_starts_with($id, 'esti-') ? 'esticrm' : 'mls';
+    $sourceId = $source === 'esticrm' ? substr($id, 5) : $id;
 
     $privateRoot = dirname(__DIR__, 2) . '/mls';
     $config = require $privateRoot . '/config.php';
@@ -45,12 +47,12 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
     $statement = $db->prepare(
-        'SELECT source_id, source_export_at, fields_json, images_json
+        'SELECT source, source_id, source_export_at, fields_json, images_json
          FROM mls_offers
-         WHERE source_id = ? AND publishable = 1
+         WHERE source = ? AND source_id = ? AND publishable = 1
          LIMIT 1'
     );
-    $statement->execute([$id]);
+    $statement->execute([$source, $sourceId]);
     $row = $statement->fetch();
     if (!$row) {
         http_response_code(404);
@@ -86,7 +88,7 @@ try {
     $features = array_values(array_unique($features));
 
     $offer = [
-        'id' => (string)$row['source_id'],
+        'id' => $source === 'esticrm' ? 'esti-' . $row['source_id'] : (string)$row['source_id'],
         'number' => firstText($fields, 'numberExport', 'number'),
         'title' => $title,
         'type' => $type,

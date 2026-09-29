@@ -30,14 +30,62 @@ Każdy kolejny import zapisze miasto i dzielnicę, a w logu zgłosi brak miasta
 w ofercie do publikacji. Działanie następnego importu z crona wymaga jeszcze
 sprawdzenia po nadejściu kolejnej paczki MLS.
 
-Obecna lista wyników nadal pobiera maksymalnie 100 ofert. Przed pokazaniem
-wszystkich około 9000 ofert trzeba wdrożyć stronicowanie i filtrowanie po
-stronie API, aby podpowiedziane lokalizacje miały odpowiadające im wyniki.
+### Pierwszy rzeczywisty eksport MLS — 29.09.2026
 
-Status: importer wdrożony i uruchomiony 27.09.2026 na hostingu Hostinger dla
-`darkgreen-rabbit-981798.hostingersite.com`. Ograniczone publiczne API oraz frontend
-zostały uruchomione na danych z przykładowej paczki EstiCRM. API zwraca wyłącznie
-jawnie wybrane pola i nie publikuje danych kontaktowych ani dokładnego adresu.
+Zaimportowano paczkę pełną około 14,6 GiB i trzy następujące po niej paczki
+przyrostowe (4,6, 43,43 i 60,79 MiB). Po ich zatwierdzeniu baza zawierała
+5 071 ofert, w tym 5 066 kandydatów do publikacji, oraz cztery zarejestrowane
+paczki. Jedno powtórzenie identycznej oferty `377499` pominięto; raport
+`logs/skipped-<sha>.json` został zapisany na serwerze. Importer przekazał
+raport do dwóch adresów powiadomień wskazanych w prywatnym `config.php`.
+Samo przyjęcie wiadomości przez funkcję `mail()` nie potwierdza dostarczenia
+jej do skrzynek.
+
+Rzeczywiste nazwy paczek mają sufiks `_YYYYMMDDHHMMSS.zip`, a akcje w
+przyrostach obejmują `create`, `update` i `delete`. Importer akceptuje te
+formaty oraz starszy wzór nazwy z podkreśleniem przed godziną. Duża paczka
+wymaga limitów co najmniej 20 GiB dla ZIP i 30 GiB po rozpakowaniu.
+Połączenie z bazą jest odnawiane po długich etapach odczytu ZIP i zdjęć, żeby
+nie wygasło przed transakcją. Konto ma 50 GiB; po imporcie zajęte było około
+29,36 GiB.
+
+### Drugi eksport: własne oferty EstiCRM (kod przygotowany, jeszcze nie wdrożony)
+
+Eksport własnych ofert powinien używać opcji **„Dowolny – format EstiCRMXml”**
+w EstiCRM, osobnego konta FTP ograniczonego do `mls/esticrm/incoming` i osobnego
+zadania cron: `import.php --source=esticrm`. Nie kierować paczek EstiCRM do
+`mls/incoming` używanego przez MLS.
+
+Przed włączeniem drugiego eksportu: wykonać kopię bazy, uruchomić migrację
+`private/migrations/20260929_offer_sources.sql`, wdrożyć importer i punkty API,
+utworzyć katalogi `esticrm/incoming`, `esticrm/processing`, `esticrm/archive`
+i `esticrm/errors` poza `public_html`, a następnie ustawić w prywatnym
+`config.php` `esticrm_import_enabled => true`. Dopiero po sprawdzeniu składni
+PHP i importu pierwszej paczki włączyć cron oraz eksport w EstiCRM. Paczka
+całościowa usuwa oferty tylko własnego źródła. Publiczne identyfikatory MLS
+pozostają liczbami; oferty EstiCRM dostają prefiks `esti-`.
+
+Lista wyników daje pierwszeństwo ofertom własnym. Identyczne oferty z MLS
+i EstiCRM są ukrywane na liście, jeśli oba eksporty podają to samo `companyId`
+i numer oferty. Inne duplikaty wymagają osobnego sprawdzenia.
+
+W formularzu EstiCRM: nazwa portalu `MazurEstate — własne oferty`, adres hosta
+`147.93.73.136` (bez `ftp://`), port `21`, login nowego konta ograniczonego do
+`mls/esticrm/incoming`, a katalogi zdjęć oraz XML/ZIP pozostawić puste. Hasło
+tego konta wprowadza właściciel bezpośrednio w Hostingerze i EstiCRM. Pozostawić
+automatyczną wysyłkę tylko wtedy, gdy wszystkie aktywne oferty własne mają
+trafiać na stronę. Pierwsza realna paczka musi potwierdzić, że nazwy plików,
+struktura ZIP i znaczniki aktywnej oferty pasują do walidacji importera.
+
+Lista wyników pobiera wszystkie oferty do publikacji strumieniowo z API, z
+pięcioma zdjęciami podglądowymi na ofertę, i stronicuje je w przeglądarce.
+Przy dalszym wzroście katalogu warto przenieść filtrowanie i stronicowanie
+do API, aby nie przesyłać całej listy przy każdym otwarciu wyszukiwarki.
+
+Status: importer działa na hostingu Hostinger dla
+`darkgreen-rabbit-981798.hostingersite.com`. Publiczne API i frontend
+wyświetlają rzeczywiste oferty MLS. API zwraca wyłącznie jawnie wybrane pola
+i nie publikuje danych kontaktowych ani dokładnego adresu.
 
 ## Serwer
 
@@ -85,16 +133,19 @@ nieruchomości i typ transakcji na podstawie już zaimportowanych danych MLS.
 ## Zachowanie importera
 
 - Odbiera płaskie paczki ZIP z `definitions.xml`, XML ofert i zdjęciami.
-- Obsługuje `export="incremental"` z akcjami `update` i `delete`.
+- Obsługuje `export="incremental"` z akcjami `create`, `update` i `delete`.
 - Obsługuje `export="full"`; zawartość paczki jest stanem autorytatywnym, więc
   oferty nieobecne w niej są usuwane z bazy.
-- Przetwarza paczki chronologicznie według sufiksu `_YYYYMMDD_HHMMSS.zip`.
+- Przetwarza paczki chronologicznie według sufiksu `_YYYYMMDDHHMMSS.zip`
+  (rzeczywisty MLS) lub `_YYYYMMDD_HHMMSS.zip` (starszy przykład).
 - Czeka 10 minut od ostatniej zmiany pliku, blokuje równoległe uruchomienia i
   zatwierdza każdą paczkę w transakcji bazy.
 - Sprawdza strukturę ZIP, CRC, rozmiary, XML, identyfikatory, daty i obrazy;
   odrzuca ścieżki, dowiązania, DTD i encje.
 - Deduplikuje paczki i zdjęcia przez SHA-256. Przetworzone ZIP-y trafiają do
   `archive`, błędne do `errors`. Archiwum ZIP ma retencję 7 dni.
+- Pomija błędne identyfikatory i powtarzające się rekordy, zapisuje raport
+  oraz wysyła powiadomienie o pominięciach bez zatrzymywania poprawnych ofert.
 - Po pełnym eksporcie usuwa nieużywane zdjęcia.
 - Oferta jest kandydatem do publikacji tylko przy `offerExport=1` i `status=3`.
   To nie wystawia jej jeszcze publicznie.

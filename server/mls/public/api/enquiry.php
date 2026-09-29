@@ -91,7 +91,7 @@ try {
     $phone = inputText($input, 'phone', 32);
     $email = inputText($input, 'email', 190);
     $message = inputText($input, 'message', 3000);
-    $offerId = inputText($input, 'offer_id', 40);
+    $offerId = inputText($input, 'offer_id', 45);
     $submittedOfferNumber = inputText($input, 'offer_number', 80);
     $submittedOfferNumber = preg_replace('/\s+/u', ' ', $submittedOfferNumber) ?? '';
 
@@ -101,7 +101,7 @@ try {
     if ($phone === '' && $email === '') reply(422, 'missing_contact');
     if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) reply(422, 'invalid_email');
     if ($phone !== '' && !preg_match('/\A[0-9+() .-]{6,32}\z/u', $phone)) reply(422, 'invalid_phone');
-    if ($offerId !== '' && !preg_match('/\A[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
+    if ($offerId !== '' && !preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
 
     $config = require $privateRoot . '/config.php';
     $company = trim((string)($config['esticrm_company'] ?? ''));
@@ -128,8 +128,10 @@ try {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ]);
-        $statement = $db->prepare('SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
-        $statement->execute([$offerId]);
+        $source = str_starts_with($offerId, 'esti-') ? 'esticrm' : 'mls';
+        $sourceId = $source === 'esticrm' ? substr($offerId, 5) : $offerId;
+        $statement = $db->prepare('SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1');
+        $statement->execute([$source, $sourceId]);
         $row = $statement->fetch();
         if ($row) {
             $fields = json_decode((string)$row['fields_json'], true, 512, JSON_THROW_ON_ERROR);

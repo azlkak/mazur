@@ -17,19 +17,25 @@ try {
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
     ]);
     $rows = $db->query(
-        'SELECT source_id, source_export_at, fields_json, images_json
+        'SELECT source, source_id, source_export_at, fields_json, images_json
          FROM mls_offers
          WHERE publishable = 1
-         ORDER BY source_export_at DESC, source_id DESC
-         LIMIT 100'
-    )->fetchAll();
+         ORDER BY (source = \'esticrm\') DESC, source_export_at DESC, source_id DESC'
+    );
 
     $offers = [];
+    $seenProperties = [];
     foreach ($rows as $row) {
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
         $images = json_decode($row['images_json'], true, 512, JSON_THROW_ON_ERROR);
+        $companyId = trim((string)($fields['companyId'] ?? ''));
+        $number = trim((string)($fields['number'] ?? ''));
+        $propertyKey = $companyId !== '' && $number !== '' ? $companyId . ':' . $number : '';
+        if ($propertyKey !== '' && isset($seenProperties[$propertyKey])) continue;
+        if ($propertyKey !== '') $seenProperties[$propertyKey] = true;
         $city = trim((string)(($fields['locationExportCityName'] ?? '') ?: ($fields['locationCityName'] ?? '')));
         $district = trim((string)(($fields['locationExportPrecinctName'] ?? '') ?: ($fields['locationPrecinctName'] ?? '')));
         $type = trim((string)($fields['typeName'] ?? 'Nieruchomość'));
@@ -37,7 +43,7 @@ try {
         if ($title === '') $title = $type . ($city !== '' ? ' — ' . $city : '');
 
         $offers[] = [
-            'id' => (string)$row['source_id'],
+            'id' => $row['source'] === 'esticrm' ? 'esti-' . $row['source_id'] : (string)$row['source_id'],
             'number' => (string)($fields['numberExport'] ?? $fields['number'] ?? ''),
             'title' => $title,
             'type' => $type,
@@ -57,17 +63,17 @@ try {
             'exportedAt' => (string)$row['source_export_at'],
             'images' => array_map(
                 static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
-                array_values(array_filter($images, static fn($name): bool => is_string($name)))
+                array_slice(array_values(array_filter($images, static fn($name): bool => is_string($name))), 0, 5)
             ),
         ];
     }
 
     echo json_encode([
-        'demo' => true,
+        'demo' => false,
         'count' => count($offers),
         'offers' => $offers,
     ], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Throwable $error) {
     http_response_code(500);
-    echo '{"error":"Nie udało się pobrać ofert testowych"}';
+    echo '{"error":"Nie udało się pobrać ofert"}';
 }

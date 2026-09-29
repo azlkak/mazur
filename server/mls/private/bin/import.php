@@ -19,6 +19,38 @@ function event(string $message): void {
     if (file_put_contents(ROOT . '/logs/import.log', $line, FILE_APPEND | LOCK_EX) === false) fail('Cannot write log');
     echo $line;
 }
+function reportSkipped(string $sha, string $file, array $skipped, array $config): void {
+    if ($skipped === []) return;
+    $report = ['batch' => $file, 'skipped_count' => count($skipped), 'skipped' => $skipped];
+    $json = json_encode($report, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    if (file_put_contents(ROOT . '/logs/skipped-' . $sha . '.json', $json . "\n", LOCK_EX) === false) {
+        event('WARNING: cannot save skipped-offer report for ' . $sha);
+    }
+    event('WARNING: skipped ' . count($skipped) . ' offer records in batch ' . $sha);
+    $recipients = $config['notification_emails'] ?? [];
+    if (!is_array($recipients)) { event('WARNING: invalid notification email configuration'); return; }
+    $lines = ["Paczka MLS: $file", 'Pominięte rekordy: ' . count($skipped), ''];
+    foreach (array_slice($skipped, 0, 30) as $issue) {
+        $lines[] = 'Oferta ' . ($issue['id'] ?: '(pusty numer)') . ': ' . $issue['reason'];
+    }
+    if (count($skipped) > 30) $lines[] = 'Pozostałe wpisy są w raporcie na serwerze.';
+    foreach ($recipients as $to) {
+        if (!is_string($to) || !filter_var($to, FILTER_VALIDATE_EMAIL) || preg_match('/[\r\n]/', $to)) {
+            event('WARNING: invalid notification email configuration');
+            continue;
+        }
+        $sent = mail($to, 'Mazur Estate - raport importu MLS', implode("\n", $lines), [
+            'From' => 'powiadomienia@mazurestate.pl',
+            'Content-Type' => 'text/plain; charset=UTF-8',
+        ]);
+        if (!$sent) event('WARNING: skipped-offer email could not be sent for ' . $sha);
+    }
+}
+function batchTimestamp(string $path): string {
+    // MLS sends YYYYMMDDHHMMSS; older example packages include a separator.
+    if (!preg_match('/_([0-9]{8})_?([0-9]{6})\.zip\z/', basename($path), $match)) fail('Unrecognized batch timestamp');
+    return $match[1] . $match[2];
+}
 function inspect(string $path, array $c): array {
     if (is_link($path) || filesize($path) > $c['max_zip_bytes']) fail('ZIP exceeds limit or is a symlink');
     $z = new ZipArchive();
@@ -56,19 +88,42 @@ function inspect(string $path, array $c): array {
         $doc = xml($read($offerFile));
         $exportType = (string)$doc['export'];
         if ($doc->getName() !== 'offers' || !in_array($exportType, ['incremental', 'full'], true)) fail('Unsupported export type');
-        $rows = []; $images = [];
+        $rows = []; $images = []; $rowXmlHashes = []; $skipped = []; $blockedIds = [];
         foreach ($doc->children() as $o) {
             if ($o->getName() !== 'offer') fail('Unknown XML record');
             $id = text($o, 'id');
-            if (!preg_match('/\A[0-9]{1,40}\z/', $id) || isset($rows[$id])) fail('Invalid or duplicate offer ID');
+            if (!preg_match('/\A[0-9]{1,40}\z/', $id)) {
+                $skipped[] = ['id' => preg_replace('/[^A-Za-z0-9_-]/', '?', substr($id, 0, 40)), 'reason' => 'invalid_id'];
+                continue;
+            }
+            if (isset($blockedIds[$id])) {
+                $skipped[] = ['id' => $id, 'reason' => 'conflicting_duplicate'];
+                continue;
+            }
+            $xmlHash = hash('sha256', $o->asXML());
+            if (isset($rowXmlHashes[$id])) {
+                if ($rowXmlHashes[$id] !== $xmlHash) {
+                    unset($rows[$id]);
+                    $blockedIds[$id] = true;
+                    $skipped[] = ['id' => $id, 'reason' => 'conflicting_duplicate'];
+                } else {
+                    $skipped[] = ['id' => $id, 'reason' => 'identical_duplicate'];
+                }
+                continue;
+            }
+            $rowXmlHashes[$id] = $xmlHash;
             $action = text($o, 'action');
-            if (!in_array($action, ['update', 'delete'], true)) fail('Unsupported offer action');
-            if ($exportType === 'full' && $action !== 'update') fail('Full export may only contain active offers');
+            if (!in_array($action, ['create', 'update', 'delete'], true)) fail('Unsupported offer action');
+            if ($exportType === 'full' && $action === 'delete') fail('Full export may only contain active offers');
             $stamp = text($o, 'exportDate');
             if ($stamp !== '') {
                 $date = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $stamp);
                 if (!$date || $date->format('Y-m-d H:i:s') !== $stamp) fail('Invalid export timestamp');
-            } elseif ($action !== 'delete') fail('Missing export timestamp');
+            } elseif ($action !== 'delete') {
+                $packageDate = DateTimeImmutable::createFromFormat('!YmdHis', batchTimestamp($path));
+                if (!$packageDate) fail('Invalid package timestamp');
+                $stamp = $packageDate->format('Y-m-d H:i:s');
+            }
             $fields = [];
             foreach ($o->children() as $key => $value) {
                 if ($key !== 'pictures') {
@@ -77,7 +132,7 @@ function inspect(string $path, array $c): array {
                 }
             }
             $gallery = null;
-            if ($action === 'update' && isset($o->pictures)) {
+            if ($action !== 'delete' && isset($o->pictures)) {
                 $gallery = [];
                 foreach ($o->pictures->picture as $picture) {
                     $name = trim((string)$picture);
@@ -95,38 +150,53 @@ function inspect(string $path, array $c): array {
             $rows[$id] = ['action'=>$action, 'stamp'=>$stamp, 'fields'=>$fields, 'gallery'=>$gallery];
         }
         if ($exportType === 'full' && count($rows) < ($c['min_full_offers'] ?? 1)) fail('Full export is unexpectedly empty');
-        return [$rows, $images, $total, $exportType];
+        return [$rows, $images, $total, $exportType, $skipped];
     } finally { $z->close(); }
 }
 try {
     foreach (['zip', 'SimpleXML', 'pdo_mysql'] as $ext) if (!extension_loaded($ext)) fail('Missing extension: ' . $ext);
-    $dry = ($argv[1] ?? '') === '--check';
+    $args = array_slice($argv, 1);
+    $source = in_array('--source=esticrm', $args, true) ? 'esticrm' : 'mls';
+    $dry = in_array('--check', $args, true);
+    $checkPath = null;
+    foreach ($args as $arg) {
+        if ($arg === '--check' || $arg === '--source=esticrm') continue;
+        if ($dry && $checkPath === null && str_starts_with($arg, '/')) { $checkPath = $arg; continue; }
+        fail('Unsupported importer argument');
+    }
     $c = require ROOT . (is_file(ROOT . '/config.php') ? '/config.php' : '/config.example.php');
     if ($dry) {
-        if (!isset($argv[2])) fail('Usage: php import.php --check /absolute/package.zip');
-        [$rows, $images, $bytes, $exportType] = inspect($argv[2], $c);
-        echo json_encode(['export'=>$exportType,'offers'=>count($rows),'images'=>count($images),'expanded_bytes'=>$bytes], JSON_PRETTY_PRINT) . "\n";
+        if ($checkPath === null) fail('Usage: php import.php [--source=esticrm] --check /absolute/package.zip');
+        [$rows, $images, $bytes, $exportType, $skipped] = inspect($checkPath, $c);
+        echo json_encode(['export'=>$exportType,'offers'=>count($rows),'images'=>count($images),'expanded_bytes'=>$bytes,'skipped_count'=>count($skipped),'skipped'=>array_slice($skipped,0,30)], JSON_PRETTY_PRINT) . "\n";
         exit;
     }
-    if (!$c['enabled']) fail('Importer disabled: configure and validate on staging first');
+    if ($source === 'mls' && !$c['enabled']) fail('MLS importer disabled');
+    if ($source === 'esticrm' && !($c['esticrm_import_enabled'] ?? false)) fail('EstiCRM importer disabled');
+    $feedRoot = $source === 'mls' ? ROOT : ROOT . '/esticrm';
+    foreach (['incoming', 'processing', 'archive', 'errors'] as $directory) {
+        if (!is_dir($feedRoot . '/' . $directory)) fail('Missing feed directory: ' . $directory);
+    }
+    // Both feeds share an image store; serialize imports and orphan cleanup.
     $lock = fopen(ROOT . '/import.lock', 'c');
     if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) fail('Another import is running');
-    if (glob(ROOT . '/errors/*.zip')) fail('Resolve failed packages before continuing');
-    $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
-    $files = array_merge(glob(ROOT . '/processing/*.zip'), glob(ROOT . '/incoming/*.zip'));
-    // EstiCRM names end with YYYYMMDD_HHMMSS; reject unknown ordering.
-    foreach ($files as $f) if (!preg_match('/_\d{8}_\d{6}\.zip\z/', basename($f))) fail('Unrecognized batch timestamp');
-    usort($files, fn($a,$b)=>strcmp(substr(basename($a),-19), substr(basename($b),-19)));
+    if (glob($feedRoot . '/errors/*.zip')) fail('Resolve failed packages before continuing');
+    $db = null;
+    $files = array_merge(glob($feedRoot . '/processing/*.zip'), glob($feedRoot . '/incoming/*.zip'));
+    foreach ($files as $f) batchTimestamp($f);
+    usort($files, fn($a,$b)=>strcmp(batchTimestamp($a), batchTimestamp($b)));
     foreach ($files as $src) {
         if (is_link($src)) fail('Symlink package rejected');
         if (time() - filemtime($src) < $c['min_age_seconds']) break;
-        $path = ROOT . '/processing/' . basename($src);
+        $path = $feedRoot . '/processing/' . basename($src);
         if ($src !== $path && (file_exists($path) || !rename($src, $path))) fail('Cannot claim package');
         try {
             $sha = hash_file('sha256', $path);
-            $q = $db->prepare('SELECT sha256 FROM mls_batches WHERE sha256=?'); $q->execute([$sha]);
+            $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
+            $q = $db->prepare('SELECT sha256 FROM mls_batches WHERE source=? AND sha256=?'); $q->execute([$source,$sha]);
+            $skipped = [];
             if (!$q->fetchColumn()) {
-                [$rows, $images, $total, $exportType] = inspect($path, $c);
+                [$rows, $images, $total, $exportType, $skipped] = inspect($path, $c);
                 if (disk_free_space(ROOT) < $total + 512 * 1024 ** 2) fail('Insufficient staging space');
                 $z = new ZipArchive(); if ($z->open($path) !== true) fail('Cannot reopen ZIP');
                 try {
@@ -143,45 +213,53 @@ try {
                     }
                 } finally { $z->close(); }
                 if (hash_file('sha256', $path) !== $sha) fail('Package changed during import');
+                $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
                 $db->beginTransaction();
-                $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source_id=? FOR UPDATE');
-                $put = $db->prepare('INSERT INTO mls_offers (source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
-                $delete = $db->prepare('DELETE FROM mls_offers WHERE source_id=?');
+                $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source=? AND source_id=? FOR UPDATE');
+                $put = $db->prepare('INSERT INTO mls_offers (source,source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
+                $delete = $db->prepare('DELETE FROM mls_offers WHERE source=? AND source_id=?');
                 if ($exportType === 'full') {
+                    $db->exec('DROP TEMPORARY TABLE IF EXISTS mls_full_ids');
                     $db->exec('CREATE TEMPORARY TABLE mls_full_ids (source_id VARCHAR(40) CHARACTER SET ascii PRIMARY KEY) ENGINE=MEMORY');
                     $seen = $db->prepare('INSERT INTO mls_full_ids (source_id) VALUES (?)');
                 }
                 foreach ($rows as $id=>$r) {
                     if ($exportType === 'full') $seen->execute([$id]);
-                    $get->execute([$id]); $old = $get->fetch(PDO::FETCH_ASSOC);
+                    $get->execute([$source,$id]); $old = $get->fetch(PDO::FETCH_ASSOC);
                     if ($r['action'] === 'delete') {
-                        if (!$old || $r['stamp'] === '' || $old['source_export_at'] <= $r['stamp']) $delete->execute([$id]);
+                        if (!$old || $r['stamp'] === '' || $old['source_export_at'] <= $r['stamp']) $delete->execute([$source,$id]);
                         continue;
                     }
                     if ($old && $old['source_export_at'] > $r['stamp']) continue;
                     $gallery = $r['gallery'] ?? ($old ? json_decode($old['images_json'],true,512,JSON_THROW_ON_ERROR) : []);
                     $f = $r['fields'];
                     // Conservative candidate flag. Public API remains disabled separately.
-                    $visible = ($f['offerExport'] ?? '') === '1' && ($f['status'] ?? '') === '3';
+                    $visible = ($f['status'] ?? '') === '3' && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
                     $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
                     $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
-                    $put->execute([$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
+                    $put->execute([$source,$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
                 }
-                if ($exportType === 'full') $db->exec('DELETE o FROM mls_offers o LEFT JOIN mls_full_ids f ON f.source_id=o.source_id WHERE f.source_id IS NULL');
+                if ($exportType === 'full') {
+                    $remove = $db->prepare('DELETE o FROM mls_offers o LEFT JOIN mls_full_ids f ON f.source_id=o.source_id WHERE o.source=? AND f.source_id IS NULL');
+                    $remove->execute([$source]);
+                }
                 // The location API reads these columns, so the same transaction
                 // adds, updates and removes suggestions with the offers.
-                $locationCheck = $db->query("SELECT COUNT(*) AS total, SUM(location_city = '') AS missing_city FROM mls_offers WHERE publishable = 1")->fetch(PDO::FETCH_ASSOC);
-                $q = $db->prepare('INSERT INTO mls_batches (sha256,file_name,export_type,offer_count) VALUES (?,?,?,?)');
-                $q->execute([$sha,basename($path),$exportType,count($rows)]); $db->commit();
-                event(((int)$locationCheck['missing_city'] > 0 ? 'WARNING ' : '') . 'Location search checked: ' . (int)$locationCheck['total'] . ' publishable offers, ' . (int)$locationCheck['missing_city'] . ' without city');
+                $locationCheck = $db->prepare("SELECT COUNT(*) AS total, SUM(location_city = '') AS missing_city FROM mls_offers WHERE source=? AND publishable = 1");
+                $locationCheck->execute([$source]); $locationCheck = $locationCheck->fetch(PDO::FETCH_ASSOC);
+                $q = $db->prepare('INSERT INTO mls_batches (source,sha256,file_name,export_type,offer_count) VALUES (?,?,?,?,?)');
+                $q->execute([$source,$sha,basename($path),$exportType,count($rows)]); $db->commit();
+                event($source . ': ' . ((int)$locationCheck['missing_city'] > 0 ? 'WARNING ' : '') . 'Location search checked: ' . (int)$locationCheck['total'] . ' publishable offers, ' . (int)$locationCheck['missing_city'] . ' without city');
             }
-            $archivePath = ROOT . '/archive/' . $sha . '.zip';
+            $archivePath = $feedRoot . '/archive/' . $sha . '.zip';
             if (is_file($archivePath)) {
                 if (!unlink($path)) fail('Cannot remove duplicate package');
             } elseif (!rename($path, $archivePath)) fail('Cannot archive committed package');
-            event('Imported batch ' . $sha);
+            event($source . ': imported batch ' . $sha);
+            try { reportSkipped($sha, basename($path), $skipped, $c); }
+            catch (Throwable $notificationError) { event('WARNING: could not send skipped-offer report for ' . $sha); }
             $keepDays = max(1, (int)($c['archive_retention_days'] ?? 7));
-            foreach (glob(ROOT . '/archive/*.zip') as $oldArchive) {
+            foreach (glob($feedRoot . '/archive/*.zip') as $oldArchive) {
                 if (filemtime($oldArchive) < time() - $keepDays * 86400) @unlink($oldArchive);
             }
             if (($exportType ?? null) === 'full') {
@@ -192,14 +270,14 @@ try {
                 foreach (glob(ROOT . '/images/*') as $stored) if (is_file($stored) && !isset($used[basename($stored)])) @unlink($stored);
             }
         } catch (Throwable $e) {
-            if ($db->inTransaction()) $db->rollBack();
-            if (is_file($path)) rename($path,ROOT . '/errors/' . bin2hex(random_bytes(8)) . '-' . basename($path));
+            if ($db instanceof PDO && $db->inTransaction()) $db->rollBack();
+            if (is_file($path)) rename($path,$feedRoot . '/errors/' . bin2hex(random_bytes(8)) . '-' . basename($path));
             throw $e;
         }
     }
 } catch (Throwable $e) {
     // Avoid logging PDO errors containing connection details.
-    $message = $e instanceof PDOException ? 'Database failure; inspect configuration privately' : $e->getMessage();
+    $message = $e instanceof PDOException ? 'Database failure; SQLSTATE ' . preg_replace('/[^A-Z0-9]/', '', (string)$e->getCode()) . '; driver ' . (int)($e->errorInfo[1] ?? 0) : $e->getMessage();
     fwrite(STDERR, $message . "\n");
     exit(1);
 }
