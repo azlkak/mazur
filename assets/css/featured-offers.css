@@ -1,0 +1,29 @@
+.featured-offers[hidden]{display:none!important}
+.featured-offers{display:flex;justify-content:center;padding:28px 40px 44px;scroll-margin-top:112px}
+.featured-inner{width:100%;max-width:1360px}
+.featured-heading{display:flex;align-items:end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+.featured-heading-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.featured-controls{display:flex;gap:8px}
+.featured-controls button{display:grid;place-items:center;width:42px;height:42px;border:1px solid #d8e3ec;border-radius:50%;background:#fff;color:#0866a9;font:700 22px/1 system-ui;cursor:pointer}
+.featured-controls button:hover:not(:disabled){background:#eaf5fc}
+.featured-controls button:disabled{color:#a7b3bf;cursor:default}
+.featured-eyebrow{color:#096cad;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.featured-heading h2{font:800 clamp(28px,3vw,42px)/1.15 'Plus Jakarta Sans',sans-serif;letter-spacing:-.02em;color:#192638;margin:12px 0 0}
+.featured-grid{display:flex;gap:22px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x mandatory;scroll-padding-inline:2px;padding:2px 2px 18px;scrollbar-width:thin;scrollbar-color:#b8d6e9 transparent;-webkit-overflow-scrolling:touch}
+.featured-grid:focus-visible{outline:3px solid #70b8e7;outline-offset:3px;border-radius:22px}
+.featured-card{min-width:0;overflow:hidden;border:1px solid #e1e8ef;border-radius:22px;background:#fff;color:#192638;box-shadow:0 8px 26px #1724360a;transition:transform .18s,box-shadow .18s}
+.featured-card{flex:0 0 calc((100% - 44px)/3);scroll-snap-align:start}
+.featured-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px #1724361d;color:#192638}
+.featured-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#e9eef4}
+.featured-card-body{padding:20px}
+.featured-card-location{color:#0866a9;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.featured-card h3{font:800 19px/1.35 'Plus Jakarta Sans',sans-serif;margin:10px 0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.featured-card-meta{display:flex;gap:10px;flex-wrap:wrap;margin:0;color:#5e6b7c;font-size:13px}
+.featured-card-price{font-size:20px;font-weight:800;margin:16px 0 0}
+@media(max-width:900px){.featured-card{flex-basis:calc((100% - 22px)/2)}
+}
+@media(max-width:600px){.featured-offers{padding:20px 16px 36px}
+.featured-heading-actions{width:100%;justify-content:space-between}
+.featured-card{flex-basis:min(82vw,340px)}
+.featured-card img{aspect-ratio:16/10}
+}

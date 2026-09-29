@@ -16,6 +16,8 @@ return [
     'archive_retention_days' => 7,
     // One summary email per imported package when offer records are skipped.
     'notification_emails' => [],
+    // One-time admin codes are sent only to these trusted addresses.
+    'featured_admin_emails' => [],
     // EstiCRM: Ustawienia -> Dane firmowe. Never expose these values publicly.
     'esticrm_company' => '',
     'esticrm_token' => '',

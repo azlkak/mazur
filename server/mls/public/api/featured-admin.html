@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wybrane oferty — MazurEstate</title>
+  <link rel="stylesheet" href="featured-admin.css">
+  <script src="featured-admin.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><p class="eyebrow">MazurEstate</p><h1>Wybrane oferty</h1><p>Zarządzaj ofertami widocznymi na stronie głównej.</p></header>
+    <p id="message" role="status" aria-live="polite"></p>
+    <section id="login" hidden>
+      <h2>Dostęp do panelu</h2>
+      <p>Kod jednorazowy wyślemy na uprawniony adres e-mail.</p>
+      <form id="email-form"><label for="email">Adres e-mail</label><input id="email" type="email" autocomplete="email" required><button type="submit">Wyślij kod</button></form>
+      <form id="code-form" hidden><label for="code">Kod z wiadomości</label><input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required><button type="submit">Zaloguj się</button></form>
+    </section>
+    <section id="editor" hidden>
+      <div class="toolbar"><p>Zalogowano: <strong id="account"></strong></p><button id="logout" type="button" class="quiet">Wyloguj</button></div>
+      <h2>Oferty na stronie głównej <small id="count"></small></h2>
+      <p>Dodaj maksymalnie 10 ofert. Strzałkami ustaw kolejność. Na stronie głównej oferty można przewijać poziomo. Wycofane oferty znikają ze strony automatycznie.</p>
+      <ol id="selected"></ol>
+      <button id="save" type="button">Zapisz zmiany</button>
+      <hr>
+      <h2>Znajdź ofertę</h2>
+      <label for="search">Numer oferty, tytuł lub miejscowość</label>
+      <input id="search" type="search" autocomplete="off" placeholder="Np. 985910 albo Warszawa">
+      <p id="search-hint">Wpisz przynajmniej 2 znaki.</p>
+      <ul id="results"></ul>
+    </section>
+  </main>
+</body>
+</html>

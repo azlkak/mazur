@@ -9,6 +9,7 @@
 <script src="assets/js/support.js?v=4"></script>
   <link rel="stylesheet" href="assets/css/cookie-consent.css">
   <link rel="stylesheet" href="assets/css/contact-form.css?v=5">
+  <link rel="stylesheet" href="assets/css/featured-offers.css?v=1">
 
 <!-- SEO START -->
 <title>Agencja nieruchomości Warszawa | MazurEstate</title>
@@ -288,6 +289,22 @@
           Szukaj
         </button>
       </div>
+    </div>
+  </section>
+
+  <section id="featured-offers" class="featured-offers" aria-labelledby="featured-title" hidden>
+    <div class="featured-inner">
+      <div class="featured-heading">
+        <div><span id="featured-eyebrow" class="featured-eyebrow">Wybrane oferty</span><h2 id="featured-title">Nieruchomości warte uwagi</h2></div>
+        <div class="featured-heading-actions">
+          <div class="featured-controls" aria-label="Przewijanie wybranych ofert">
+            <button id="featured-prev" type="button" aria-label="Poprzednie oferty" disabled>←</button>
+            <button id="featured-next" type="button" aria-label="Następne oferty">→</button>
+          </div>
+          <a id="featured-all" class="me-cta me-cta-outline" href="wyniki-wyszukiwania/?type=mieszkania&transaction=sprzedaz&lang=pl">Zobacz wszystkie oferty →</a>
+        </div>
+      </div>
+      <div id="featured-grid" class="featured-grid" role="region" aria-label="Wybrane oferty" tabindex="0"></div>
     </div>
   </section>
 
@@ -778,6 +795,7 @@ class Component extends DCLogic {
 }
 </script>
 <script src="assets/js/homepage-i18n.js"></script>
+<script src="assets/js/featured-offers.js?v=1"></script>
 <script src="assets/js/residual-i18n.js"></script>
 <script src="assets/js/enquiry.js?v=5"></script>
 <script src="assets/js/cookie-consent.js?v=ga4-20260928"></script>

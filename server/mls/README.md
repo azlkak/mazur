@@ -14,6 +14,36 @@ Hostingerze.
 - `public/api/` — jawne punkty API; tylko ten podkatalog trafia pod `public_html/api`.
 - `private/config.example.php` — wzór konfiguracji bez sekretów.
 
+### Wybrane oferty na stronie głównej — wdrożone 29.09.2026
+
+Panel `https://api.mazurestate.pl/api/featured-admin.php` pozwala osobie
+nietechnicznej wyszukać ofertę MLS po numerze, tytule lub miejscowości,
+dodać do dziesięciu ofert, zmienić ich kolejność i usunąć je z sekcji.
+Na stronie głównej karty przewija się poziomo strzałkami lub gestem. Dostęp
+jest przez kod jednorazowy wysyłany e-mailem. Kod i lista uprawnionych
+adresów nie trafiają do publicznego HTML ani do GitHub. W prywatnym
+`mls/config.php` ustawiono oba uprawnione adresy. Przy kolejnej instalacji dodać:
+
+```php
+'featured_admin_emails' => ['adres-pierwszy@example.com', 'adres-drugi@example.com'],
+```
+
+Utworzono tabelę `featured_offers` w `u101822986_mls` i wgrano
+`public/api/featured-offers.php`, `featured-admin.php`,
+`featured-admin.html`, `featured-admin.css` i `featured-admin.js` do
+`public_html/api/`. Odpowiedzi publicznego API oraz stanu niezalogowanego
+panelu zwracają HTTP 200. Logowanie kodem, zapis pierwszej oferty i widok
+kart należy sprawdzić po otrzymaniu kodu przez właściciela.
+Nie wdrażać pozostałych plików PHP z repozytorium razem z tą funkcją:
+produkcyjna baza nadal ma schemat jednego źródła.
+
+Publiczny punkt `featured-offers.php` zwraca tylko identyfikatory aktywnych
+ofert, więc zdjęcia i ceny zawsze pochodzą z bieżącego API MLS. Gdy lista
+jest pusta lub API nie odpowiada, sekcja pozostaje ukryta. Wycofana oferta
+jest automatycznie pomijana. Panel pokazuje ją jako nieaktywną, by można
+ją było usunąć z ustawienia. Ta wersja obsługuje wyłącznie numery MLS;
+po wdrożeniu drugiego źródła trzeba rozszerzyć walidację i łączenie danych.
+
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
 bezpieczeństwa mogą być przechowywane lokalnie przez administratora.
