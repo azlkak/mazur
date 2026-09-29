@@ -78,6 +78,13 @@
     .location-option { width: 100%; display: flex; align-items: center; gap: 10px; border: 0; border-radius: 12px; padding: 11px 12px; background: transparent; color: oklch(0.31 0.025 250); font: 650 14px/1.3 'Manrope', sans-serif; text-align: left; cursor: pointer; }
     .location-option:hover, .location-option:focus-visible { outline: none; background: oklch(0.95 0.02 250); color: oklch(0.43 0.14 250); }
     .location-option svg { flex-shrink: 0; }
+    .transaction-combobox { position: relative; flex: .9; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px; }
+    .transaction-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0; border: 0; background: transparent; color: oklch(0.28 0.02 250); font: 700 15px/1.4 'Manrope', sans-serif; text-align: left; cursor: pointer; }
+    .transaction-trigger svg { flex-shrink: 0; transition: transform .18s ease; }
+    .transaction-trigger[aria-expanded="true"] svg { transform: rotate(180deg); }
+    .transaction-menu { position: absolute; top: calc(100% + 10px); left: 0; right: 0; z-index: 31; min-width: 170px; padding: 8px; border: 1px solid oklch(0.9 0.012 250); border-radius: 18px; background: #fff; box-shadow: 0 18px 44px rgba(20,35,65,.18); }
+    .transaction-menu button { width: 100%; padding: 12px 14px; border: 0; border-radius: 11px; background: transparent; color: oklch(0.28 0.02 250); font: 700 14px/1.3 'Manrope', sans-serif; text-align: left; cursor: pointer; }
+    .transaction-menu button:hover, .transaction-menu button[aria-selected="true"] { background: #e8f3fb; color: #0866a9; }
     /* The off-canvas navigation must never cover the desktop header. */
     #mobile-menu-panel { display: none !important; }
     @media (max-width: 768px) {
@@ -267,12 +274,10 @@
           </sc-if>
         </div>
         <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
-        <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
+        <div class="transaction-combobox">
           <span style="font-size: 11.5px; font-weight: 700; color: oklch(0.55 0.02 250); text-transform: uppercase; letter-spacing: 0.04em;">Transakcja</span>
-          <select id="search-transaction" style="border: none; outline: none; font-size: 15px; font-weight: 600; color: oklch(0.28 0.02 250); background: transparent; font-family: inherit; appearance: none;">
-            <option>Sprzedaż</option>
-            <option>Wynajem</option>
-          </select>
+          <button id="search-transaction" class="transaction-trigger" type="button" aria-haspopup="listbox" aria-expanded="{{ transactionExpanded }}" onClick="{{ toggleTransaction }}">{{ transactionLabel }}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+          <sc-if value="{{ transactionOpen }}" hint-placeholder-val="{{ false }}"><div class="transaction-menu" role="listbox"><button type="button" role="option" data-value="sprzedaz" aria-selected="{{ saleSelected }}" onClick="{{ chooseTransaction }}">Sprzedaż</button><button type="button" role="option" data-value="wynajem" aria-selected="{{ rentSelected }}" onClick="{{ chooseTransaction }}">Wynajem</button></div></sc-if>
         </div>
         <div data-search-divider="true" style="width: 1px; background: oklch(0.93 0.01 250); margin: 8px 0;"></div>
         <div style="flex: 0.9; display: flex; flex-direction: column; gap: 4px; padding: 10px 18px; border-radius: 16px;" style-hover="background: oklch(0.97 0.006 250);">
@@ -572,7 +577,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeTab: 'mieszkania', locationQuery: '', locationOpen: false, availableLocations: [], langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
+  state = { activeTab: 'mieszkania', transaction: 'sprzedaz', transactionOpen: false, locationQuery: '', locationOpen: false, availableLocations: [], langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
     this._locationsAbort = new AbortController();
@@ -599,10 +604,12 @@ class Component extends DCLogic {
       const target = event.target;
       if (!(target instanceof Element)) return;
       const outsideLocation = !target.closest('.location-combobox');
+      const outsideTransaction = !target.closest('.transaction-combobox');
       const outsideLanguage = !target.closest('#language-picker-home');
-      if ((outsideLocation && this.state.locationOpen) || (outsideLanguage && this.state.langOpen)) {
+      if ((outsideLocation && this.state.locationOpen) || (outsideTransaction && this.state.transactionOpen) || (outsideLanguage && this.state.langOpen)) {
         this.setState({
           locationOpen: outsideLocation ? false : this.state.locationOpen,
+          transactionOpen: outsideTransaction ? false : this.state.transactionOpen,
           langOpen: outsideLanguage ? false : this.state.langOpen,
         });
       }
@@ -762,6 +769,13 @@ class Component extends DCLogic {
       categories,
       propertyTabs: tabs.map(t => ({ ...t, active: t.id === this.state.activeTab })),
       selectTab: (e) => this.setState({ activeTab: e.currentTarget.dataset.tab }),
+      transactionLabel: ({pl:['Sprzedaż','Wynajem'],en:['Sale','Rent'],uk:['Продаж','Оренда'],ru:['Продажа','Аренда']}[pageLang])[this.state.transaction === 'wynajem' ? 1 : 0],
+      transactionOpen: this.state.transactionOpen,
+      transactionExpanded: this.state.transactionOpen ? 'true' : 'false',
+      saleSelected: this.state.transaction === 'sprzedaz' ? 'true' : 'false',
+      rentSelected: this.state.transaction === 'wynajem' ? 'true' : 'false',
+      toggleTransaction: () => this.setState(s => ({ transactionOpen: !s.transactionOpen })),
+      chooseTransaction: (e) => this.setState({ transaction: e.currentTarget.dataset.value, transactionOpen: false }),
       locationQuery: this.state.locationQuery,
       locationOpen: this.state.locationOpen,
       locationExpanded: this.state.locationOpen ? 'true' : 'false',
@@ -775,7 +789,7 @@ class Component extends DCLogic {
       runSearch: () => {
         const query = new URLSearchParams({
           type: this.state.activeTab,
-          transaction: document.getElementById('search-transaction')?.value === 'Wynajem' ? 'wynajem' : 'sprzedaz',
+          transaction: this.state.transaction,
           location: this.state.locationQuery,
           price: document.getElementById('search-price')?.value || '',
           area: document.getElementById('search-area')?.value || '',
@@ -795,7 +809,7 @@ class Component extends DCLogic {
 }
 </script>
 <script src="assets/js/homepage-i18n.js"></script>
-<script src="assets/js/featured-offers.js?v=1"></script>
+<script src="assets/js/featured-offers.js?v=2"></script>
 <script src="assets/js/residual-i18n.js"></script>
 <script src="assets/js/enquiry.js?v=5"></script>
 <script src="assets/js/cookie-consent.js?v=ga4-20260928"></script>

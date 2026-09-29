@@ -52,7 +52,7 @@
   const locationsUrl='https://api.mazurestate.pl/api/mls-locations.php';
   const normalize=value=>String(value||'').toLocaleLowerCase('pl').trim();
   const normalizeLocation=value=>normalize(value).replace(/ł/g,'l').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  const categoryFor=value=>{const name=normalize(value);if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return null};
+  const categoryFor=value=>{const name=normalize(value);if(name.startsWith('działka')||name.includes('grunt'))return 'dzialki';if(name.startsWith('mieszkanie')||name.startsWith('apartament'))return 'mieszkania';if(name.startsWith('dom'))return 'domy';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return null};
   const fallbackImages={mieszkania:images[0],domy:images[2],dzialki:images[4],lokale:images[3]};
   let loadError=false;
   let availableLocations=[];
@@ -152,7 +152,7 @@
   }[lang];
   const safeLocation=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   let locationScope='';
-  const cityOption=entry=>`<button type="button" role="option" data-city="${safeLocation(entry.city)}"><span><b>${safeLocation(entry.city)}</b><small>${locationCopy.city}</small></span><i aria-hidden="true">›</i></button>`;
+  const cityOption=entry=>`<div class="location-city-row"><button type="button" role="option" data-location="${safeLocation(entry.city)}"><span><b>${safeLocation(entry.city)}</b><small>${locationCopy.city}</small></span></button>${entry.districts.length?`<button type="button" class="location-city-expand" data-city="${safeLocation(entry.city)}" aria-label="${locationCopy.districts}: ${safeLocation(entry.city)}">›</button>`:''}</div>`;
   const districtOption=(city,district)=>`<button type="button" role="option" data-location="${safeLocation(city)}, ${safeLocation(district)}"><span><b>${safeLocation(district)}</b><small>${safeLocation(city)} · ${locationCopy.district}</small></span></button>`;
   function renderLocations(){
     const query=normalizeLocation(locationInput.value);
@@ -166,7 +166,7 @@
   locationInput.addEventListener('focus',openLocations);locationInput.addEventListener('input',()=>{locationScope='';openLocations()});
   locationInput.addEventListener('keydown',event=>{if(event.key==='Escape')closeLocations();if(event.key==='ArrowDown'){event.preventDefault();openLocations();locationMenu.querySelector('button')?.focus()}});
   locationToggle.addEventListener('click',()=>locationMenu.classList.contains('open')?closeLocations():(locationInput.focus(),openLocations()));
-  locationMenu.addEventListener('click',event=>{const back=event.target.closest('[data-back]');if(back){locationScope='';renderLocations();locationMenu.querySelector('[data-city]')?.focus();return}const city=event.target.closest('[data-city]');if(city){locationScope=city.dataset.city;renderLocations();locationMenu.querySelector('[data-location]')?.focus();return}const option=event.target.closest('[data-location]');if(option){locationInput.value=option.dataset.location;locationInput.focus();closeLocations()}});
+  locationMenu.addEventListener('click',event=>{const back=event.target.closest('[data-back]');if(back){locationScope='';renderLocations();locationMenu.querySelector('[data-location]')?.focus();return}const city=event.target.closest('[data-city]');if(city){locationScope=city.dataset.city;renderLocations();locationMenu.querySelector('[data-location]')?.focus();return}const option=event.target.closest('[data-location]');if(option){locationInput.value=option.dataset.location;locationInput.focus();closeLocations()}});
   locationMenu.addEventListener('keydown',event=>{if(event.key==='Escape'){locationInput.focus();closeLocations()}if(event.key==='ArrowDown'||event.key==='ArrowUp'){const buttons=[...locationMenu.querySelectorAll('button')],index=buttons.indexOf(document.activeElement);event.preventDefault();buttons[(index+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length]?.focus()}});
   document.addEventListener('click',event=>{if(!event.target.closest('.location-filter'))closeLocations()});
   const searchForm=document.getElementById('results-search');

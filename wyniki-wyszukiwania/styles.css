@@ -95,6 +95,9 @@
 .location-group button b{font-size:14px;font-weight:750}
 .location-group button small{font-size:11px;font-weight:600}
 .location-group button i{font-style:normal;font-size:24px;line-height:1;color:var(--blue)}
+.location-city-row{display:flex;align-items:stretch;gap:4px}
+.location-city-row>[data-location]{flex:1;min-width:0}
+.location-city-row>.location-city-expand{flex:0 0 44px;width:44px;min-width:44px;justify-content:center;padding:0;color:var(--blue);font-size:24px}
 .location-group button[data-location*=',']{padding-left:24px}
 .location-suggestions .location-back{width:100%;min-height:44px;margin:0 0 6px;padding:8px 12px;border:0;border-bottom:1px solid var(--line);background:#fff;color:var(--blue);font:750 12px Manrope;text-align:left;cursor:pointer}
 .location-suggestions .location-back:hover{background:#f1f6fa}
