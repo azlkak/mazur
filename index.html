@@ -321,30 +321,6 @@
         </sc-for>
       </div>
 
-      <div id="featured-offers" style="padding-top: 72px; scroll-margin-top: 112px;">
-        <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 30px;">
-          <div>
-            <span style="display: block; margin-bottom: 12px; color: oklch(0.5 0.14 250); font-size: 13px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;">Ostatnio dodane</span>
-            <h2 style="margin: 0; color: oklch(0.26 0.03 250); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 34px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em;">Wybrane nieruchomości</h2>
-          </div>
-          <div style="display: flex; gap: 10px;">
-            <button onClick="{{ scrollOffersLeft }}" aria-label="Poprzednie ogłoszenia" style="width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid oklch(0.88 0.01 250); border-radius: 50%; background: white; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button onClick="{{ scrollOffersRight }}" aria-label="Następne ogłoszenia" style="width: 44px; height: 44px; display: grid; place-items: center; border: none; border-radius: 50%; background: oklch(0.5 0.14 250); color: white; cursor: pointer;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </div>
-        </div>
-        <div id="featured-track" style="display: flex; gap: 22px; overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; padding: 2px 2px 16px; scroll-snap-type: x mandatory;">
-          <sc-for list="{{ featuredOffers }}" as="offer" hint-placeholder-count="6">
-            <a href="oferta/?id=4374&amp;lang={{ pageLang }}" data-offer-card style="display: block; flex: 0 0 min(390px, 82vw); overflow: hidden; border: 1px solid oklch(0.9 0.01 250); border-radius: 22px; background: white; scroll-snap-align: start; color: inherit;">
-              <div style="position: relative; height: 230px; overflow: hidden;"><img src="{{ offer.image }}" alt="{{ offer.title }}" style="width: 100%; height: 100%; object-fit: cover;" decoding="async"><span style="position: absolute; right: 14px; bottom: 14px; padding: 9px 12px; border-radius: 10px; background: white; color: oklch(0.25 0.03 250); font-size: 13px; font-weight: 800; box-shadow: 0 6px 18px rgba(20,35,65,0.12);">{{ offer.price }}</span></div>
-              <div style="padding: 22px;">
-                <span style="display: block; margin-bottom: 8px; color: oklch(0.5 0.14 250); font-size: 11.5px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;">{{ offer.location }}</span>
-                <h3 style="min-height: 48px; margin: 0 0 17px; color: oklch(0.26 0.03 250); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.28; font-weight: 800;">{{ offer.title }}</h3>
-                <div style="display: flex; flex-wrap: wrap; gap: 7px;"><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.rooms }}</span><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.area }}</span><span style="padding: 6px 9px; border-radius: 999px; background: oklch(0.96 0.01 250); color: oklch(0.5 0.02 250); font-size: 11.5px; font-weight: 700;">{{ offer.type }}</span></div>
-              </div>
-            </a>
-          </sc-for>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -667,14 +643,6 @@ class Component extends DCLogic {
       { src: 'assets/images/category-land.webp', title: 'Działki', subtitle: 'Grunty pod inwestycje', href: `wyniki-wyszukiwania/?type=dzialki&transaction=sprzedaz&lang=${categoryLang}` },
       { src: 'assets/images/category-commercial.webp', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla biznesu', href: `wyniki-wyszukiwania/?type=lokale&transaction=wynajem&lang=${categoryLang}` },
     ];
-    const featuredOffers = [
-      { image: 'assets/images/category-apartments.webp', price: '1 190 000 PLN', location: 'Warszawa · Wola', title: 'Nowoczesny apartament z balkonem', rooms: '3 pokoje', area: '64 m²', type: 'Sprzedaż' },
-      { image: 'assets/images/category-houses.webp', price: '1 850 000 PLN', location: 'Konstancin-Jeziorna', title: 'Rodzinny dom blisko zieleni', rooms: '5 pokoi', area: '168 m²', type: 'Sprzedaż' },
-      { image: 'assets/images/category-commercial.webp', price: '7 900 PLN / mies.', location: 'Warszawa · Mokotów', title: 'Lokal usługowy przy głównej ulicy', rooms: '4 pomieszczenia', area: '92 m²', type: 'Wynajem' },
-      { image: 'assets/images/category-land.webp', price: '690 000 PLN', location: 'Wiązowna', title: 'Działka budowlana z dobrym dojazdem', rooms: 'Działka', area: '1 240 m²', type: 'Sprzedaż' },
-      { image: 'assets/images/hf_20260726_144524_c09ad56f-4bf3-454e-ad5c-3ebd0166d985.png', price: '4 600 PLN / mies.', location: 'Warszawa · Wilanów', title: 'Jasne mieszkanie gotowe do wynajmu', rooms: '2 pokoje', area: '48 m²', type: 'Wynajem' },
-      { image: 'assets/images/individual-approach-v2.png', price: '980 000 PLN', location: 'Warszawa · Ochota', title: 'Mieszkanie w kameralnej inwestycji', rooms: '3 pokoje', area: '58 m²', type: 'Sprzedaż' },
-    ];
     const languageParams = new URLSearchParams(window.location.search);
     const detectedLanguage = languageParams.has('lang') ? languageParams.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0];
     const pageLang = ['pl', 'uk', 'en', 'ru'].includes(detectedLanguage) ? detectedLanguage : 'pl';
@@ -784,7 +752,6 @@ class Component extends DCLogic {
       faqs: faqData.map(f => ({ ...f, rotate: this.state.openFaq === f.id ? 'rotate(180deg)' : 'rotate(0deg)', maxHeight: this.state.openFaq === f.id ? '520px' : '0px' })),
       toggleFaq: (e) => { const id = Number(e.currentTarget.dataset.faqId); this.setState(s => ({ openFaq: s.openFaq === id ? -1 : id })); },
       testimonials,
-      featuredOffers,
       pageLang,
       featuredOffersHref: `wyniki-wyszukiwania/?type=mieszkania&transaction=sprzedaz&lang=${pageLang}`,
       why1: whyUs[0],
