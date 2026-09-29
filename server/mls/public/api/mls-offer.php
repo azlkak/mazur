@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/portal-visibility.php';
 
 header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: public, max-age=300');
+header('Cache-Control: no-store');
 $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
 $allowedOrigins = ['https://mazurestate.pl', 'https://www.mazurestate.pl', 'https://azlkak.github.io'];
 if (in_array($origin, $allowedOrigins, true)) {
@@ -61,6 +62,12 @@ try {
     }
 
     $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+    [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+    if (portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, $fields)) {
+        http_response_code(404);
+        echo '{"error":"Oferta nie jest dostępna"}';
+        exit;
+    }
     $images = json_decode($row['images_json'], true, 512, JSON_THROW_ON_ERROR);
     $type = firstText($fields, 'typeName') ?: 'Nieruchomość';
     $city = firstText($fields, 'locationExportCityName', 'locationCityName');

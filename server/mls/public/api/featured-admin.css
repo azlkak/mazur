@@ -30,6 +30,10 @@ li strong{display:block}
 li span{color:#68788a;font-size:14px}
 li div.actions{display:flex;gap:6px;flex-shrink:0}
 li .actions button{border-radius:9px;padding:7px 11px}
+.danger{background:#fff0ed;color:#a6291c}
+.danger:hover{background:#fbded8}
+#results li .actions{flex-wrap:wrap;justify-content:flex-end}
+#hidden{max-height:450px;overflow:auto}
 hr{border:0;border-top:1px solid #e0e8f0;margin:34px 0}
 #results{max-height:520px;overflow:auto}
 #results li{background:#f9fbfd}

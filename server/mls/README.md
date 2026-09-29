@@ -44,6 +44,18 @@ jest automatycznie pomijana. Panel pokazuje ją jako nieaktywną, by można
 ją było usunąć z ustawienia. Ta wersja obsługuje wyłącznie numery MLS;
 po wdrożeniu drugiego źródła trzeba rozszerzyć walidację i łączenie danych.
 
+### Ukrywanie ofert z portalu
+
+Panel pozwala ukryć wyszukaną ofertę MLS lub EstiCRM na całym portalu i później
+ją przywrócić. Ukrycie zapisuje się w `portal_hidden_offers`, poza tabelą
+importowanych ofert. Importer MLS nie kasuje tych ustawień. Publiczne API
+pomija ukryte oferty w wynikach, podpowiedziach lokalizacji i sekcji wybranych,
+a strona szczegółów zwraca dla nich 404. Jeżeli oba źródła zawierają tę samą
+nieruchomość (`companyId:number`), ukrycie obejmuje oba rekordy. Ukrycie
+usuwa ofertę z zapisanej listy wybranych, żeby nie wróciła tam automatycznie
+po przywróceniu. Przed wdrożeniem nowych plików PHP uruchomić migrację
+`private/migrations/20260929_portal_hidden_offers.sql` na bazie `u101822986_mls`.
+
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
 bezpieczeństwa mogą być przechowywane lokalnie przez administratora.

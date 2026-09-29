@@ -4,6 +4,7 @@
   let csrf = '';
   let selected = [];
   let catalog = [];
+  let hidden = [];
   let inactive = new Set();
   const notice = (message, error = false) => { $('message').textContent = message; $('message').classList.toggle('error', error); };
   async function post(action, details = {}) {
@@ -34,7 +35,7 @@
         button.disabled = position + delta < 0 || position + delta >= selected.length;
         button.onclick = () => { [selected[position], selected[position + delta]] = [selected[position + delta], selected[position]]; renderSelected(); };
       }
-      const remove = text(actions, 'button', 'Usuń'); remove.type = 'button'; remove.className = 'quiet';
+      const remove = text(actions, 'button', 'Usuń z wybranych'); remove.type = 'button'; remove.className = 'quiet';
       remove.onclick = () => { selected = selected.filter(value => value !== id); inactive.delete(id); renderSelected(); renderResults(); };
       li.append(info, actions); list.append(li);
     }
@@ -48,9 +49,37 @@
     for (const offer of matches) {
       const id = String(offer.id); const li = document.createElement('li');
       text(li, 'span', offerLabel(offer, id));
-      const add = text(li, 'button', selected.includes(id) ? 'Dodano' : 'Dodaj'); add.type = 'button'; add.disabled = selected.includes(id) || selected.length >= 10;
+      const actions = document.createElement('div'); actions.className = 'actions';
+      const canFeature = !id.startsWith('esti-');
+      const add = text(actions, 'button', !canFeature ? 'Tylko MLS w wybranych' : selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = !canFeature || selected.includes(id) || selected.length >= 10;
       add.onclick = () => { selected.push(id); renderSelected(); renderResults(); };
+      const hide = text(actions, 'button', 'Ukryj z portalu'); hide.type = 'button'; hide.className = 'danger';
+      hide.onclick = async () => {
+        if (!window.confirm(`Ukryć ofertę nr ${offer.number || id} na całym portalu? Możesz ją później przywrócić w tym panelu.`)) return;
+        hide.disabled = true;
+        try { await post('hide', {id}); notice('Oferta ukryta na portalu. Możesz ją przywrócić poniżej.'); await initialize(); }
+        catch { notice('Nie udało się ukryć oferty. Spróbuj ponownie.', true); hide.disabled = false; }
+      };
+      li.append(actions);
       list.append(li);
+    }
+  }
+  function renderHidden() {
+    $('hidden-count').textContent = `(${hidden.length})`;
+    const list = $('hidden'); list.replaceChildren();
+    if (!hidden.length) { text(list, 'p', 'Nie ma ukrytych ofert.'); return; }
+    for (const offer of hidden) {
+      const li = document.createElement('li');
+      const info = document.createElement('div');
+      text(info, 'strong', `${offer.title || 'Oferta'} · nr ${offer.offer_number || offer.id}`);
+      text(info, 'span', offer.source === 'esticrm' ? 'EstiCRM' : 'MLS');
+      const restore = text(li, 'button', 'Przywróć'); restore.type = 'button'; restore.className = 'quiet';
+      restore.onclick = async () => {
+        restore.disabled = true;
+        try { await post('restore', {id: offer.id}); notice('Oferta przywrócona na portalu.'); await initialize(); }
+        catch { notice('Nie udało się przywrócić oferty. Spróbuj ponownie.', true); restore.disabled = false; }
+      };
+      li.prepend(info); list.append(li);
     }
   }
   async function initialize() {
@@ -60,8 +89,9 @@
     if (!state.authorized) return;
     csrf = state.csrf; $('account').textContent = state.email;
     selected = state.selected.map(row => String(row.source_id));
+    hidden = state.hidden || [];
     inactive = new Set(state.selected.filter(row => Number(row.publishable) !== 1).map(row => String(row.source_id)));
-    renderSelected();
+    renderSelected(); renderHidden();
     try {
       const response = await fetch('mls-test.php', {cache: 'no-store'});
       if (!response.ok) throw new Error();

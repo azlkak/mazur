@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/portal-visibility.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -19,6 +20,7 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
     ]);
+    [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
     $rows = $db->query(
         'SELECT source, source_id, source_export_at, fields_json, images_json
          FROM mls_offers
@@ -30,6 +32,7 @@ try {
     $seenProperties = [];
     foreach ($rows as $row) {
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+        if (portalIsHidden($hiddenIds, $hiddenProperties, (string)$row['source'], (string)$row['source_id'], $fields)) continue;
         $images = json_decode($row['images_json'], true, 512, JSON_THROW_ON_ERROR);
         $companyId = trim((string)($fields['companyId'] ?? ''));
         $number = trim((string)($fields['number'] ?? ''));

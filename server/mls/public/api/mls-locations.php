@@ -1,8 +1,9 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/portal-visibility.php';
 
 header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: public, max-age=300');
+header('Cache-Control: no-store');
 $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
 if (in_array($origin, ['https://mazurestate.pl', 'https://www.mazurestate.pl', 'https://azlkak.github.io'], true)) {
     header('Access-Control-Allow-Origin: ' . $origin);
@@ -17,12 +18,15 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
-    $rows = $db->query(
-        "SELECT DISTINCT location_city AS city, location_district AS district
-         FROM mls_offers
-         WHERE publishable = 1 AND location_city <> ''
-         ORDER BY location_city, location_district"
-    )->fetchAll();
+    [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+    $rows = [];
+    foreach ($db->query("SELECT source, source_id, location_city AS city, location_district AS district, fields_json FROM mls_offers WHERE publishable = 1 AND location_city <> '' ORDER BY location_city, location_district") as $row) {
+        $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+        if (portalIsHidden($hiddenIds, $hiddenProperties, (string)$row['source'], (string)$row['source_id'], $fields)) continue;
+        $key = $row['city'] . "\0" . $row['district'];
+        $rows[$key] = ['city' => $row['city'], 'district' => $row['district']];
+    }
+    $rows = array_values($rows);
 
     echo json_encode([
         'count' => count($rows),

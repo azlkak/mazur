@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wybrane oferty — MazurEstate</title>
-  <link rel="stylesheet" href="featured-admin.css">
-  <script src="featured-admin.js?v=2" defer></script>
+  <title>Panel ofert — MazurEstate</title>
+  <link rel="stylesheet" href="featured-admin.css?v=3">
+  <script src="featured-admin.js?v=3" defer></script>
 </head>
 <body>
   <main>
-    <header><p class="eyebrow">MazurEstate</p><h1>Wybrane oferty</h1><p>Zarządzaj ofertami widocznymi na stronie głównej.</p></header>
+    <header><p class="eyebrow">MazurEstate</p><h1>Panel ofert</h1><p>Wybieraj oferty na stronę główną i ukrywaj te, których nie chcesz pokazywać na portalu.</p></header>
     <p id="message" role="status" aria-live="polite"></p>
     <section id="login" hidden>
       <h2>Dostęp do panelu</h2>
@@ -25,10 +25,15 @@
       <button id="save" type="button">Zapisz zmiany</button>
       <hr>
       <h2>Znajdź ofertę</h2>
+      <p>Znalezioną ofertę możesz dodać do wybranych lub ukryć na całym portalu. Ukrycie można cofnąć poniżej; import MLS nie pokaże jej ponownie.</p>
       <label for="search">Numer oferty, tytuł lub miejscowość</label>
       <input id="search" type="search" autocomplete="off" placeholder="Np. 985910 albo Warszawa">
       <p id="search-hint">Wpisz przynajmniej 2 znaki.</p>
       <ul id="results"></ul>
+      <hr>
+      <h2>Ukryte na portalu <small id="hidden-count"></small></h2>
+      <p>Te oferty nie pojawiają się w wyszukiwarce ani na stronach szczegółów. Przywrócenie ponownie udostępni ofertę, jeśli nadal jest aktywna w MLS.</p>
+      <ul id="hidden"></ul>
     </section>
   </main>
 </body>
