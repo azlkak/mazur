@@ -219,7 +219,7 @@
           Przeglądaj aktualne oferty sprzedaży i wynajmu oraz skorzystaj ze wsparcia doświadczonych doradców. Pomożemy Ci znaleźć przestrzeń do życia, rozwoju biznesu lub bezpiecznej inwestycji.
         </p>
         <div style="display: flex; align-items: center; gap: 28px;">
-          <a href="#featured-offers" class="me-cta me-cta-light">Zobacz oferty</a>
+          <a href="#categories" class="me-cta me-cta-light">Zobacz oferty</a>
         </div>
       </div>
 
@@ -573,12 +573,8 @@ class Component extends DCLogic {
         this.setState({ availableLocations: [...locations].sort((a, b) => a.localeCompare(b, 'pl')) });
       }).catch(() => {});
     const categoriesSection = document.getElementById('categories');
-    const featuredOffersSection = document.getElementById('featured-offers');
     const whyUsSection = document.getElementById('why-us');
     const conversationCta = document.getElementById('services');
-    if (featuredOffersSection && whyUsSection?.parentNode) {
-      whyUsSection.parentNode.insertBefore(featuredOffersSection, whyUsSection);
-    }
     if (categoriesSection && conversationCta?.parentNode) {
       conversationCta.parentNode.insertBefore(categoriesSection, conversationCta);
     }
@@ -719,16 +715,6 @@ class Component extends DCLogic {
         const card = el.querySelector('[data-tcard]');
         const step = card ? card.getBoundingClientRect().width + 24 : 340;
         el.scrollBy({ left: step, behavior: 'smooth' });
-      },
-      scrollOffersLeft: () => {
-        const el = document.getElementById('featured-track');
-        const card = el?.querySelector('[data-offer-card]');
-        if (el) el.scrollBy({ left: -(card ? card.getBoundingClientRect().width + 22 : 410), behavior: 'smooth' });
-      },
-      scrollOffersRight: () => {
-        const el = document.getElementById('featured-track');
-        const card = el?.querySelector('[data-offer-card]');
-        if (el) el.scrollBy({ left: card ? card.getBoundingClientRect().width + 22 : 410, behavior: 'smooth' });
       },
       startDrag: (e) => {
         const el = document.getElementById('testimonials-track');
