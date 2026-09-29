@@ -34,7 +34,7 @@ function db(array $config): PDO
     ]);
 }
 
-function throttle(string $key, int $limit, int $windowSeconds): bool
+function throttle(string $key, int $limit, int $windowSeconds): int
 {
     $folder = dirname(__DIR__, 2) . '/mls/runtime/featured-rate';
     if (!is_dir($folder) && !mkdir($folder, 0700, true) && !is_dir($folder)) throw new RuntimeException('Rate storage unavailable');
@@ -45,15 +45,15 @@ function throttle(string $key, int $limit, int $windowSeconds): bool
     if (!is_array($events)) $events = [];
     $now = time();
     $events = array_values(array_filter($events, static fn($at): bool => is_int($at) && $at > $now - $windowSeconds));
-    $allowed = count($events) < $limit;
-    if ($allowed) $events[] = $now;
+    $retryAfter = count($events) >= $limit ? max(1, $events[0] + $windowSeconds - $now) : 0;
+    if ($retryAfter === 0) $events[] = $now;
     rewind($handle);
     ftruncate($handle, 0);
     fwrite($handle, json_encode($events, JSON_THROW_ON_ERROR));
     fflush($handle);
     flock($handle, LOCK_UN);
     fclose($handle);
-    return $allowed;
+    return $retryAfter;
 }
 
 try {
@@ -81,7 +81,13 @@ try {
         $email = strtolower(trim((string)($input['email'] ?? '')));
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 254) respond(422, ['error' => 'invalid_email']);
         $ip = (string)($_SERVER['REMOTE_ADDR'] ?? 'unknown');
-        if (!throttle('ip:' . $ip, 5, 3600) || !throttle('email:' . $email, 3, 900)) respond(429, ['error' => 'wait_before_retry']);
+        $ipWait = throttle('ip:' . $ip, 10, 3600);
+        $emailWait = throttle('email:' . $email, 5, 900);
+        if ($ipWait || $emailWait) {
+            $retryAfter = max($ipWait, $emailWait);
+            header('Retry-After: ' . $retryAfter);
+            respond(429, ['error' => 'wait_before_retry', 'retry_after' => $retryAfter]);
+        }
         if (in_array($email, $allowed, true)) {
             $code = (string)random_int(100000, 999999);
             $_SESSION['pending_email'] = $email;

@@ -9,7 +9,11 @@
   async function post(action, details = {}) {
     const response = await fetch(endpoint, {method: 'POST', credentials: 'same-origin', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({action, csrf, ...details})});
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error || 'Wystąpił błąd');
+    if (!response.ok) {
+      const error = new Error(data.error || 'Wystąpił błąd');
+      error.retryAfter = Number(data.retry_after) || 0;
+      throw error;
+    }
     return data;
   }
   function text(parent, tag, value) { const node = document.createElement(tag); node.textContent = value; parent.append(node); return node; }
@@ -67,8 +71,14 @@
   }
   $('email-form').onsubmit = async event => {
     event.preventDefault();
+    const button = $('email-form').querySelector('button');
+    button.disabled = true;
     try { await post('request-code', {email: $('email').value}); $('code-form').hidden = false; notice('Jeśli adres ma dostęp, kod został wysłany. Sprawdź pocztę.'); }
-    catch { notice('Nie udało się wysłać kodu. Spróbuj później.', true); }
+    catch (error) {
+      if (error.message === 'wait_before_retry') notice(`Za dużo próśb o kod. Spróbuj ponownie za ${Math.ceil(error.retryAfter / 60)} min.`, true);
+      else notice('Nie udało się wysłać kodu. Spróbuj później.', true);
+    }
+    finally { button.disabled = false; }
   };
   $('code-form').onsubmit = async event => {
     event.preventDefault();
