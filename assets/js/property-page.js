@@ -1,7 +1,5 @@
 const languageParams = new URLSearchParams(location.search);
-const queryLang = languageParams.has('lang')
-  ? languageParams.get('lang')
-  : 'pl';
+const queryLang = window.MAZUR_LANG || languageParams.get('lang') || 'pl';
 const lang = ['pl','uk','en','ru'].includes(queryLang) ? queryLang : 'pl';
 
 const ui = {

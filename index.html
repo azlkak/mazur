@@ -11,20 +11,6 @@
   <link rel="stylesheet" href="assets/css/contact-form.css?v=5">
   <link rel="stylesheet" href="assets/css/featured-offers.css?v=2">
   <link rel="stylesheet" href="assets/css/contact-options.css?v=7">
-
-<!-- SEO START -->
-<title>Agencja nieruchomości Warszawa | MazurEstate</title>
-<meta name="description" content="Sprzedaż, zakup, wynajem i zarządzanie nieruchomościami w Warszawie. Obsługa w języku polskim, angielskim, ukraińskim i rosyjskim.">
-<meta name="robots" content="index,follow,max-image-preview:large">
-<link rel="alternate" hreflang="pl" href="https://mazurestate.pl/?lang=pl">
-<link rel="alternate" hreflang="en" href="https://mazurestate.pl/?lang=en">
-<link rel="alternate" hreflang="uk" href="https://mazurestate.pl/?lang=uk">
-<link rel="alternate" hreflang="ru" href="https://mazurestate.pl/?lang=ru">
-<link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/?lang=pl">
-<script src="assets/js/seo-config.js"></script>
-<script src="assets/js/seo.js"></script>
-<!-- SEO END -->
-
 <!-- Google tag (gtag.js) with Consent Mode -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQDFZ9T9DC"></script>
 <script>
@@ -41,6 +27,21 @@
   window.gtag('js', new Date());
   window.gtag('config', 'G-YQDFZ9T9DC', { send_page_view: mazurAnalyticsGranted });
 </script>
+
+<!-- SEO START -->
+<title>Agencja nieruchomości Warszawa | MazurEstate</title>
+<meta name="description" content="Sprzedaż, zakup, wynajem i zarządzanie nieruchomościami w Warszawie. Obsługa w języku polskim, angielskim, ukraińskim i rosyjskim.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://mazurestate.pl/">
+<link rel="alternate" hreflang="pl" href="https://mazurestate.pl/">
+<link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/">
+<link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/">
+<link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/">
+<link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/">
+<script src="assets/js/language-routing.js"></script>
+<script src="assets/js/seo-config.js"></script>
+<script src="assets/js/seo.js"></script>
+<!-- SEO END -->
 </head>
 <body id="top">
 <x-dc>
@@ -578,7 +579,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { activeTab: 'mieszkania', transaction: 'sprzedaz', transactionOpen: false, locationQuery: '', locationOpen: false, availableLocations: [], langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = params.has('lang') ? params.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0]; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
+  state = { activeTab: 'mieszkania', transaction: 'sprzedaz', transactionOpen: false, locationQuery: '', locationOpen: false, availableLocations: [], langOpen: false, lang: (() => { const params = new URLSearchParams(window.location.search); const code = window.MAZUR_LANG || params.get('lang') || 'pl'; return ({ pl: 'PL', uk: 'UKR', en: 'ENG', ru: 'RU' }[code] || 'PL'); })(), openFaq: -1, mobileMenuOpen: false };
 
   componentDidMount() {
     this._locationsAbort = new AbortController();
@@ -665,7 +666,7 @@ class Component extends DCLogic {
       { src: 'assets/images/category-commercial.webp', title: 'Lokale komercyjne', subtitle: 'Przestrzeń dla biznesu', href: `wyniki-wyszukiwania/?type=lokale&transaction=wynajem&lang=${categoryLang}` },
     ];
     const languageParams = new URLSearchParams(window.location.search);
-    const detectedLanguage = languageParams.has('lang') ? languageParams.get('lang') : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0];
+    const detectedLanguage = window.MAZUR_LANG || languageParams.get('lang') || 'pl';
     const pageLang = ['pl', 'uk', 'en', 'ru'].includes(detectedLanguage) ? detectedLanguage : 'pl';
     const faqByLang = {
       pl: [
@@ -795,9 +796,9 @@ class Component extends DCLogic {
           location: this.state.locationQuery,
           price: document.getElementById('search-price')?.value || '',
           area: document.getElementById('search-area')?.value || '',
-          lang: new URLSearchParams(window.location.search).get('lang') || 'pl'
+          lang: window.MAZUR_LANG || 'pl'
         });
-        window.location.href = `wyniki-wyszukiwania/?${query.toString()}`;
+        window.location.href = window.mazurLocalizedUrl(`wyniki-wyszukiwania/?${query.toString()}`);
       },
       langs,
       currentLangLabel: this.state.lang,

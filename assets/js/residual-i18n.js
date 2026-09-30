@@ -1,5 +1,5 @@
 (() => {
-  const lang = new URLSearchParams(location.search).get('lang') || 'pl';
+  const lang = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang')) || 'pl';
   if (lang === 'pl' || !['en', 'uk', 'ru'].includes(lang)) return;
   const tr = {
     en: {'DOSTĘPNOŚĆ':'LAYOUT AND ACCESSIBILITY','WENTYLACJA I DOSTĘP':'VENTILATION AND ACCESS','CHŁODNICTWO I HAŁAS':'REFRIGERATION AND NOISE','Zdjęcie ilustracyjne':'Illustrative image','Zdjęcie nieruchomości':'Property photo','Zobacz wszystkie zdjęcia · 5':'View all photos · 5','Otwórz menu':'Open menu','Wybierz język':'Choose language','Pokaż lokalizacje':'Show locations','Paginacja wyników':'Results pagination','Poprzednia opinia':'Previous review','Następna opinia':'Next review','Poprzednie ogłoszenia':'Previous listings','Następne ogłoszenia':'Next listings','Założyciele MazurEstate':'MazurEstate founders','Wpisz miasto lub dzielnicę':'Enter a city or district','Lokal usługowy przy głównej ulicy':'Commercial premises on a main street','Zdjęcie: indywidualne podejście / spotkanie z klientem':'Individual consultation with a client','Zadzwoń do MazurEstate: +48 503 937 749':'Call MazurEstate: +48 503 937 749'},

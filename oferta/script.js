@@ -67,7 +67,7 @@ function showUnavailable(message){
 }
 
 async function loadOffer(){
-  const params=new URLSearchParams(location.search),id=params.get('id'),lang=['pl','uk','en','ru'].includes(params.get('lang'))?params.get('lang'):'pl';
+  const params=new URLSearchParams(location.search),id=params.get('id'),lang=['pl','uk','en','ru'].includes((window.MAZUR_LANG || params.get('lang')))?(window.MAZUR_LANG || params.get('lang')):'pl';
   document.documentElement.lang=lang;
   document.querySelectorAll('.language-picker a').forEach(link=>{const next=new URL(link.href);const label=link.textContent.trim();next.searchParams.set('id',id||'');next.searchParams.set('lang',label==='UKR'?'uk':label.toLowerCase());link.href=next.toString()});
   if(!id){showUnavailable('Brakuje numeru oferty w adresie strony.');return}

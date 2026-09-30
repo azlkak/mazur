@@ -12,7 +12,7 @@
   };
   const storedChoice=localStorage.getItem(key);
   if(storedChoice)return;
-  const lang=new URLSearchParams(location.search).get('lang')||document.documentElement.lang||'pl';
+  const lang=(window.MAZUR_LANG || new URLSearchParams(location.search).get('lang'))||document.documentElement.lang||'pl';
   const copy={
     pl:['Dbamy o Twoją prywatność','Używamy niezbędnych ciasteczek, a za Twoją zgodą również narzędzi analitycznych i marketingowych.','Polityka ciasteczek','Odrzuć','Akceptuję'],
     en:['Your privacy matters','We use necessary cookies and, with your consent, analytics and marketing tools.','Cookie policy','Reject','Accept'],

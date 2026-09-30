@@ -1,6 +1,6 @@
 (() => {
   const params = new URLSearchParams(location.search);
-  const lang = ['pl', 'en', 'uk', 'ru'].includes(params.get('lang')) ? params.get('lang') : 'pl';
+  const lang = ['pl', 'en', 'uk', 'ru'].includes((window.MAZUR_LANG || params.get('lang'))) ? (window.MAZUR_LANG || params.get('lang')) : 'pl';
   const labels = { pl: 'PL', en: 'ENG', uk: 'UKR', ru: 'RU' };
   const copy = {
     en: {

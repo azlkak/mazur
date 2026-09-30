@@ -1,5 +1,5 @@
 (() => {
-  const lang = new URLSearchParams(location.search).get('lang') || 'pl';
+  const lang = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang')) || 'pl';
   if (lang === 'pl') return;
 
   const translations = {

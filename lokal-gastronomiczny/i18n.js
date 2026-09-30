@@ -1,5 +1,5 @@
 (() => {
-  const lang = new URLSearchParams(location.search).get('lang') || 'pl';
+  const lang = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang')) || 'pl';
   const supported = ['pl', 'en', 'uk', 'ru'];
   const current = supported.includes(lang) ? lang : 'pl';
   const labels = { pl: 'PL', en: 'ENG', uk: 'UKR', ru: 'RU' };

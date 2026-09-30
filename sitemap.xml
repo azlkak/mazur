@@ -1,451 +1,451 @@
 <?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://mazurestate.pl/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/?lang=pl" />
+    <loc>https://mazurestate.pl/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/?lang=pl" />
+    <loc>https://mazurestate.pl/en/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/doradztwo/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/doradztwo/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/doradztwo/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/doradztwo/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/?lang=pl" />
+    <loc>https://mazurestate.pl/doradztwo/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/doradztwo/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/doradztwo/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/doradztwo/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/doradztwo/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/?lang=pl" />
+    <loc>https://mazurestate.pl/en/doradztwo/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/doradztwo/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/doradztwo/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/doradztwo/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/doradztwo/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/doradztwo/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/doradztwo/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/doradztwo/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/doradztwo/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/doradztwo/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/doradztwo/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/doradztwo/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/doradztwo/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dla-deweloperow/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dla-deweloperow/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dla-deweloperow/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dla-deweloperow/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
+    <loc>https://mazurestate.pl/dla-deweloperow/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dla-deweloperow/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dla-deweloperow/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dla-deweloperow/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dla-deweloperow/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
+    <loc>https://mazurestate.pl/en/dla-deweloperow/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dla-deweloperow/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dla-deweloperow/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dla-deweloperow/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dla-deweloperow/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/dla-deweloperow/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dla-deweloperow/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dla-deweloperow/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dla-deweloperow/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dla-deweloperow/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/dla-deweloperow/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dla-deweloperow/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dla-deweloperow/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-medyczny/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-medyczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-medyczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-medyczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
+    <loc>https://mazurestate.pl/lokal-medyczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-medyczny/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-medyczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-medyczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-medyczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
+    <loc>https://mazurestate.pl/en/lokal-medyczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-medyczny/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-medyczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-medyczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-medyczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/lokal-medyczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-medyczny/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-medyczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-medyczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-medyczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/lokal-medyczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-medyczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-medyczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-gastronomiczny/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
+    <loc>https://mazurestate.pl/lokal-gastronomiczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-gastronomiczny/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
+    <loc>https://mazurestate.pl/en/lokal-gastronomiczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-gastronomiczny/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/lokal-gastronomiczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokal-gastronomiczny/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/lokal-gastronomiczny/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokal-gastronomiczny/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokal-gastronomiczny/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/grunt-pod-budowe/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/grunt-pod-budowe/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/grunt-pod-budowe/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/grunt-pod-budowe/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
+    <loc>https://mazurestate.pl/grunt-pod-budowe/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/grunt-pod-budowe/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/grunt-pod-budowe/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/grunt-pod-budowe/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/grunt-pod-budowe/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
+    <loc>https://mazurestate.pl/en/grunt-pod-budowe/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/grunt-pod-budowe/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/grunt-pod-budowe/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/grunt-pod-budowe/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/grunt-pod-budowe/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/grunt-pod-budowe/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/grunt-pod-budowe/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/grunt-pod-budowe/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/grunt-pod-budowe/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/grunt-pod-budowe/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/grunt-pod-budowe/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/grunt-pod-budowe/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/grunt-pod-budowe/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
+    <loc>https://mazurestate.pl/mieszkanie-pod-wynajem/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
+    <loc>https://mazurestate.pl/en/mieszkanie-pod-wynajem/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/mieszkanie-pod-wynajem/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/mieszkanie-pod-wynajem/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/mieszkanie-pod-wynajem/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/mieszkanie-pod-wynajem/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/kim-jestesmy/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/kim-jestesmy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/kim-jestesmy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/kim-jestesmy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
+    <loc>https://mazurestate.pl/kim-jestesmy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/kim-jestesmy/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/kim-jestesmy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/kim-jestesmy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/kim-jestesmy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
+    <loc>https://mazurestate.pl/en/kim-jestesmy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/kim-jestesmy/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/kim-jestesmy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/kim-jestesmy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/kim-jestesmy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/kim-jestesmy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/kim-jestesmy/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/kim-jestesmy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/kim-jestesmy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/kim-jestesmy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/kim-jestesmy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/kim-jestesmy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/kim-jestesmy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/domy/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/domy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/domy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/domy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/?lang=pl" />
+    <loc>https://mazurestate.pl/domy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/domy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/domy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/domy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/domy/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/domy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/domy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/domy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/?lang=pl" />
+    <loc>https://mazurestate.pl/en/domy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/domy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/domy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/domy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/domy/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/domy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/domy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/domy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/domy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/domy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/domy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/domy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/domy/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/domy/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/domy/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/domy/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/domy/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/domy/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/domy/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/domy/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/domy/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/domy/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dzialki/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dzialki/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dzialki/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dzialki/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/?lang=pl" />
+    <loc>https://mazurestate.pl/dzialki/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dzialki/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dzialki/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dzialki/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dzialki/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/?lang=pl" />
+    <loc>https://mazurestate.pl/en/dzialki/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dzialki/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dzialki/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dzialki/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dzialki/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/dzialki/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/dzialki/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/dzialki/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/dzialki/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/dzialki/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/dzialki/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/dzialki/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/dzialki/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokale-komercyjne/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokale-komercyjne/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokale-komercyjne/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokale-komercyjne/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
+    <loc>https://mazurestate.pl/lokale-komercyjne/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokale-komercyjne/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokale-komercyjne/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokale-komercyjne/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokale-komercyjne/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
+    <loc>https://mazurestate.pl/en/lokale-komercyjne/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokale-komercyjne/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokale-komercyjne/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokale-komercyjne/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokale-komercyjne/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/lokale-komercyjne/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/lokale-komercyjne/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/lokale-komercyjne/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/lokale-komercyjne/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/lokale-komercyjne/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/lokale-komercyjne/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/lokale-komercyjne/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/lokale-komercyjne/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-prywatnosci/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-prywatnosci/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-prywatnosci/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-prywatnosci/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
+    <loc>https://mazurestate.pl/polityka-prywatnosci/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-prywatnosci/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-prywatnosci/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-prywatnosci/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-prywatnosci/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
+    <loc>https://mazurestate.pl/en/polityka-prywatnosci/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-prywatnosci/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-prywatnosci/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-prywatnosci/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-prywatnosci/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/polityka-prywatnosci/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-prywatnosci/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-prywatnosci/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-prywatnosci/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-prywatnosci/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/polityka-prywatnosci/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-prywatnosci/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-prywatnosci/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-cookies/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-cookies/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-cookies/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-cookies/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
+    <loc>https://mazurestate.pl/polityka-cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-cookies/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-cookies/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-cookies/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-cookies/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
+    <loc>https://mazurestate.pl/en/polityka-cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-cookies/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-cookies/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-cookies/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-cookies/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/polityka-cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/polityka-cookies/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/polityka-cookies/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/polityka-cookies/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/polityka-cookies/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/polityka-cookies/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/polityka-cookies/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/polityka-cookies/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/regulamin/?lang=pl</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/regulamin/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/regulamin/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/regulamin/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/?lang=pl" />
+    <loc>https://mazurestate.pl/regulamin/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/regulamin/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/regulamin/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/regulamin/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/regulamin/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/?lang=pl" />
+    <loc>https://mazurestate.pl/en/regulamin/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/regulamin/?lang=uk</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/regulamin/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/regulamin/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/regulamin/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/?lang=pl" />
+    <loc>https://mazurestate.pl/uk/regulamin/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/" />
   </url>
   <url>
-    <loc>https://mazurestate.pl/regulamin/?lang=ru</loc>
-    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/?lang=pl" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/regulamin/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/regulamin/?lang=uk" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/regulamin/?lang=ru" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/?lang=pl" />
+    <loc>https://mazurestate.pl/ru/regulamin/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://mazurestate.pl/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://mazurestate.pl/en/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="uk" href="https://mazurestate.pl/uk/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://mazurestate.pl/ru/regulamin/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://mazurestate.pl/regulamin/" />
   </url>
 </urlset>

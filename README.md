@@ -33,7 +33,7 @@ Each public page folder contains its own `index.html` and, where needed, local
 duplication.
 
 Public content is available in Polish (`pl`), English (`en`), Ukrainian (`uk`)
-and Russian (`ru`) through the `?lang=` query parameter.
+and Russian (`ru`) at separate paths: `/` for Polish and `/en/`, `/uk/`, `/ru/` for translations. The same prefixes apply to every public page. Old `?lang=` links are redirected in the browser to the corresponding path, preserving filters and fragments. GitHub Pages cannot issue HTTP 301 redirects for query parameters; those would require a proxy or hosting configuration outside this repository.
 
 ## Repository conventions
 
@@ -57,7 +57,7 @@ Then open `http://127.0.0.1:4173/`.
 
 ## SEO maintenance
 
-Run `python3 scripts/prepare-seo.py` after changing SEO copy or the production domain. The generator owns the marked head blocks, `assets/js/seo-config.js`, `sitemap.xml` and `robots.txt`. Edit the generator, not generated metadata. Query-based languages are preserved; shared `seo.js` sets same-language canonical and structured data at runtime. Demo search/listing pages remain noindex.
+Run `python3 scripts/prepare-seo.py` after changing a public page, SEO copy or the production domain. The generator owns the marked head blocks, translated HTML copies in `en/`, `uk/`, `ru/`, `assets/js/seo-config.js`, `sitemap.xml` and `robots.txt`. Edit the original page and generator, not the translated HTML copies. Each language has a static canonical and hreflang links; shared `seo.js` maintains matching structured data at runtime. Search/listing pages remain noindex. Run `python3 scripts/check-language-routes.py` to validate generated paths and the sitemap.
 
 On GitHub project Pages, `/mazur/robots.txt` is not the host-root robots policy: submit the sitemap directly in Search Console. On a custom domain, update `BASE` in the generator and serve robots at the origin root. See [SEO plan and 36 blog topics](docs/seo-plan.md) for limitations and next steps.
 

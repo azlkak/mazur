@@ -1,14 +1,14 @@
-/* Shared metadata for existing query-based language versions. */
+/* Shared metadata for language paths. */
 (() => {
   const config = window.MAZUR_SEO;
   if (!config) return;
   const segments = location.pathname.replace(/index\.html$/, '').split('/').filter(Boolean);
   const candidate = segments.length ? segments[segments.length - 1] + '/' : '';
   const route = config.pages[candidate] ? candidate : '';
-  const requested = new URLSearchParams(location.search).get('lang');
+  const requested = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang'));
   const lang = config.languages.includes(requested) ? requested : 'pl';
   const page = config.pages[route];
-  const canonical = config.base + route + '?lang=' + lang;
+  const canonical = config.base + (lang === 'pl' ? '' : lang + '/') + route;
   function meta(name, content, property = false) {
     const attr = property ? 'property' : 'name';
     let el = document.head.querySelector(`meta[${attr}="${name}"]`);
@@ -30,7 +30,7 @@
     let schema = document.getElementById('seo-structured-data');
     if (!schema) { schema=document.createElement('script'); schema.id='seo-structured-data'; schema.type='application/ld+json'; document.head.appendChild(schema); }
     const businessId=config.base+'#business';
-    const graph=[{'@type':'RealEstateAgent','@id':businessId,name:'MazurEstate',url:config.base+'?lang=pl',telephone:'+48503937749',email:'info@mazurestate.pl',areaServed:{'@type':'City',name:'Warszawa'},contactPoint:{'@type':'ContactPoint',contactType:'customer service',telephone:'+48503937749',availableLanguage:config.languages}},
+    const graph=[{'@type':'RealEstateAgent','@id':businessId,name:'MazurEstate',url:config.base,telephone:'+48503937749',email:'info@mazurestate.pl',areaServed:{'@type':'City',name:'Warszawa'},contactPoint:{'@type':'ContactPoint',contactType:'customer service',telephone:'+48503937749',availableLanguage:config.languages}},
       {'@type':'WebSite','@id':config.base+'#website',url:config.base,name:'MazurEstate',publisher:{'@id':businessId},inLanguage:config.languages},
       {'@type':'WebPage','@id':canonical+'#webpage',url:canonical,name:title,description:page.descriptions[lang],inLanguage:lang,isPartOf:{'@id':config.base+'#website'},about:{'@id':businessId}}];
     if(page.service) graph.push({'@type':'Service','@id':canonical+'#service',name:page.names[lang],description:page.descriptions[lang],url:canonical,provider:{'@id':businessId}});
@@ -41,7 +41,7 @@
     apply();
     document.querySelectorAll('[data-seo-service]').forEach(link => {
       const service = link.getAttribute('data-seo-service');
-      link.href = service + '?lang=' + lang;
+      link.href = window.mazurLocalizedUrl(service, lang);
       link.textContent = config.pages[service].names[lang];
     });
   });

@@ -1,6 +1,6 @@
 (() => {
   const params = new URLSearchParams(location.search);
-  const lang = ['pl', 'en', 'uk', 'ru'].includes(params.get('lang')) ? params.get('lang') : 'pl';
+  const lang = ['pl', 'en', 'uk', 'ru'].includes((window.MAZUR_LANG || params.get('lang'))) ? (window.MAZUR_LANG || params.get('lang')) : 'pl';
   const copy = {
     pl: ['Wybrane oferty', 'Nieruchomości warte uwagi', 'Zobacz wszystkie oferty', 'powierzchnia', 'pokoje', 'Poprzednie oferty', 'Następne oferty'],
     en: ['Featured properties', 'Properties worth exploring', 'See all properties', 'area', 'rooms', 'Previous properties', 'Next properties'],
@@ -30,7 +30,7 @@
   const number = new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'pl-PL');
   function card(offer) {
     const anchor = make('a', 'featured-card');
-    anchor.href = `oferta/?id=${encodeURIComponent(offer.id)}&lang=${lang}`;
+    anchor.href = window.mazurLocalizedUrl(`oferta/?id=${encodeURIComponent(offer.id)}`);
     if (offer.images?.[0]) {
       const img = make('img'); img.src = offer.images[0]; img.alt = offer.title || ''; img.loading = 'lazy'; img.decoding = 'async'; anchor.append(img);
     }

@@ -1,8 +1,6 @@
 (function () {
   const params = new URLSearchParams(window.location.search);
-  const requestedLanguage = params.has('lang')
-    ? params.get('lang')
-    : ((navigator.languages && navigator.languages[0]) || navigator.language || 'pl').toLowerCase().split('-')[0];
+  const requestedLanguage = window.MAZUR_LANG || params.get('lang') || 'pl';
   const lang = ['pl', 'uk', 'en', 'ru'].includes(requestedLanguage) ? requestedLanguage : 'pl';
   if (!['uk', 'en', 'ru'].includes(lang)) return;
 
@@ -149,20 +147,7 @@
       const key = normalize(element.getAttribute('aria-label') || '');
       if (dictionary.has(key)) element.setAttribute('aria-label', dictionary.get(key));
     });
-    const internalRoutes = new Set([
-      'doradztwo/', 'dla-deweloperow/', 'kim-jestesmy/',
-      'mieszkanie-pod-wynajem/', 'lokal-medyczny/', 'lokal-gastronomiczny/', 'grunt-pod-budowe/',
-      'wyniki-wyszukiwania/', 'oferta/', 'polityka-prywatnosci/', 'polityka-cookies/', 'regulamin/'
-    ]);
-    root.querySelectorAll?.('a[href]').forEach(link => {
-      const raw = link.getAttribute('href');
-      const route = raw?.replace(/^\.\//, '').split(/[?#]/)[0];
-      if (!internalRoutes.has(route)) return;
-      const destination = new URL(raw, location.href);
-      if (destination.searchParams.get('lang') !== lang) {
-        destination.searchParams.set('lang', lang);
-        link.href = destination.href;
-      }
+    root.querySelectorAll?.('[data-seo-service]').forEach(link => {
       const service = link.dataset.seoService;
       const serviceName = service && window.MAZUR_SEO?.pages?.[service]?.names?.[lang];
       if (serviceName && link.textContent !== serviceName) link.textContent = serviceName;

@@ -1,5 +1,5 @@
 (() => {
-  const requestedLang = new URLSearchParams(location.search).get('lang') || document.documentElement.lang;
+  const requestedLang = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang')) || document.documentElement.lang;
   const lang = ['pl', 'en', 'uk', 'ru'].includes(requestedLang) ? requestedLang : 'pl';
   document.body.classList.add('contact-options-enabled');
   const copy = {

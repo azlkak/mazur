@@ -2,7 +2,7 @@
   const script = document.currentScript;
   const type = script?.dataset.searchType;
   if (!['lokale', 'dzialki', 'mieszkania'].includes(type)) return;
-  const requestedLang = new URLSearchParams(location.search).get('lang') || document.documentElement.lang;
+  const requestedLang = (window.MAZUR_LANG || new URLSearchParams(location.search).get('lang')) || document.documentElement.lang;
   const lang = ['pl', 'en', 'uk', 'ru'].includes(requestedLang) ? requestedLang : 'pl';
   const copy = {
     pl: { types: { lokale: 'Lokale komercyjne', dzialki: 'Działki', mieszkania: 'Mieszkania' }, eyebrow: 'PRZEGLĄDAJ OFERTY', title: 'Wolisz poszukać samodzielnie?', intro: 'Możesz też przejrzeć dostępne oferty. Typ nieruchomości jest już dopasowany do tej strony.', location: 'Lokalizacja', locationHint: 'Wpisz miasto lub dzielnicę', transaction: 'Transakcja', sale: 'Sprzedaż', rent: 'Wynajem', price: 'Cena max', priceHint: 'np. 1 000 000 PLN', area: 'Powierzchnia', areaHint: 'min m²', search: 'Szukaj' },
@@ -19,7 +19,7 @@
     section.setAttribute('aria-labelledby', 'compact-search-title');
     section.innerHTML = `<div class="compact-search-intro"><span>${copy.eyebrow}</span><h2 id="compact-search-title">${copy.title}</h2><p>${copy.intro}</p></div>
       <div class="compact-search-type">${label}</div>
-      <form class="compact-search-form" action="../wyniki-wyszukiwania/" method="get">
+      <form class="compact-search-form" action="${window.mazurLocalizedUrl("../wyniki-wyszukiwania/")}" method="get">
         <input type="hidden" name="type" value="${type}">
         <div class="compact-search-field compact-search-location">
           <label for="compact-location">${copy.location}</label>
@@ -29,7 +29,6 @@
         <div class="compact-search-field compact-search-transaction"><span class="compact-search-label" id="compact-transaction-label">${copy.transaction}</span><input type="hidden" name="transaction" value="sprzedaz"><button id="compact-transaction" class="compact-search-transaction-trigger" type="button" aria-labelledby="compact-transaction-label compact-transaction-value" aria-haspopup="listbox" aria-controls="compact-transaction-options" aria-expanded="false"><span id="compact-transaction-value">${copy.sale}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="compact-search-transaction-options" id="compact-transaction-options" role="listbox" aria-labelledby="compact-transaction-label" hidden><button type="button" role="option" data-value="sprzedaz" aria-selected="true">${copy.sale}</button><button type="button" role="option" data-value="wynajem" aria-selected="false">${copy.rent}</button></div></div>
         <div class="compact-search-field"><label for="compact-price">${copy.price}</label><input id="compact-price" name="price" inputmode="numeric" placeholder="${copy.priceHint}"></div>
         <div class="compact-search-field"><label for="compact-area">${copy.area}</label><input id="compact-area" name="area" inputmode="decimal" placeholder="${copy.areaHint}"></div>
-        <input type="hidden" name="lang" value="${lang}">
         <button class="compact-search-submit" type="submit"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 5 5"/></svg>${copy.search}</button>
       </form>`;
     main.appendChild(section);
