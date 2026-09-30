@@ -34,7 +34,7 @@
       const mobileNav = document.createElement('nav');
       mobileNav.className = 'chrome-mobile-nav shell';
       mobileNav.id = 'chrome-mobile-nav';
-      mobileNav.innerHTML = `<a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a class="mobile-menu-contact-link" href="tel:+48503937749">${t.contact}</a><a class="mobile-call" href="tel:+48503937749">+48 503 937 749</a>`;
+      mobileNav.innerHTML = `<a href="${home}#categories">${t.choose}</a><a href="${home}#about">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${home}#services">${t.developers}</a><a href="${window.mazurLocalizedUrl('../kim-jestesmy/', lang)}">${t.about}</a><a class="mobile-menu-contact-link" href="tel:+48503937749">${t.contact}</a><a class="mobile-call" href="tel:+48503937749">+48 503 937 749</a>`;
       mobileNav.querySelector('a:nth-child(2)').href = advisoryUrl;
       mobileNav.querySelector('a:nth-child(4)').href = developersUrl;
       bar.appendChild(menuButton);
