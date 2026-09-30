@@ -8,6 +8,7 @@
     ru: ['Избранные предложения', 'Недвижимость, достойная внимания', 'Все предложения', 'площадь', 'комнат', 'Предыдущие предложения', 'Следующие предложения']
   }[lang];
   let offers = [];
+  const localPreview = lang === 'pl' && (location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname));
   function updateControls(grid, previous, next) {
     const last = grid.scrollWidth - grid.clientWidth;
     previous.disabled = grid.scrollLeft <= 1;
@@ -43,7 +44,16 @@
     const section = document.getElementById('featured-offers');
     const grid = document.getElementById('featured-grid');
     if (!section || !grid) return;
-    if (!offers.length) { section.hidden = true; return; }
+    if (!offers.length) {
+      if (localPreview) {
+        section.hidden = false;
+        if (document.getElementById('featured-eyebrow').textContent !== copy[0]) document.getElementById('featured-eyebrow').textContent = copy[0];
+        if (document.getElementById('featured-title').textContent !== copy[1]) document.getElementById('featured-title').textContent = copy[1];
+        if (!grid.querySelector('.featured-preview-note')) grid.innerHTML = '<p class="featured-preview-note">Wybrane oferty są dostępne na stronie online. Podgląd lokalny nie może pobrać ich z API.</p>';
+      } else section.hidden = true;
+      return;
+    }
+    grid.querySelector('.featured-preview-note')?.remove();
     if (grid.querySelector('.featured-card')) return;
     document.getElementById('featured-eyebrow').textContent = copy[0];
     document.getElementById('featured-title').textContent = copy[1];

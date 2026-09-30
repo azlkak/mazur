@@ -30,7 +30,7 @@
     let schema = document.getElementById('seo-structured-data');
     if (!schema) { schema=document.createElement('script'); schema.id='seo-structured-data'; schema.type='application/ld+json'; document.head.appendChild(schema); }
     const businessId=config.base+'#business';
-    const graph=[{'@type':'RealEstateAgent','@id':businessId,name:'MazurEstate',url:config.base+'?lang=pl',telephone:'+48503937749',email:'info@mazurestate.com',areaServed:{'@type':'City',name:'Warszawa'},contactPoint:{'@type':'ContactPoint',contactType:'customer service',telephone:'+48503937749',availableLanguage:config.languages}},
+    const graph=[{'@type':'RealEstateAgent','@id':businessId,name:'MazurEstate',url:config.base+'?lang=pl',telephone:'+48503937749',email:lang==='pl'?'info@mazurestate.pl':'info@mazurestate.com',areaServed:{'@type':'City',name:'Warszawa'},contactPoint:{'@type':'ContactPoint',contactType:'customer service',telephone:'+48503937749',availableLanguage:config.languages}},
       {'@type':'WebSite','@id':config.base+'#website',url:config.base,name:'MazurEstate',publisher:{'@id':businessId},inLanguage:config.languages},
       {'@type':'WebPage','@id':canonical+'#webpage',url:canonical,name:title,description:page.descriptions[lang],inLanguage:lang,isPartOf:{'@id':config.base+'#website'},about:{'@id':businessId}}];
     if(page.service) graph.push({'@type':'Service','@id':canonical+'#service',name:page.names[lang],description:page.descriptions[lang],url:canonical,provider:{'@id':businessId}});
