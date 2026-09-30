@@ -25,7 +25,7 @@ NAMES = {
     'dzialki/': ['Działki Warszawa i okolice — pomoc w wyborze', 'Land in the Warsaw area — selection support', 'Земельні ділянки у Варшаві й околицях', 'Земельные участки в Варшаве и окрестностях'],
     'lokale-komercyjne/': ['Lokale komercyjne Warszawa — najem i zakup', 'Commercial property in Warsaw — rent and purchase', 'Комерційні приміщення у Варшаві — оренда й купівля', 'Коммерческие помещения в Варшаве — аренда и покупка'],
     'polityka-prywatnosci/': ['Polityka prywatności', 'Privacy policy', 'Політика конфіденційності', 'Политика конфиденциальности'],
-    'polityka-cookies/': ['Polityka cookies', 'Cookie policy', 'Політика cookies', 'Политика cookies'],
+    'polityka-cookies/': ['Polityka ciasteczek', 'Cookie policy', 'Політика файлів cookie', 'Политика файлов cookie'],
     'regulamin/': ['Regulamin strony', 'Website terms', 'Правила користування сайтом', 'Правила использования сайта'],
     'wyniki-wyszukiwania/': ['Wyszukiwanie nieruchomości', 'Property search', 'Пошук нерухомості', 'Поиск недвижимости'],
     'oferta/': ['Przykładowa oferta nieruchomości', 'Sample property listing', 'Приклад пропозиції нерухомості', 'Пример предложения недвижимости'],

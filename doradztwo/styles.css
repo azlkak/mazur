@@ -30,8 +30,8 @@
 .advisory-cta{margin-top:0;margin-bottom:var(--advisory-section-gap)}
 @media(max-width:650px){:root{--advisory-section-gap:16px}.intro,.process-section,.services{padding-top:var(--advisory-section-gap);padding-bottom:var(--advisory-section-gap)}.expertise,.advisory-cta{margin-top:0;margin-bottom:var(--advisory-section-gap)}}
 
-/* In the Polish version, each service card shares the destination of its link. */
-html[lang="pl"] .service-card{position:relative;cursor:pointer}
-html[lang="pl"] .service-card>a::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit}
-html[lang="pl"] .service-card:focus-within{outline:3px solid #0870bb;outline-offset:3px}
-html[lang="pl"] .service-card>a:focus-visible{outline:0}
+/* Each service card shares the destination of its link. */
+.service-card{position:relative;cursor:pointer}
+.service-card>a::after{content:"";position:absolute;inset:0;z-index:2;border-radius:inherit}
+.service-card:focus-within{outline:3px solid #0870bb;outline-offset:3px}
+.service-card>a:focus-visible{outline:0}

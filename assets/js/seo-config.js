@@ -202,16 +202,16 @@ window.MAZUR_SEO = {
     },
     "polityka-cookies/": {
       "names": {
-        "pl": "Polityka cookies",
+        "pl": "Polityka ciasteczek",
         "en": "Cookie policy",
-        "uk": "Політика cookies",
-        "ru": "Политика cookies"
+        "uk": "Політика файлів cookie",
+        "ru": "Политика файлов cookie"
       },
       "descriptions": {
-        "pl": "Polityka cookies — informacje MazurEstate.",
+        "pl": "Polityka ciasteczek — informacje MazurEstate.",
         "en": "Cookie policy — information from MazurEstate.",
-        "uk": "Політика cookies — інформація MazurEstate.",
-        "ru": "Политика cookies — информация MazurEstate."
+        "uk": "Політика файлів cookie — інформація MazurEstate.",
+        "ru": "Политика файлов cookie — информация MazurEstate."
       },
       "index": true,
       "service": false

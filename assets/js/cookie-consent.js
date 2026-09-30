@@ -14,10 +14,10 @@
   if(storedChoice)return;
   const lang=new URLSearchParams(location.search).get('lang')||document.documentElement.lang||'pl';
   const copy={
-    pl:['Dbamy o Twoją prywatność','Używamy niezbędnych plików cookies, a za Twoją zgodą również narzędzi analitycznych i marketingowych.','Polityka cookies','Odrzuć','Akceptuję'],
+    pl:['Dbamy o Twoją prywatność','Używamy niezbędnych ciasteczek, a za Twoją zgodą również narzędzi analitycznych i marketingowych.','Polityka ciasteczek','Odrzuć','Akceptuję'],
     en:['Your privacy matters','We use necessary cookies and, with your consent, analytics and marketing tools.','Cookie policy','Reject','Accept'],
-    uk:['Ми дбаємо про Вашу конфіденційність','Ми використовуємо необхідні cookies, а за Вашою згодою — аналітичні та маркетингові інструменти.','Політика cookies','Відхилити','Прийняти'],
-    ru:['Мы заботимся о вашей конфиденциальности','Мы используем необходимые cookies, а с вашего согласия — аналитические и маркетинговые инструменты.','Политика cookies','Отклонить','Принять']
+    uk:['Ми дбаємо про Вашу конфіденційність','Ми використовуємо необхідні cookies, а за Вашою згодою — аналітичні та маркетингові інструменти.','Політика файлів cookie','Відхилити','Прийняти'],
+    ru:['Мы заботимся о вашей конфиденциальности','Мы используем необходимые cookies, а с вашего согласия — аналитические и маркетинговые инструменты.','Политика файлов cookie','Отклонить','Принять']
   }[['pl','en','uk','ru'].includes(lang)?lang:'pl'];
   const onHome=!location.pathname.split('/').filter(Boolean).at(-1)||location.pathname.endsWith('/mazur/')||location.pathname.endsWith('/index.html');
   const policy=`${onHome?'':'../'}polityka-cookies/?lang=${lang}`;

@@ -102,5 +102,5 @@
   ['.faq .eyebrow', '.faq h2'].forEach((selector, index) => set(selector, d.faqHead[index]));
   qa('.faq details').forEach((item, index) => { item.querySelector('summary').textContent = d.faq[index][0]; item.querySelector('p').textContent = d.faq[index][1]; });
   ['.final-cta .eyebrow', '.final-cta h2', '.final-cta > div:first-child > p:last-child'].forEach((selector, index) => set(selector, d.cta[index]));
-  q('.final-cta a[href^="mailto:"]').href = `mailto:info@mazurestate.com?subject=${encodeURIComponent(d.mailSubject)}`;
+  q('.final-cta a[href^="mailto:"]').href = `mailto:info@mazurestate.pl?subject=${encodeURIComponent(d.mailSubject)}`;
 })();

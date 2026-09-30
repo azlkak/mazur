@@ -8,7 +8,13 @@
     ru: ['Избранные предложения', 'Недвижимость, достойная внимания', 'Все предложения', 'площадь', 'комнат', 'Предыдущие предложения', 'Следующие предложения']
   }[lang];
   let offers = [];
-  const localPreview = lang === 'pl' && (location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname));
+  const localPreview = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
+  const previewNote = {
+    pl: 'Wybrane oferty są dostępne na stronie online. Podgląd lokalny nie może pobrać ich z API.',
+    en: 'Featured properties are available on the live site. The local preview cannot load them from the API.',
+    uk: 'Обрані пропозиції доступні на сайті. Локальний перегляд не може завантажити їх через API.',
+    ru: 'Избранные предложения доступны на сайте. Локальный просмотр не может загрузить их через API.'
+  }[lang];
   function updateControls(grid, previous, next) {
     const last = grid.scrollWidth - grid.clientWidth;
     previous.disabled = grid.scrollLeft <= 1;
@@ -49,7 +55,7 @@
         section.hidden = false;
         if (document.getElementById('featured-eyebrow').textContent !== copy[0]) document.getElementById('featured-eyebrow').textContent = copy[0];
         if (document.getElementById('featured-title').textContent !== copy[1]) document.getElementById('featured-title').textContent = copy[1];
-        if (!grid.querySelector('.featured-preview-note')) grid.innerHTML = '<p class="featured-preview-note">Wybrane oferty są dostępne na stronie online. Podgląd lokalny nie może pobrać ich z API.</p>';
+        if (!grid.querySelector('.featured-preview-note')) grid.append(make('p', 'featured-preview-note', previewNote));
       } else section.hidden = true;
       return;
     }

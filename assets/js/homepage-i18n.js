@@ -83,7 +83,7 @@
     ['Projekty', 'Проєкти', 'Projects', 'Проекты'],
     ['Wszelkie prawa zastrzeżone.', 'Усі права захищені.', 'All rights reserved.', 'Все права защищены.'],
     ['Polityka prywatności', 'Політика конфіденційності', 'Privacy policy', 'Политика конфиденциальности'],
-    ['Cookies', 'Cookies', 'Cookies', 'Cookies'],
+    ['Ciasteczka', 'Файли cookie', 'Cookies', 'Файлы cookie'],
     ['Regulamin', 'Умови використання', 'Terms', 'Правила'],
     ['Towarzyszymy Ci od pierwszej rozmowy, przez wybór lub przygotowanie nieruchomości, prezentacje i negocjacje, aż do finalizacji transakcji.', 'Ми супроводжуємо Вас від першої розмови, вибору або підготовки нерухомості, показів і переговорів до завершення угоди.', 'We support you from the first conversation through property selection or preparation, viewings and negotiations, all the way to completion.', 'Мы сопровождаем вас от первого разговора, выбора или подготовки объекта, показов и переговоров до завершения сделки.'],
     ['Analizujemy aktualne oferty, ceny i potencjał nieruchomości, pomagając podejmować decyzje oparte na realnych danych i sytuacji rynkowej.', 'Ми аналізуємо актуальні пропозиції, ціни та потенціал нерухомості, допомагаючи приймати рішення на основі реальних даних і ринкової ситуації.', 'We analyse current listings, prices and property potential, helping you make decisions based on real data and market conditions.', 'Мы анализируем актуальные предложения, цены и потенциал недвижимости, помогая принимать решения на основе реальных данных и рыночной ситуации.'],
@@ -116,7 +116,7 @@
     ['Wynajem, Wilanów', 'Оренда, Вілянув', 'Rental, Wilanów', 'Аренда, Вилянув'],
     ['Zakup mieszkania, klient z Ukrainy', 'Купівля квартири, клієнт з України', 'Apartment purchase, client from Ukraine', 'Покупка квартиры, клиент из Украины'],
     ['Sprzedaż domu, Wiązowna', 'Продаж будинку, Вьонзовна', 'House sale, Wiązowna', 'Продажа дома, Вёнзовна'],
-    ['Najem, klient z Rosji', 'Оренда, клієнт із Росії', 'Rental, client from Russia', 'Аренда, клиент из России'],
+    ['Najem', 'Оренда', 'Rental', 'Аренда'],
     ['Nieruchomość komercyjna, Mokotów', 'Комерційна нерухомість, Мокотув', 'Commercial property, Mokotów', 'Коммерческая недвижимость, Мокотув']
   ];
 
