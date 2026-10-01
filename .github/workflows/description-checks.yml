@@ -1,5 +1,7 @@
 name: Description formatter checks
 on:
+  push:
+    branches: [feat/formatted-offer-descriptions]
   pull_request:
     paths:
       - 'assets/js/offer-description.mjs'
@@ -13,9 +15,9 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Checkout exact PR commit without credentials
+      - name: Checkout exact source commit without credentials
         env:
-          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
           git init .
           git remote add origin https://github.com/azlkak/mazur.git
