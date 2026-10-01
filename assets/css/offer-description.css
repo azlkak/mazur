@@ -1,0 +1,20 @@
+/* Approved description-preview typography; scoped to offer descriptions only. */
+.description { min-width: 0; }
+.description > .eyebrow { color: var(--blue, #0870bb); font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-bottom: 12px; }
+.description > h2 { overflow-wrap: anywhere; }
+.description .description-reader { max-width: 76ch; overflow-wrap: anywhere; }
+.description .description-reader h3 { margin: 26px 0 12px; font-size: 16px; line-height: 1.5; letter-spacing: .03em; font-weight: 800; color: var(--navy, #172536); }
+.description .description-reader h3:first-child { margin-top: 0; }
+.description .description-reader p { font-size: 16px; line-height: 1.75; color: #435064; margin: 0 0 17px; }
+.description .description-reader > p:first-child { color: #334359; }
+.description .description-reader ul, .description .description-reader ol { padding-left: 24px; margin: 0 0 22px; color: #435064; font-size: 16px; line-height: 1.75; }
+.description .description-reader li { padding-left: 4px; margin: 0 0 7px; }
+.description .description-reader li::marker { color: var(--blue, #0870bb); font-weight: 700; }
+.description .description-reader li p { margin: 0; line-height: 1.75; }
+.description .description-reader li p + p { margin-top: 8px; }
+.description .description-reader li ul, .description .description-reader li ol { margin-top: 8px; margin-bottom: 12px; }
+.description .description-reader strong { color: var(--navy, #172536); font-weight: 800; }
+.description .description-reader em { font-style: italic; }
+.description .description-reader .empty-note { border: 1px dashed var(--line, #dfe5eb); border-radius: 10px; padding: 20px; color: var(--muted, #687482); }
+.description .description-language-note { max-width: 76ch; background: #e9f3fc; color: #1b597f; padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; margin: 0 0 22px; }
+@media (max-width: 650px) { .description .description-reader ul, .description .description-reader ol { padding-left: 22px; } }
