@@ -19,6 +19,38 @@ function event(string $message): void {
     if (file_put_contents(ROOT . '/logs/import.log', $line, FILE_APPEND | LOCK_EX) === false) fail('Cannot write log');
     echo $line;
 }
+function recordRun(string $source, string $result, string $error = ''): void {
+    if (!in_array($source, ['mls', 'esticrm'], true)) return;
+    $folder = ROOT . '/logs';
+    if (!is_dir($folder)) return;
+    $path = $folder . '/status-' . $source . '.json';
+    $previous = is_file($path) ? json_decode((string)@file_get_contents($path), true) : null;
+    if (!is_array($previous)) $previous = [];
+    $now = time();
+    $status = [
+        'result' => $result,
+        'last_run_at' => $now,
+        'last_success_at' => (int)($previous['last_success_at'] ?? 0),
+        'last_error_at' => (int)($previous['last_error_at'] ?? 0),
+        'last_error' => (string)($previous['last_error'] ?? ''),
+    ];
+    if ($result === 'success') {
+        $status['last_success_at'] = $now;
+        $status['last_error'] = '';
+    } elseif ($result === 'error') {
+        $status['last_error_at'] = $now;
+        $status['last_error'] = substr($error, 0, 200);
+    }
+    $temp = @tempnam($folder, '.status-');
+    if ($temp === false) return;
+    try {
+        if (@file_put_contents($temp, json_encode($status, JSON_THROW_ON_ERROR), LOCK_EX) !== false) @rename($temp, $path);
+    } catch (Throwable $ignored) {
+        // Monitoring must never stop a valid import.
+    } finally {
+        if (is_file($temp)) @unlink($temp);
+    }
+}
 function reportSkipped(string $sha, string $file, array $skipped, array $config): void {
     if ($skipped === []) return;
     $report = ['batch' => $file, 'skipped_count' => count($skipped), 'skipped' => $skipped];
@@ -164,6 +196,7 @@ function inspect(string $path, array $c): array {
         return [$rows, $images, $total, $exportType, $skipped];
     } finally { $z->close(); }
 }
+$source = 'mls';
 try {
     foreach (['zip', 'SimpleXML', 'pdo_mysql'] as $ext) if (!extension_loaded($ext)) fail('Missing extension: ' . $ext);
     $args = array_slice($argv, 1);
@@ -192,6 +225,7 @@ try {
     // Both feeds share an image store; serialize imports and orphan cleanup.
     $lock = fopen(ROOT . '/import.lock', 'c');
     if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) fail('Another import is running');
+    recordRun($source, 'running');
     if (glob($feedRoot . '/errors/*.zip')) fail('Resolve failed packages before continuing');
     $db = null;
     $files = array_merge(glob($feedRoot . '/processing/*.zip'), glob($feedRoot . '/incoming/*.zip'));
@@ -292,9 +326,11 @@ try {
             throw $e;
         }
     }
+    recordRun($source, 'success');
 } catch (Throwable $e) {
     // Avoid logging PDO errors containing connection details.
     $message = $e instanceof PDOException ? 'Database failure; SQLSTATE ' . preg_replace('/[^A-Z0-9]/', '', (string)$e->getCode()) . '; driver ' . (int)($e->errorInfo[1] ?? 0) : $e->getMessage();
+    recordRun($source, 'error', $e instanceof RuntimeException ? $message : 'Unexpected importer error');
     fwrite(STDERR, $message . "\n");
     exit(1);
 }

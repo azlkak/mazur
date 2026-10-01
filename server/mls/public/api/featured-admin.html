@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Panel ofert — MazurEstate</title>
-  <link rel="stylesheet" href="featured-admin.css?v=3">
-  <script src="featured-admin.js?v=4" defer></script>
+  <link rel="stylesheet" href="featured-admin.css?v=4">
+  <script src="featured-admin.js?v=5" defer></script>
 </head>
 <body>
   <main>
-    <header><p class="eyebrow">MazurEstate</p><h1>Panel ofert</h1><p>Wybieraj oferty na stronę główną i ukrywaj te, których nie chcesz pokazywać na portalu.</p></header>
+    <header><p class="eyebrow">MazurEstate</p><h1>Panel ofert</h1><p>Wybieraj oferty, ukrywaj je na portalu i sprawdzaj stan importów.</p></header>
     <p id="message" role="status" aria-live="polite"></p>
     <section id="login" hidden>
       <h2>Dostęp do panelu</h2>
@@ -19,6 +19,14 @@
     </section>
     <section id="editor" hidden>
       <div class="toolbar"><p>Zalogowano: <strong id="account"></strong></p><button id="logout" type="button" class="quiet">Wyloguj</button></div>
+      <div class="integration-panel" aria-labelledby="integration-title">
+        <div class="integration-heading"><div><p class="eyebrow">Monitoring</p><h2 id="integration-title">Status integracji</h2></div><button id="integration-refresh" type="button" class="quiet">Odśwież</button></div>
+        <p id="integration-intro">Sprawdzam importy…</p>
+        <div id="integration-cards" class="integration-cards" aria-live="polite"></div>
+        <h3>Ostatnio zaimportowane paczki</h3>
+        <ul id="integration-batches" class="batch-list"></ul>
+      </div>
+      <hr>
       <h2>Oferty na stronie głównej <small id="count"></small></h2>
       <p>Dodaj maksymalnie 10 ofert. Strzałkami ustaw kolejność. Na stronie głównej oferty można przewijać poziomo. Wycofane oferty znikają ze strony automatycznie.</p>
       <ol id="selected"></ol>

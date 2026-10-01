@@ -57,6 +57,78 @@ function throttle(string $key, int $limit, int $windowSeconds): int
     return $retryAfter;
 }
 
+function integrationStatus(PDO $db, array $config): array
+{
+    $root = dirname(__DIR__, 2) . '/mls';
+    $sourceColumn = $db->query("SHOW COLUMNS FROM mls_batches LIKE 'source'")->fetch() !== false;
+    $offerSourceColumn = portalOffersHaveSource($db);
+    $feeds = [];
+    foreach (['mls', 'esticrm'] as $source) {
+        $feedRoot = $source === 'mls' ? $root : $root . '/esticrm';
+        $enabled = $source === 'mls' ? (bool)($config['enabled'] ?? false) : (bool)($config['esticrm_import_enabled'] ?? false);
+        $countSql = 'SELECT COUNT(*) AS total, COALESCE(SUM(publishable = 1), 0) AS publishable FROM mls_offers';
+        if ($offerSourceColumn) $countSql .= ' WHERE source = ?';
+        $count = $db->prepare($countSql);
+        $count->execute($offerSourceColumn ? [$source] : []);
+        $offers = $source === 'esticrm' && !$offerSourceColumn
+            ? ['total' => 0, 'publishable' => 0]
+            : $count->fetch();
+
+        $batchSql = 'SELECT file_name, export_type, offer_count, UNIX_TIMESTAMP(imported_at) AS imported_at FROM mls_batches';
+        if ($sourceColumn) $batchSql .= ' WHERE source = ?';
+        $batchSql .= ' ORDER BY imported_at DESC LIMIT 6';
+        $query = $db->prepare($batchSql);
+        $query->execute($sourceColumn ? [$source] : []);
+        $batches = $source === 'esticrm' && !$sourceColumn ? [] : $query->fetchAll();
+        foreach ($batches as &$batch) {
+            $batch['offer_count'] = (int)$batch['offer_count'];
+            $batch['imported_at'] = (int)$batch['imported_at'];
+        }
+        unset($batch);
+
+        $health = null;
+        $healthPath = $root . '/logs/status-' . $source . '.json';
+        if (is_file($healthPath) && filesize($healthPath) <= 2048) {
+            $decoded = json_decode((string)file_get_contents($healthPath), true);
+            if (is_array($decoded)) $health = $decoded;
+        }
+        $counts = [];
+        $oldest = [];
+        foreach (['incoming', 'processing', 'errors'] as $folder) {
+            $files = glob($feedRoot . '/' . $folder . '/*.zip') ?: [];
+            $counts[$folder] = count($files);
+            $oldest[$folder] = $files ? min(array_map('filemtime', $files)) : null;
+        }
+        $lastRun = (int)($health['last_run_at'] ?? 0);
+        $state = 'ok';
+        $reason = '';
+        if (!$enabled) $state = 'disabled';
+        elseif ($counts['errors'] > 0 || ($health['result'] ?? '') === 'error') $state = 'error';
+        elseif ($lastRun === 0) $state = 'unknown';
+        elseif (time() - $lastRun > 8100 || (($health['result'] ?? '') === 'running' && time() - $lastRun > 5400)) { $state = 'stale'; $reason = 'run'; }
+        elseif (($oldest['incoming'] ?? 0) && time() - $oldest['incoming'] > 8100) { $state = 'stale'; $reason = 'incoming'; }
+        elseif (($oldest['processing'] ?? 0) && time() - $oldest['processing'] > 5400) { $state = 'stale'; $reason = 'processing'; }
+        elseif (($health['result'] ?? '') === 'running') $state = 'running';
+        elseif ($source === 'mls' && (!$batches || time() - $batches[0]['imported_at'] > 10800)) $state = 'quiet';
+        $feeds[$source] = [
+            'state' => $state,
+            'state_reason' => $reason,
+            'enabled' => $enabled,
+            'last_run_at' => $lastRun ?: null,
+            'last_success_at' => (int)($health['last_success_at'] ?? 0) ?: null,
+            'last_error_at' => (int)($health['last_error_at'] ?? 0) ?: null,
+            'last_error' => in_array(($health['result'] ?? ''), ['error'], true) ? (string)($health['last_error'] ?? '') : '',
+            'offers_total' => (int)$offers['total'],
+            'offers_publishable' => (int)$offers['publishable'],
+            'incoming' => $counts['incoming'],
+            'processing' => $counts['processing'],
+            'errors' => $counts['errors'],
+            'batches' => $batches,
+        ];
+    }
+    return ['checked_at' => time(), 'retention_days' => max(1, (int)($config['archive_retention_days'] ?? 7)), 'feeds' => $feeds];
+}
+
 try {
     $config = require dirname(__DIR__, 2) . '/mls/config.php';
     $allowed = array_map('strtolower', $config['featured_admin_emails'] ?? []);
@@ -84,6 +156,10 @@ try {
         foreach ($hidden as &$row) $row['id'] = $row['source'] === 'esticrm' ? 'esti-' . $row['source_id'] : $row['source_id'];
         unset($row);
         respond(200, ['authorized' => true, 'email' => $_SESSION['admin_email'], 'csrf' => $_SESSION['csrf'], 'selected' => $rows, 'hidden' => $hidden]);
+    }
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && ($_GET['action'] ?? '') === 'integration-status') {
+        if (!$authorized) respond(401, ['error' => 'login_required']);
+        respond(200, integrationStatus(db($config), $config));
     }
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') respond(405, ['error' => 'method_not_allowed']);
     $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');
