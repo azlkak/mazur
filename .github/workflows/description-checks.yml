@@ -1,4 +1,4 @@
-name: Description formatter checks
+name: Description and importer checks
 on:
   push:
     branches: [feat/formatted-offer-descriptions, main]
@@ -10,6 +10,8 @@ on:
       - 'server/mls/public/api/mls-offer.php'
       - 'scripts/test-description-formatter.php'
       - 'scripts/test-offer-description.mjs'
+      - 'server/mls/private/bin/import.php'
+      - 'scripts/test-importer-regions.php'
       - '.github/workflows/description-checks.yml'
   pull_request:
     paths:
@@ -20,6 +22,8 @@ on:
       - 'server/mls/public/api/mls-offer.php'
       - 'scripts/test-description-formatter.php'
       - 'scripts/test-offer-description.mjs'
+      - 'server/mls/private/bin/import.php'
+      - 'scripts/test-importer-regions.php'
       - '.github/workflows/description-checks.yml'
 permissions:
   contents: read
@@ -42,6 +46,8 @@ jobs:
           php -l server/mls/public/api/description-formatter.php
           php -l server/mls/public/api/mls-offer.php
           php scripts/test-description-formatter.php --require-dom
+          php -l server/mls/private/bin/import.php
+          php scripts/test-importer-regions.php
       - name: JavaScript syntax and description regression checks
         run: |
           node --check oferta/script.js
