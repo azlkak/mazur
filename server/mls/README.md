@@ -130,6 +130,11 @@ osobnego konta FTP ograniczonego do `mls/esticrm/incoming` i osobnego zadania
 cron: `import.php --source=esticrm`. Nie kierować paczek EstiCRM do
 `mls/incoming` używanego przez MLS.
 
+Ograniczenie do województwa mazowieckiego dotyczy wyłącznie źródła MLS.
+W portalu eksportowym EstiCRM pole „Wysyłaj TYLKO z lokalizacji” pozostaje
+puste, a importer nie nakłada filtra regionalnego na ręcznie wybrane oferty.
+Nie wolno przenosić filtra MLS na oferty własne.
+
 Przed włączeniem drugiego eksportu: wykonać kopię bazy, uruchomić migrację
 `private/migrations/20260929_offer_sources.sql`, wdrożyć importer i punkty API,
 utworzyć katalogi `esticrm/incoming`, `esticrm/processing`, `esticrm/archive`
