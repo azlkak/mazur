@@ -1,12 +1,25 @@
 name: Description formatter checks
 on:
   push:
-    branches: [feat/formatted-offer-descriptions]
+    branches: [feat/formatted-offer-descriptions, main]
+    paths:
+      - 'assets/js/offer-description.mjs'
+      - 'assets/css/offer-description.css'
+      - 'oferta/script.js'
+      - 'server/mls/public/api/description-formatter.php'
+      - 'server/mls/public/api/mls-offer.php'
+      - 'scripts/test-description-formatter.php'
+      - 'scripts/test-offer-description.mjs'
+      - '.github/workflows/description-checks.yml'
   pull_request:
     paths:
       - 'assets/js/offer-description.mjs'
+      - 'assets/css/offer-description.css'
+      - 'oferta/script.js'
       - 'server/mls/public/api/description-formatter.php'
+      - 'server/mls/public/api/mls-offer.php'
       - 'scripts/test-description-formatter.php'
+      - 'scripts/test-offer-description.mjs'
       - '.github/workflows/description-checks.yml'
 permissions:
   contents: read
@@ -25,5 +38,12 @@ jobs:
           git checkout --detach FETCH_HEAD
       - name: PHP syntax and source-preservation checks
         run: |
+          php -v
           php -l server/mls/public/api/description-formatter.php
+          php -l server/mls/public/api/mls-offer.php
           php scripts/test-description-formatter.php --require-dom
+      - name: JavaScript syntax and description regression checks
+        run: |
+          node --check oferta/script.js
+          node --check assets/js/offer-description.mjs
+          node --test scripts/test-offer-description.mjs
