@@ -63,6 +63,7 @@ try {
             'rooms' => (int)($fields['apartmentRoomNumber'] ?? 0),
             'floor' => (string)($fields['apartmentFloor'] ?? ''),
             'exportedAt' => (string)$row['source_export_at'],
+            'imageCount' => count(array_filter($images, static fn($name): bool => is_string($name))),
             'images' => array_map(
                 static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
                 array_slice(array_values(array_filter($images, static fn($name): bool => is_string($name))), 0, 5)
