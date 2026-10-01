@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
+// Optional during a rolling deployment: missing formatter keeps the plain API.
+if (is_file(__DIR__ . '/description-formatter.php')) require_once __DIR__ . '/description-formatter.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -22,9 +24,10 @@ function firstText(array $fields, string ...$keys): string
 
 function publicDescription(string $value): string
 {
-    $value = preg_replace('/<br\s*\/?>/i', "\n", $value) ?? $value;
+    // Preserve block boundaries for legacy clients; NBSP is a space, not a line.
+    $value = preg_replace('~<(?:br|hr)\b[^>]*>|</(?:p|div|h[1-6]|li|ul|ol|section|article|blockquote|tr|td|th)\s*>~i', "\n", $value) ?? $value;
     $value = html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-    $value = preg_replace("/\r\n?|\x{00A0}/u", "\n", $value) ?? $value;
+    $value = str_replace(["\r\n", "\r", "\u{00A0}", "\u{202F}"], ["\n", "\n", ' ', ' '], $value);
     $value = preg_replace('/[ \t]+/u', ' ', $value) ?? $value;
     $value = preg_replace('/\n{3,}/u', "\n\n", $value) ?? $value;
     return trim($value);
@@ -122,6 +125,9 @@ try {
         'buildingFloors' => firstText($fields, 'buildingFloornumber'),
         'buildingYear' => firstText($fields, 'buildingYear'),
         'description' => publicDescription(firstText($fields, 'descriptionWebsite', 'description')),
+        'descriptionDocument' => function_exists('mazurDescriptionDocument')
+            ? mazurDescriptionDocument(firstText($fields, 'descriptionWebsite', 'description')) : null,
+        'descriptionLanguage' => 'pl',
         'features' => array_slice($features, 0, 20),
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
