@@ -89,7 +89,10 @@ function isMazowieckie(array $fields): bool {
     $province = $exportProvince !== '' ? $exportProvince : trim((string)($fields['locationProvinceName'] ?? ''));
     return strtoupper($province) === 'MAZOWIECKIE';
 }
-function inspect(string $path, array $c): array {
+function isSupportedRegion(array $fields, string $source): bool {
+    return $source !== 'mls' || isMazowieckie($fields);
+}
+function inspect(string $path, array $c, string $source): array {
     if (is_link($path) || filesize($path) > $c['max_zip_bytes']) fail('ZIP exceeds limit or is a symlink');
     $z = new ZipArchive();
     if ($z->open($path, ZipArchive::CHECKCONS) !== true) fail('Invalid or incomplete ZIP');
@@ -169,9 +172,9 @@ function inspect(string $path, array $c): array {
                     $fields[$key] = (string)$value;
                 }
             }
-            // Keep the ID in a full-feed snapshot, but do not read or store
-            // pictures for offers outside the region. Deletes are ID-only.
-            if ($action !== 'delete' && !isMazowieckie($fields)) {
+            // MLS remains Mazowieckie-only. EstiCRM has no region filter.
+            // Keep excluded IDs in full snapshots, without storing their images.
+            if ($action !== 'delete' && !isSupportedRegion($fields, $source)) {
                 $rows[$id] = ['action'=>$action, 'stamp'=>$stamp, 'fields'=>$fields, 'gallery'=>null, 'out_of_region'=>true];
                 continue;
             }
@@ -212,7 +215,7 @@ try {
     $c = require ROOT . (is_file(ROOT . '/config.php') ? '/config.php' : '/config.example.php');
     if ($dry) {
         if ($checkPath === null) fail('Usage: php import.php [--source=esticrm] --check /absolute/package.zip');
-        [$rows, $images, $bytes, $exportType, $skipped] = inspect($checkPath, $c);
+        [$rows, $images, $bytes, $exportType, $skipped] = inspect($checkPath, $c, $source);
         $inRegion = count(array_filter($rows, fn($row) => empty($row['out_of_region']) && $row['action'] !== 'delete'));
         echo json_encode(['export'=>$exportType,'offers'=>count($rows),'offers_in_region'=>$inRegion,'images'=>count($images),'expanded_bytes'=>$bytes,'skipped_count'=>count($skipped),'skipped'=>array_slice($skipped,0,30)], JSON_PRETTY_PRINT) . "\n";
         exit;
@@ -243,7 +246,7 @@ try {
             $q = $db->prepare('SELECT sha256 FROM mls_batches WHERE source=? AND sha256=?'); $q->execute([$source,$sha]);
             $skipped = [];
             if (!$q->fetchColumn()) {
-                [$rows, $images, $total, $exportType, $skipped] = inspect($path, $c);
+                [$rows, $images, $total, $exportType, $skipped] = inspect($path, $c, $source);
                 if (disk_free_space(ROOT) < $total + 512 * 1024 ** 2) fail('Insufficient staging space');
                 $z = new ZipArchive(); if ($z->open($path) !== true) fail('Cannot reopen ZIP');
                 try {
@@ -286,7 +289,7 @@ try {
                     $gallery = $r['gallery'] ?? ($old ? json_decode($old['images_json'],true,512,JSON_THROW_ON_ERROR) : []);
                     $f = $r['fields'];
                     // Conservative candidate flag. Public API remains disabled separately.
-                    $visible = ($f['status'] ?? '') === '3' && isMazowieckie($f) && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
+                    $visible = ($f['status'] ?? '') === '3' && isSupportedRegion($f, $source) && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
                     $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
                     $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
                     $put->execute([$source,$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
