@@ -51,9 +51,9 @@ function recordRun(string $source, string $result, string $error = ''): void {
         if (is_file($temp)) @unlink($temp);
     }
 }
-function reportSkipped(string $sha, string $file, array $skipped, array $config): void {
+function reportSkipped(string $source, string $sha, string $file, array $skipped, array $config): void {
     if ($skipped === []) return;
-    $report = ['batch' => $file, 'skipped_count' => count($skipped), 'skipped' => $skipped];
+    $report = ['source' => $source, 'batch' => $file, 'skipped_count' => count($skipped), 'skipped' => $skipped];
     $json = json_encode($report, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     if (file_put_contents(ROOT . '/logs/skipped-' . $sha . '.json', $json . "\n", LOCK_EX) === false) {
         event('WARNING: cannot save skipped-offer report for ' . $sha);
@@ -61,7 +61,8 @@ function reportSkipped(string $sha, string $file, array $skipped, array $config)
     event('WARNING: skipped ' . count($skipped) . ' offer records in batch ' . $sha);
     $recipients = $config['notification_emails'] ?? [];
     if (!is_array($recipients)) { event('WARNING: invalid notification email configuration'); return; }
-    $lines = ["Paczka MLS: $file", 'Pominięte rekordy: ' . count($skipped), ''];
+    $sourceLabel = $source === 'esticrm' ? 'EstiCRM' : 'MLS';
+    $lines = ["Paczka $sourceLabel: $file", 'Pominięte rekordy: ' . count($skipped), ''];
     foreach (array_slice($skipped, 0, 30) as $issue) {
         $lines[] = 'Oferta ' . ($issue['id'] ?: '(pusty numer)') . ': ' . $issue['reason'];
     }
@@ -71,7 +72,7 @@ function reportSkipped(string $sha, string $file, array $skipped, array $config)
             event('WARNING: invalid notification email configuration');
             continue;
         }
-        $sent = mail($to, 'Mazur Estate - raport importu MLS', implode("\n", $lines), [
+        $sent = mail($to, 'Mazur Estate - raport importu ' . $sourceLabel, implode("\n", $lines), [
             'From' => 'powiadomienia@mazurestate.pl',
             'Content-Type' => 'text/plain; charset=UTF-8',
         ]);
@@ -307,7 +308,7 @@ try {
                 if (!unlink($path)) fail('Cannot remove duplicate package');
             } elseif (!rename($path, $archivePath)) fail('Cannot archive committed package');
             event($source . ': imported batch ' . $sha);
-            try { reportSkipped($sha, basename($path), $skipped, $c); }
+            try { reportSkipped($source, $sha, basename($path), $skipped, $c); }
             catch (Throwable $notificationError) { event('WARNING: could not send skipped-offer report for ' . $sha); }
             $keepDays = max(1, (int)($c['archive_retention_days'] ?? 7));
             foreach (glob($feedRoot . '/archive/*.zip') as $oldArchive) {

@@ -136,7 +136,7 @@ try {
         ),
     ];
 
-    echo json_encode(['demo' => true, 'offer' => $offer], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(['demo' => false, 'offer' => $offer], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Throwable $error) {
     http_response_code(500);
     echo '{"error":"Nie udało się pobrać oferty"}';

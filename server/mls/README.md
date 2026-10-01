@@ -58,6 +58,24 @@ po przywróceniu. Przed wdrożeniem nowych plików PHP uruchomić migrację
 Publiczne API i panel obsługują zarówno obecny schemat `mls_offers` bez kolumny
 `source`, jak i schemat po planowanej migracji `20260929_offer_sources.sql`.
 
+### Status integracji w panelu ofert
+
+Po zalogowaniu ten sam panel pokazuje osobno MLS i EstiCRM: ostatnie
+uruchomienie importera, ostatni import, liczby ofert, paczki oczekujące,
+przetwarzane i błędne oraz historię ostatnich paczek. Odczyt jest dostępny
+wyłącznie dla uprawnionych adresów po logowaniu kodem. Panel odświeża dane
+co minutę i pozwala odświeżyć je ręcznie.
+
+Importer zapisuje prywatny plik `logs/status-<źródło>.json` przy rozpoczęciu,
+poprawnym zakończeniu i błędzie każdego przebiegu, także gdy nie ma nowych
+paczek. Dzięki temu panel odróżnia działający harmonogram bez nowych danych
+od braku uruchomienia. Po ponad 2 godzinach i 15 minutach bez potwierdzenia
+pokazuje ostrzeżenie; paczki w `errors/` również wymagają uwagi. Jeżeli
+importer danego źródła nie zapisuje jeszcze statusu, panel uczciwie pokaże
+„Brak telemetrii”, zachowując historię z bazy. Migrację dwóch źródeł wykonano
+01.10.2026; status MLS potwierdził poprawny przebieg o 13:00 UTC. Import
+EstiCRM pozostaje wyłączony do sprawdzenia pierwszej rzeczywistej paczki.
+
 Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
 bezpieczeństwa mogą być przechowywane lokalnie przez administratora.
@@ -101,19 +119,26 @@ Połączenie z bazą jest odnawiane po długich etapach odczytu ZIP i zdjęć, �
 nie wygasło przed transakcją. Konto ma 50 GiB; po imporcie zajęte było około
 29,36 GiB.
 
-### Drugi eksport: własne oferty EstiCRM (kod przygotowany, jeszcze nie wdrożony)
+### Drugi eksport: wybrane oferty EstiCRM (konfiguracja w toku)
 
 Eksport własnych ofert powinien używać opcji **„Dowolny – format EstiCRMXml”**
-w EstiCRM, osobnego konta FTP ograniczonego do `mls/esticrm/incoming` i osobnego
-zadania cron: `import.php --source=esticrm`. Nie kierować paczek EstiCRM do
+w EstiCRM i trybu **ręcznego**. Po ustawieniu oferty jako „Aktywna publikacja”
+pracownik zaznacza portal MazurEstate w polu „EX” tej oferty. Dzięki temu
+wybiera w CRM, które oferty pojawią się na stronie; tryb automatyczny wysłałby
+wszystkie aktywne oferty spełniające ustawienia portalu. Ten eksport potrzebuje
+osobnego konta FTP ograniczonego do `mls/esticrm/incoming` i osobnego zadania
+cron: `import.php --source=esticrm`. Nie kierować paczek EstiCRM do
 `mls/incoming` używanego przez MLS.
 
 Przed włączeniem drugiego eksportu: wykonać kopię bazy, uruchomić migrację
 `private/migrations/20260929_offer_sources.sql`, wdrożyć importer i punkty API,
 utworzyć katalogi `esticrm/incoming`, `esticrm/processing`, `esticrm/archive`
-i `esticrm/errors` poza `public_html`, a następnie ustawić w prywatnym
-`config.php` `esticrm_import_enabled => true`. Dopiero po sprawdzeniu składni
-PHP i importu pierwszej paczki włączyć cron oraz eksport w EstiCRM. Paczka
+i `esticrm/errors` poza `public_html`. Po otrzymaniu pierwszej paczki uruchomić
+`import.php --source=esticrm --check /bezwzgledna/sciezka/paczka.zip`; kontrola
+działa przy wyłączonym imporcie. Dopiero po sprawdzeniu składni PHP i wyniku
+kontroli ustawić w prywatnym `config.php` `esticrm_import_enabled => true`,
+zaimportować tę paczkę ręcznie, sprawdzić publiczne API i włączyć osobny cron.
+Paczka
 całościowa usuwa oferty tylko własnego źródła. Publiczne identyfikatory MLS
 pozostają liczbami; oferty EstiCRM dostają prefiks `esti-`.
 
@@ -121,28 +146,40 @@ Lista wyników daje pierwszeństwo ofertom własnym. Identyczne oferty z MLS
 i EstiCRM są ukrywane na liście, jeśli oba eksporty podają to samo `companyId`
 i numer oferty. Inne duplikaty wymagają osobnego sprawdzenia.
 
-W formularzu EstiCRM: nazwa portalu `MazurEstate — własne oferty`, adres hosta
+W formularzu EstiCRM: nazwa portalu `MazurEstate — wybrane oferty`, adres hosta
 `147.93.73.136` (bez `ftp://`), port `21`, login nowego konta ograniczonego do
 `mls/esticrm/incoming`, a katalogi zdjęć oraz XML/ZIP pozostawić puste. Hasło
-tego konta wprowadza właściciel bezpośrednio w Hostingerze i EstiCRM. Pozostawić
-automatyczną wysyłkę tylko wtedy, gdy wszystkie aktywne oferty własne mają
-trafiać na stronę. Pierwsza realna paczka musi potwierdzić, że nazwy plików,
+tego konta wprowadza właściciel bezpośrednio w Hostingerze i EstiCRM. Wybrać
+**eksport ręczny** i początkowo zaznaczyć w „EX” tylko jedną ofertę testową.
+Pierwsza realna paczka musi potwierdzić, że nazwy plików,
 struktura ZIP i znaczniki aktywnej oferty pasują do walidacji importera.
+Po imporcie sprawdzić szczegóły i zdjęcia wybranej oferty na stronie, a
+następnie wycofać jej zaznaczenie w „EX” i sprawdzić usunięcie z portalu.
+MLS powinien w obu krokach pozostać bez zmian.
 
 Lista wyników pobiera wszystkie oferty do publikacji strumieniowo z API, z
 pięcioma zdjęciami podglądowymi na ofertę, i stronicuje je w przeglądarce.
 Przy dalszym wzroście katalogu warto przenieść filtrowanie i stronicowanie
 do API, aby nie przesyłać całej listy przy każdym otwarciu wyszukiwarki.
 
-Status: importer działa na hostingu Hostinger dla
-`darkgreen-rabbit-981798.hostingersite.com`. Publiczne API i frontend
-wyświetlają rzeczywiste oferty MLS. API zwraca wyłącznie jawnie wybrane pola
-i nie publikuje danych kontaktowych ani dokładnego adresu.
+Status 01.10.2026: publiczne API i frontend wyświetlają rzeczywiste oferty MLS.
+API zwraca wyłącznie jawnie wybrane pola i nie publikuje danych kontaktowych
+ani dokładnego adresu. Godzinny cron MLS wskazywał usuniętą ścieżkę
+`darkgreen-rabbit-981798.hostingersite.com` i zwracał `Could not open input file`.
+Zastąpiono go pojedynczym zadaniem `0 * * * *` uruchamiającym importer pod
+`domains/mazurestate.pl/mls/bin/import.php` (UID `7SEAMmQMRq`). Przebieg po
+wdrożeniu importera dwuzródłowego 01.10.2026 o 13:00 UTC zakończył się
+poprawnie według prywatnego `logs/status-mls.json`. Odbiór następnej paczki
+MLS nadal wymaga weryfikacji. Ostatnia paczka
+zapisana w `mls_batches` została zaimportowana 30.09.2026 o 13:00 UTC;
+powiadomienie eksportera z 30.09.2026 19:29 czasu polskiego zgłasza blokadę
+zapisu na FTP portalu. Trzeba osobno sprawdzić adres FTP i dostęp konta
+eksportu MLS, zanim uzna się synchronizację za przywróconą.
 
 ## Serwer
 
 ```text
-/home/u101822986/domains/darkgreen-rabbit-981798.hostingersite.com/mls/
+/home/u101822986/domains/mazurestate.pl/mls/
   config.php          # prywatne dane bazy, tryb 0600
   bin/import.php      # importer uruchamiany wyłącznie z CLI
   schema.sql
@@ -155,10 +192,18 @@ i nie publikuje danych kontaktowych ani dokładnego adresu.
 ```
 
 - Baza: `u101822986_mls`; osobny użytkownik o tej samej nazwie.
-- Konto FTP MLS jest ograniczone do katalogu `mls/incoming`.
-- Zadanie Cron w hPanelu: raz na godzinę (`0 * * * *`).
-- Polecenie: `/usr/bin/php /home/u101822986/domains/darkgreen-rabbit-981798.hostingersite.com/mls/bin/import.php`.
-- Importer jest włączony. Dane dostępowe nie zostały przekazane MLS.
+- W wiadomości przekazanej MLS podano host `ftp.mazurestate.pl`, port `21`,
+  login `u101822986.mls`, katalog `/` i tryb pasywny; użytkownik potwierdził,
+  że tych danych używa nadawca. Rekord DNS `ftp` nadal wskazuje
+  `147.93.73.136`. Konto `u101822986.mls` jest obecnie ograniczone do
+  `domains/mazurestate.pl/mls/incoming`. Osobne konto
+  `u101822986.esticrm` ograniczono do `mls/esticrm/incoming`.
+- Zadanie Cron w hPanelu: raz na godzinę (`0 * * * *`), polecenie:
+  `/usr/bin/php /home/u101822986/domains/mazurestate.pl/mls/bin/import.php`.
+- Importer uruchomił się 01.10.2026 o 09:00 czasu polskiego i przetworzył
+  zaległą paczkę `EstiCRM_2553_20260930152903.zip` (28 rekordów). Potwierdzają
+  to wyjście zadania Cron i nowy wpis w `mls_batches` z czasem 07:00:04 UTC.
+  Dostarczanie kolejnych paczek przez FTP nadal wymaga osobnej weryfikacji.
 - Tymczasowy klucz SSH użyty przy wdrożeniu został usunięty.
 
 ## Formularz kontaktowy i EstiCRM
