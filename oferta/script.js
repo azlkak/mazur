@@ -2,10 +2,7 @@ const MLS_DETAIL_API='https://api.mazurestate.pl/api/mls-offer.php';
 
 // Resolve from this shared script, including language-prefixed and project URLs.
 const descriptionAssets=new URL('../assets/',document.currentScript?.src||document.baseURI);
-const descriptionStyles=document.createElement('link');
-descriptionStyles.rel='stylesheet';descriptionStyles.href=new URL('css/offer-description.css?v=1',descriptionAssets).href;
-document.head.appendChild(descriptionStyles);
-const descriptionRenderer=import(new URL('js/offer-description.mjs?v=1',descriptionAssets).href).catch(()=>null);
+const descriptionRenderer=import(new URL('js/offer-description.mjs?v=20261001-2',descriptionAssets).href).catch(()=>null);
 
 const text=(selector,value)=>{const element=document.querySelector(selector);if(element)element.textContent=value};
 const categoryFor=value=>{const name=String(value||'').toLocaleLowerCase('pl');if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return 'mieszkania'};
@@ -56,7 +53,9 @@ function renderDescription(offer){
   const heading=document.createElement('h2');heading.textContent=offer.title;
   section.append(eyebrow,heading);
   const paragraphs=String(offer.description||'Skontaktuj się z nami, aby poznać szczegóły tej nieruchomości.').split(/\n+/).map(item=>item.trim()).filter(Boolean);
-  paragraphs.forEach(content=>{const paragraph=document.createElement('p');paragraph.textContent=content;section.appendChild(paragraph)});
+  const reader=document.createElement('div');reader.className='description-reader';reader.lang='pl';
+  paragraphs.forEach(content=>{const paragraph=document.createElement('p');paragraph.textContent=content;reader.appendChild(paragraph)});
+  section.appendChild(reader);
   // The plain description is always available, even if the new module fails.
   // Only the description changes: photos, prices and the enquiry form do not wait.
   void descriptionRenderer.then(module=>{
