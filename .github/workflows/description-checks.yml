@@ -1,0 +1,27 @@
+name: Description formatter checks
+on:
+  pull_request:
+    paths:
+      - 'assets/js/offer-description.mjs'
+      - 'server/mls/public/api/description-formatter.php'
+      - 'scripts/test-description-formatter.php'
+      - '.github/workflows/description-checks.yml'
+permissions:
+  contents: read
+jobs:
+  formatter:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact PR commit without credentials
+        env:
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          git init .
+          git remote add origin https://github.com/azlkak/mazur.git
+          git fetch --depth=1 origin "$SOURCE_SHA"
+          git checkout --detach FETCH_HEAD
+      - name: PHP syntax and source-preservation checks
+        run: |
+          php -l server/mls/public/api/description-formatter.php
+          php scripts/test-description-formatter.php --require-dom
