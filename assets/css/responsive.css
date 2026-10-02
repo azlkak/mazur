@@ -130,3 +130,21 @@ body[data-section-layout="services"] main>.shell{width:min(1360px,calc(100% - va
   body[data-property-type] .content{padding-top:var(--me-section-half)!important;padding-bottom:var(--me-section-space)!important}
   .advisory-hero,.developer-hero,.medical-hero{margin-top:var(--me-section-space)!important}
 }
+
+/* Keep floating labels in the document flow on narrow screens. */
+@media(max-width:650px){
+  #hero-inner{flex-direction:column!important;align-items:stretch!important;justify-content:center!important;padding-bottom:62px!important}
+  #hero-content{padding-bottom:18px!important}
+  #hero-stat-chip{position:relative!important;inset:auto!important;align-self:flex-start;flex-direction:row!important;align-items:center!important;gap:8px!important;margin:0 20px!important}
+  #hero-stat-chip span:last-child{max-width:135px;line-height:1.25}
+
+  .hero:has(.hero-photos){padding:36px 20px;gap:26px}
+  .hero:has(.hero-photos) h1{font-size:clamp(29px,8vw,36px)!important;overflow-wrap:normal;word-break:normal;hyphens:auto}
+  .hero-photos{height:auto!important;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;align-items:end}
+  .hero-photos .portrait{position:relative;inset:auto!important;width:100%;height:clamp(190px,58vw,250px)!important;border-radius:22px}
+  .hero-photos .portrait-one{border-top-left-radius:72px}
+  .hero-photos .portrait-two{border-bottom-right-radius:72px}
+  .hero-photos .experience-chip{position:relative;grid-column:1/-1;justify-self:center;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;white-space:normal}
+
+  .site-footer .footer-social,#footer-grid>div:first-child>div:last-child{grid-column:1/-1!important;justify-content:center!important;gap:12px!important;margin-top:8px!important}
+}
