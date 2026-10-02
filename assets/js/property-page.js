@@ -29,4 +29,4 @@ const pickerButton = document.querySelector('.language-button');
 pickerButton.addEventListener('click',()=>{const open=picker.classList.toggle('is-open');pickerButton.setAttribute('aria-expanded',String(open));});
 document.addEventListener('click',event=>{if(!picker.contains(event.target)){picker.classList.remove('is-open');pickerButton.setAttribute('aria-expanded','false');}});
 const chromeStyles=document.createElement('link');chromeStyles.rel='stylesheet';chromeStyles.href='../assets/css/site-chrome.css?v=20261002-logo';document.head.appendChild(chromeStyles);
-const chromeScript=document.createElement('script');chromeScript.src='../assets/js/site-chrome.js?v=20261002-logo';document.body.appendChild(chromeScript);
+const chromeScript=document.createElement('script');chromeScript.src='../assets/js/site-chrome.js?v=20261002-layout';document.body.appendChild(chromeScript);

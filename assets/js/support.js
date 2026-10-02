@@ -1913,7 +1913,7 @@
 // Local file previews do not resolve directory URLs to index.html automatically.
 const responsiveStyles = document.createElement("link");
 responsiveStyles.rel = "stylesheet";
-responsiveStyles.href = "assets/css/responsive.css?v=6";
+responsiveStyles.href = "assets/css/responsive.css?v=20261002-layout";
 document.head.appendChild(responsiveStyles);
 
 if (location.protocol === "file:") {

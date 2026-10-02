@@ -106,5 +106,5 @@ function setupTestimonials(){const track=document.getElementById('testimonials-t
 
 loadOffer().finally(()=>{
   setupTestimonials();
-  const sharedChromeScript=document.createElement('script');sharedChromeScript.src='../assets/js/site-chrome.js';document.body.appendChild(sharedChromeScript);
+  const sharedChromeScript=document.createElement('script');sharedChromeScript.src='../assets/js/site-chrome.js?v=20261002-layout';document.body.appendChild(sharedChromeScript);
 });

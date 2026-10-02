@@ -15,7 +15,7 @@
     const main = document.querySelector('main');
     if (!main) return;
     const section = document.createElement('section');
-    section.className = 'compact-search';
+    section.className = 'compact-search shell';
     section.setAttribute('aria-labelledby', 'compact-search-title');
     section.innerHTML = `<div class="compact-search-intro"><span>${copy.eyebrow}</span><h2 id="compact-search-title">${copy.title}</h2><p>${copy.intro}</p></div>
       <div class="compact-search-type">${label}</div>
@@ -52,11 +52,13 @@
     }));
     const normalize = value => String(value || '').toLocaleLowerCase('pl').replace(/ł/g, 'l').normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim();
     let locations = [];
-    const close = () => { list.hidden = true; input.setAttribute('aria-expanded', 'false'); };
+    let locationRequested = false;
+    const close = () => { locationRequested = false; list.hidden = true; input.setAttribute('aria-expanded', 'false'); };
     const render = () => {
+      if (!locationRequested || document.activeElement !== input) return close();
       const query = normalize(input.value);
       list.replaceChildren();
-      if (!locations.length) return close();
+      if (!locations.length) { list.hidden = true; input.setAttribute('aria-expanded', 'false'); return; }
       const matches = locations.filter(name => normalize(name).includes(query)).slice(0, 12);
       if (!matches.length) return close();
       matches.forEach(name => {
@@ -65,18 +67,27 @@
         button.type = 'button';
         button.setAttribute('role', 'option');
         button.textContent = name;
-        button.addEventListener('click', () => { input.value = name; close(); input.focus(); });
+        button.addEventListener('click', () => { input.value = name; input.focus(); close(); });
         item.appendChild(button);
         list.appendChild(item);
       });
       list.hidden = false;
       input.setAttribute('aria-expanded', 'true');
     };
-    input.addEventListener('input', render);
-    input.addEventListener('focus', render);
+    const openLocations = () => { locationRequested = true; render(); };
+    input.addEventListener('input', openLocations);
+    input.addEventListener('pointerdown', openLocations);
+    input.addEventListener('focus', openLocations);
+    section.querySelector('.compact-search-location').addEventListener('focusout', event => {
+      if (!event.currentTarget.contains(event.relatedTarget)) close();
+    });
     input.addEventListener('keydown', event => {
       if (event.key === 'Escape') close();
-      if (event.key === 'ArrowDown' && !list.hidden) { event.preventDefault(); list.querySelector('button')?.focus(); }
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        openLocations();
+        list.querySelector('button')?.focus();
+      }
     });
     section.addEventListener('keydown', event => { if (event.key === 'Escape') { close(); closeTransaction(); } });
     document.addEventListener('pointerdown', event => {
