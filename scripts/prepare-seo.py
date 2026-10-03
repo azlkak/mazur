@@ -114,5 +114,5 @@ for route, page in pages.items():
             ET.SubElement(item, f'{{{XHTML}}}link', rel='alternate', hreflang=alternate, href=url_for(route, alternate if alternate != "x-default" else "pl"))
 ET.indent(tree)
 ET.ElementTree(tree).write(ROOT / 'sitemap.xml', encoding='utf-8', xml_declaration=True)
-(ROOT / 'robots.txt').write_text('# GitHub project Pages serves this file below the origin root.\n# Submit sitemap.xml directly in Search Console; install this policy at /robots.txt on the final domain.\nUser-agent: *\nAllow: /\nSitemap: ' + BASE + 'sitemap.xml\n')
+(ROOT / 'robots.txt').write_text('User-agent: *\nAllow: /\nSitemap: ' + BASE + 'sitemap.xml\nSitemap: ' + BASE + 'sitemap-oferty.xml\n')
 print(f'Prepared {len(pages)} existing pages; {sum(p["index"] for p in pages.values()) * len(LANGS)} sitemap URLs.')

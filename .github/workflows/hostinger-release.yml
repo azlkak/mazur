@@ -1,0 +1,71 @@
+name: Hostinger release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hostinger-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate PHP and JavaScript
+        run: |
+          find server/mls/public -name '*.php' -print0 | xargs -0 -n1 php -l
+          node --check oferta/script.js
+          node --check wyniki-wyszukiwania/script.js
+          node --check assets/js/seo.js
+          python3 scripts/check-language-routes.py
+      - name: Build public files
+        run: |
+          python3 scripts/build-hostinger-site.py "$RUNNER_TEMP/mazur-build"
+          printf '{"source_sha":"%s"}\n' "$GITHUB_SHA" > "$RUNNER_TEMP/mazur-build/public/release.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hostinger-public
+          path: ${{ runner.temp }}/mazur-build/public/
+          include-hidden-files: true
+          retention-days: 14
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: hostinger-public
+          path: ${{ runner.temp }}/mazur-public
+      - name: Update public-only deployment branch
+        env:
+          PUBLIC_DIR: ${{ runner.temp }}/mazur-public
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git show-ref --verify --quiet refs/remotes/origin/hostinger-live; then
+            git worktree add "$RUNNER_TEMP/mazur-deploy" -B hostinger-live origin/hostinger-live
+          else
+            git worktree add --detach "$RUNNER_TEMP/mazur-deploy"
+            git -C "$RUNNER_TEMP/mazur-deploy" checkout --orphan hostinger-live
+          fi
+          rsync -a --delete --exclude=.git/ --exclude=.git "$PUBLIC_DIR/" "$RUNNER_TEMP/mazur-deploy/"
+          cd "$RUNNER_TEMP/mazur-deploy"
+          git add --all
+          if ! git diff --cached --quiet; then
+            git commit -m "Deploy public site from ${GITHUB_SHA}"
+            git push origin HEAD:hostinger-live
+          fi

@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteRule ^sitemap-oferty\.xml$ sitemap-oferty.php [L]
+
+<IfModule mod_headers.c>
+  SetEnvIfNoCase Host "^seo-stage\.mazurestate\.pl$" MAZUR_STAGE=1
+  Header always set X-Robots-Tag "noindex, nofollow" env=MAZUR_STAGE
+</IfModule>

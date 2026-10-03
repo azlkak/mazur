@@ -93,8 +93,16 @@ async function loadOffer(){
   document.querySelectorAll('.language-picker a').forEach(link=>{const next=new URL(link.href);const label=link.textContent.trim();next.searchParams.set('id',id||'');next.searchParams.set('lang',label==='UKR'?'uk':label.toLowerCase());link.href=next.toString()});
   if(!id){showUnavailable('Brakuje numeru oferty w adresie strony.');return}
   try{
-    const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}`,{headers:{Accept:'application/json'}});
-    const payload=await response.json();if(!response.ok||!payload.offer)throw new Error(payload.error||'Oferta nie jest dostępna');
+    const serverSeed=document.getElementById('server-offer');
+    let payload;
+    if(serverSeed){
+      payload=JSON.parse(serverSeed.textContent);
+    }else{
+      const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}`,{headers:{Accept:'application/json'}});
+      payload=await response.json();
+      if(!response.ok)throw new Error(payload.error||'Oferta nie jest dostępna');
+    }
+    if(!payload.offer||String(payload.offer.id)!==id)throw new Error('Oferta nie jest dostępna');
     const offer=payload.offer,category=categoryFor(offer.type),isRent=offer.transaction==='wynajem';
     const locationName=[offer.city,offer.district].filter(Boolean).join(', '),locationFull=[locationName,offer.province].filter(Boolean).join(' · ');
     const transactionText=isRent?'na wynajem':'na sprzedaż',eyebrow=`${offer.type} ${transactionText}`.toLocaleUpperCase('pl');
