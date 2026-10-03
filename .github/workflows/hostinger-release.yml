@@ -62,7 +62,8 @@ jobs:
             git worktree add --detach "$RUNNER_TEMP/mazur-deploy"
             git -C "$RUNNER_TEMP/mazur-deploy" checkout --orphan hostinger-live
           fi
-          rsync -a --delete --exclude=.git/ --exclude=.git "$PUBLIC_DIR/" "$RUNNER_TEMP/mazur-deploy/"
+          rsync -a --checksum --delete --exclude=.git/ --exclude=.git "$PUBLIC_DIR/" "$RUNNER_TEMP/mazur-deploy/"
+          cmp "$PUBLIC_DIR/release.json" "$RUNNER_TEMP/mazur-deploy/release.json"
           cd "$RUNNER_TEMP/mazur-deploy"
           git add --all
           if ! git diff --cached --quiet; then
