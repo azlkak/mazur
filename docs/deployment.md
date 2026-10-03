@@ -3,15 +3,15 @@
 Stan wdrożenia: 03.10.2026. GitHub `azlkak/mazur` jest repozytorium kodu,
 natomiast produkcyjny ruch `mazurestate.pl` i `www.mazurestate.pl` obsługuje
 Hostinger. Workflow `Hostinger release` buduje publiczne pliki po pushu do
-`main` i zapisuje je na gałęzi `hostinger-live`. Hostinger należy połączyć
-z tą gałęzią i katalogiem `site` przez Git auto-deployment. Dopiero potwierdzone
-włączenie tego połączenia zapewnia automatyczną publikację. GitHub Pages może
+`main` i zapisuje je na gałęzi `hostinger-live`. Hostinger jest połączony
+z tą gałęzią i katalogiem `site-live` przez włączony Git auto-deployment.
+GitHub Pages może
 pozostać awaryjną kopią statycznych stron, ale nie wykonuje PHP kart ofert.
 
 ## Układ na Hostingerze
 
 - Identyfikator konta i bezwzględne ścieżki są w prywatnej dokumentacji operacyjnej.
-- `public_html/site/` — odizolowany build publicznej witryny. Statyczne strony
+- `public_html/site-live/` — odizolowany build publicznej witryny. Statyczne strony
   są plikami HTML, aktywne oferty obsługuje `oferta/index.php`, a
   `sitemap-oferty.xml` jest kierowana do PHP i czyta bieżącą bazę.
 - `public_html/api/` — istniejące API pod `api.mazurestate.pl`; nie nadpisywać
@@ -19,7 +19,9 @@ pozostać awaryjną kopią statycznych stron, ale nie wykonuje PHP kart ofert.
 - Prywatny katalog importera poza katalogiem WWW — konfiguracja, paczki FTP,
   zdjęcia i logi. Nie kopiować do `public_html` ani do repo.
 - Root `.htaccess` (`server/mls/hostinger-root.htaccess`) kieruje tylko żądania
-  hostów apex/www do `site/`; ścieżka `/api/` i host API są wyłączone.
+  hostów apex/www do `site-live/`; ścieżka `/api/` i host API są wyłączone.
+- `public_html/site/` — poprzednia kopia zachowana po przełączeniu. Nie jest
+  automatycznie aktualizowana; służy jako punkt awaryjnego powrotu.
 
 Rekordy FTP, API i poczty nie są częścią przełączenia WWW. Ich bieżące wartości
 oraz parametry eksportów CRM należy sprawdzić w prywatnej dokumentacji
@@ -28,7 +30,7 @@ operacyjnej i panelu. Nie zmieniać ich przy publikacji frontendu.
 ## Publikacja nowej wersji witryny
 
 Docelowa ścieżka automatyczna: PR → testy → merge do `main` → workflow
-`Hostinger release` → gałąź `hostinger-live` → Hostinger `site/`.
+`Hostinger release` → gałąź `hostinger-live` → Hostinger `site-live/`.
 `release.json` na witrynie wskazuje SHA źródłowego commitu; porównać go z
 GitHubem po wdrożeniu. Publiczna gałąź nie zawiera importera, konfiguracji ani
 dokumentacji. Nie podpinać surowego `main` do katalogu serwowanego przez WWW.
@@ -44,10 +46,10 @@ Poniższa ścieżka ręczna służy do stagingu lub awarii automatyzacji:
    Skrypt kopiuje jedynie publiczne pliki do `public/` i tworzy archiwum
    `mazur-static-site.zip` z plikami statycznymi. Nie publikuje dokumentacji,
    prywatnej konfiguracji, bazy ani paczek MLS.
-3. Wdrożyć archiwum **tylko** do odizolowanego `public_html/site/`. Mechanizm
+3. Wdrożyć archiwum **tylko** do osobnego katalogu stagingowego. Mechanizm
    wdrożenia archiwum może nadpisać zawartość katalogu docelowego, dlatego
    nigdy nie celować w `public_html/` (tam znajduje się produkcyjne API).
-4. Wgrać wybrane `.php` i `.htaccess` z `public/` osobno do `site/`; nie
+4. Wgrać wybrane `.php` i `.htaccess` z `public/` osobno do tego katalogu; nie
    podmieniać produkcyjnych plików `public_html/api/` wersją z repo bez diffu
    i backupu. Zmianę root `.htaccess` robić tylko po inspekcji dotychczasowego.
 5. Na izolowanej subdomenie `seo-stage.mazurestate.pl` sprawdzić stronę
@@ -68,7 +70,13 @@ mogą zmienić się po godzinnym imporcie bez przebudowy strony. Nie ustawiamy
 
 ## Wycofanie
 
-Jeśli nowa witryna zawiedzie, a API i importer są zdrowe, przywrócić jedynie
+Najpierw wyłączyć auto-deployment, aby kolejny push nie nadpisał rollbacku.
+Przy awarii nowego buildu przywrócić routing WWW z `site-live/` do zachowanego
+`site/` (kopia root `.htaccess` sprzed tego przełączenia jest na serwerze).
+Alternatywnie odtworzyć poprzedni build na gałęzi wdrożeniowej, zachowując
+historię commitów. Nie cofać bazy ani danych MLS przy awarii frontendu.
+
+Jeżeli konieczny jest awaryjny powrót na GitHub Pages, przywrócić jedynie
 `@ ALIAS azlkak.github.io.` i `www CNAME azlkak.github.io.`. Najpierw
 sprawdzić aktualne rekordy, następnie zwalidować zmianę. FTP, API i poczta
 pozostają bez zmian. Identyfikator snapshotu sprzed przełączenia jest w prywatnej

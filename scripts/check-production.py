@@ -47,7 +47,7 @@ def check():
         assert len(image) > 100, 'Empty image'
     get(BASE + '/oferta/?id=esti-215181', expected=404)
     # An internal helper must not expose source code.
-    helper = get(BASE + '/site/api/offer-seo-lib.php')
+    helper = get(BASE + '/site-live/api/offer-seo-lib.php')
     assert b'<?php' not in helper, 'PHP source exposed'
     return {'ok': True, 'offers_in_sitemap': len(urls), 'sample_offer': offer_id}
 

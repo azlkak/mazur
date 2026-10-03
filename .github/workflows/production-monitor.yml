@@ -1,5 +1,8 @@
 name: Production health
 on:
+  push:
+    branches: [main]
+    paths: ['scripts/check-production.py', '.github/workflows/production-monitor.yml']
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
