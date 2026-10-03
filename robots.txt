@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://mazurestate.pl/sitemap.xml
+Sitemap: https://mazurestate.pl/sitemap-oferty.xml

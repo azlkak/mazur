@@ -1,0 +1,29 @@
+(() => {
+  const key='mazurestate-cookie-consent';
+  const updateAnalyticsConsent=granted=>{
+    if(typeof window.gtag!=='function')return;
+    window.gtag('consent','update',{
+      analytics_storage:granted?'granted':'denied',
+      ad_storage:'denied',
+      ad_user_data:'denied',
+      ad_personalization:'denied'
+    });
+    if(granted)window.gtag('event','page_view');
+  };
+  const storedChoice=localStorage.getItem(key);
+  if(storedChoice)return;
+  const lang=(window.MAZUR_LANG || new URLSearchParams(location.search).get('lang'))||document.documentElement.lang||'pl';
+  const copy={
+    pl:['Dbamy o Twoją prywatność','Używamy niezbędnych ciasteczek, a za Twoją zgodą również narzędzi analitycznych i marketingowych.','Polityka ciasteczek','Odrzuć','Akceptuję'],
+    en:['Your privacy matters','We use necessary cookies and, with your consent, analytics and marketing tools.','Cookie policy','Reject','Accept'],
+    uk:['Ми дбаємо про Вашу конфіденційність','Ми використовуємо необхідні cookies, а за Вашою згодою — аналітичні та маркетингові інструменти.','Політика файлів cookie','Відхилити','Прийняти'],
+    ru:['Мы заботимся о вашей конфиденциальности','Мы используем необходимые cookies, а с вашего согласия — аналитические и маркетинговые инструменты.','Политика файлов cookie','Отклонить','Принять']
+  }[['pl','en','uk','ru'].includes(lang)?lang:'pl'];
+  const onHome=!location.pathname.split('/').filter(Boolean).at(-1)||location.pathname.endsWith('/mazur/')||location.pathname.endsWith('/index.html');
+  const policy=`${onHome?'':'../'}polityka-cookies/?lang=${lang}`;
+  const banner=document.createElement('aside');
+  banner.className='cookie-consent';banner.setAttribute('role','dialog');banner.setAttribute('aria-label',copy[0]);
+  banner.innerHTML=`<div class="cookie-consent__copy"><strong>${copy[0]}</strong><p>${copy[1]} <a href="${policy}">${copy[2]}</a></p></div><div class="cookie-consent__actions"><button type="button" data-cookie="reject">${copy[3]}</button><button type="button" data-cookie="accept">${copy[4]}</button></div>`;
+  banner.addEventListener('click',event=>{const button=event.target.closest('[data-cookie]');if(!button)return;localStorage.setItem(key,button.dataset.cookie);updateAnalyticsConsent(button.dataset.cookie==='accept');window.dispatchEvent(new CustomEvent('mazurestate:cookie-consent',{detail:{choice:button.dataset.cookie}}));banner.remove()});
+  document.body.appendChild(banner);
+})();

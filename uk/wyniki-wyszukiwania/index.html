@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="uk">
+<head><base href="/wyniki-wyszukiwania/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="icon" href="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20260929-location-fix">
+  <link rel="stylesheet" href="../assets/css/site-chrome.css?v=20261002-logo">
+  <link rel="stylesheet" href="../assets/css/cookie-consent.css">
+<!-- Google tag (gtag.js) with Consent Mode -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YQDFZ9T9DC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = window.gtag || function(){ dataLayer.push(arguments); };
+  let mazurAnalyticsGranted = false;
+  try { mazurAnalyticsGranted = localStorage.getItem('mazurestate-cookie-consent') === 'accept'; } catch (error) {}
+  window.gtag('consent', 'default', {
+    analytics_storage: mazurAnalyticsGranted ? 'granted' : 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+  window.gtag('js', new Date());
+  window.gtag('config', 'G-YQDFZ9T9DC', { send_page_view: mazurAnalyticsGranted });
+</script>
+
+<!-- SEO START -->
+<title>Пошук нерухомості | MazurEstate</title>
+<meta name="description" content="Пошук нерухомості — інформація MazurEstate.">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://mazurestate.pl/uk/wyniki-wyszukiwania/">
+<script src="../assets/js/language-routing.js"></script>
+<script src="../assets/js/seo-config.js"></script>
+<script src="../assets/js/seo.js"></script>
+<!-- SEO END -->
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-bar shell">
+      <a class="brand" href="../index.html#top"><img src="../assets/images/mazur-estate-logo-transparent.png" alt="MazurEstate" decoding="async"></a>
+      <nav class="main-nav">
+        <a data-i18n="chooseProperty" href="../index.html#categories">Wybierz nieruchomość</a>
+        <a data-i18n="advisory" href="../index.html#about">Doradztwo</a>
+        <a data-i18n="whyUs" href="../index.html#why-us">Dlaczego my</a>
+        <a data-i18n="developers" href="../index.html#services">Dla deweloperów</a>
+        <a data-i18n="contact" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Kontakt</a>
+      </nav>
+      <div class="header-actions">
+        <div class="language-picker" id="language-picker"><button class="language-trigger" type="button" aria-expanded="false" aria-haspopup="listbox"><span aria-hidden="true">🌐</span><span id="language-current">PL</span><svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button><div class="language-menu" role="listbox"><button data-lang="pl">PL</button><button data-lang="uk">UKR</button><button data-lang="en">ENG</button><button data-lang="ru">RU</button></div></div>
+        <a class="phone" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">+48 503 937 749</a>
+        <a class="button" data-i18n="contactUs" href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">Skontaktuj się</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell results-main">
+    <a class="back-link" data-i18n="back" href="../index.html#categories">← Wróć do wyszukiwarki</a>
+    <form class="results-search" id="results-search">
+      <div class="filter-field custom-filter"><label id="filter-type-label">Typ nieruchomości</label><input type="hidden" id="filter-type" value="mieszkania"><button class="filter-trigger" type="button" id="filter-type-trigger" aria-expanded="false" aria-controls="filter-type-menu"><span>Mieszkania</span><i>⌄</i></button><div class="filter-menu" id="filter-type-menu" role="listbox"></div></div>
+      <div class="filter-field location-filter"><label id="filter-location-label" for="filter-location">Lokalizacja</label><div class="location-control"><input id="filter-location" autocomplete="off" placeholder="Miasto lub dzielnica" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="filter-locations"><button type="button" id="location-toggle" aria-label="Pokaż lokalizacje">⌄</button></div><div class="location-suggestions" id="filter-locations" role="listbox"></div></div>
+      <div class="filter-field custom-filter"><label id="filter-transaction-label">Transakcja</label><input type="hidden" id="filter-transaction" value="sprzedaz"><button class="filter-trigger" type="button" id="filter-transaction-trigger" aria-expanded="false" aria-controls="filter-transaction-menu"><span>Sprzedaż</span><i>⌄</i></button><div class="filter-menu" id="filter-transaction-menu" role="listbox"></div></div>
+      <div class="filter-range"><span id="filter-price-label">Cena</span><div class="range-inputs"><label><span class="sr-only" id="price-min-label">Cena od</span><input id="filter-price-min" inputmode="numeric" aria-labelledby="price-min-label" placeholder="od" autocomplete="off"><small>zł</small></label><label><span class="sr-only" id="price-max-label">Cena do</span><input id="filter-price" inputmode="numeric" aria-labelledby="price-max-label" placeholder="do" autocomplete="off"><small>zł</small></label></div></div>
+      <div class="filter-range"><span id="filter-area-label">Powierzchnia</span><div class="range-inputs"><label><span class="sr-only" id="area-min-label">Powierzchnia od</span><input id="filter-area" inputmode="decimal" aria-labelledby="area-min-label" placeholder="od" autocomplete="off"><small>m²</small></label><label><span class="sr-only" id="area-max-label">Powierzchnia do</span><input id="filter-area-max" inputmode="decimal" aria-labelledby="area-max-label" placeholder="do" autocomplete="off"><small>m²</small></label></div></div>
+      <div class="rooms-filter" id="rooms-filter"><span id="rooms-label">Liczba pokoi</span><details class="rooms-dropdown"><summary id="rooms-summary" aria-labelledby="rooms-label rooms-current"><span id="rooms-current">Dowolna</span><i>⌄</i></summary><div class="room-options" id="room-options"><label><input type="checkbox" value="1"><span>1 pokój</span></label><label><input type="checkbox" value="2"><span>2 pokoje</span></label><label><input type="checkbox" value="3"><span>3 pokoje</span></label><label><input type="checkbox" value="4"><span>4 pokoje</span></label><label><input type="checkbox" value="5"><span>5 pokoi</span></label><label><input type="checkbox" value="6"><span>6+ pokoi</span></label></div></details></div>
+      <div class="search-actions"><button type="reset" id="filter-clear">Wyczyść filtry</button><button type="button" id="more-filters" aria-controls="advanced-panel" aria-expanded="true">Mniej filtrów <span aria-hidden="true">⌃</span></button><button type="submit" id="filter-submit">Pokaż oferty</button></div>
+      <div class="advanced-panel" id="advanced-panel">
+        <div class="advanced-grid">
+          <label class="advanced-field" id="floor-filter"><span id="floor-label">Piętro</span><select id="filter-floor"><option value="">Dowolne</option><option value="0">Parter</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4 i wyżej</option></select></label>
+          <div class="filter-range" id="unit-price-filter"><span id="unit-price-label">Cena za m²</span><div class="range-inputs"><label><span class="sr-only" id="unit-min-label">Cena za m² od</span><input id="filter-unit-min" inputmode="numeric" aria-labelledby="unit-min-label" placeholder="od" autocomplete="off"><small>zł/m²</small></label><label><span class="sr-only" id="unit-max-label">Cena za m² do</span><input id="filter-unit-max" inputmode="numeric" aria-labelledby="unit-max-label" placeholder="do" autocomplete="off"><small>zł/m²</small></label></div></div>
+          <div class="filter-range" id="plot-filter" hidden><span id="plot-label">Powierzchnia działki</span><div class="range-inputs"><label><span class="sr-only" id="plot-min-label">Działka od</span><input id="filter-plot-min" inputmode="numeric" aria-labelledby="plot-min-label" placeholder="od" autocomplete="off"><small>m²</small></label><label><span class="sr-only" id="plot-max-label">Działka do</span><input id="filter-plot-max" inputmode="numeric" aria-labelledby="plot-max-label" placeholder="do" autocomplete="off"><small>m²</small></label></div></div>
+          <label class="photo-filter"><input id="filter-photos" type="checkbox"><span id="photos-label">Tylko oferty ze zdjęciami</span></label>
+        </div>
+      </div>
+    </form>
+    <section class="results-heading">
+      <div><p class="eyebrow" data-i18n="offersEyebrow">OFERTY MAZURESTATE</p><h1 id="results-title">Nieruchomości na sprzedaż</h1><p id="results-summary"></p></div>
+      <div class="controls">
+        <div class="custom-filter sort-control"><span data-i18n="sort">Sortuj</span><input type="hidden" id="sort-select" value="newest"><button class="filter-trigger" type="button" id="sort-trigger" aria-expanded="false" aria-controls="sort-menu"><span>Data dodania: najnowsze</span><i>⌄</i></button><div class="filter-menu" id="sort-menu" role="listbox"></div></div>
+      </div>
+    </section>
+
+    <div class="active-filters" id="active-filters"></div>
+    <section id="offer-list" class="offer-list" aria-live="polite"></section>
+
+    <section class="pagination-bar" aria-label="Paginacja wyników">
+      <div class="per-page-field"><span id="per-page-label" data-i18n="perPage">Pokaż na stronie</span><details class="per-page-control"><input type="hidden" id="per-page" value="10"><summary class="filter-trigger" id="per-page-trigger" aria-controls="per-page-menu" aria-labelledby="per-page-label per-page-current"><span id="per-page-current">10</span><i>⌄</i></summary><div class="filter-menu" id="per-page-menu" role="listbox"><button type="button" role="option" data-value="5">5</button><button type="button" role="option" aria-selected="true" class="selected" data-value="10">10</button><button type="button" role="option" data-value="20">20</button><button type="button" role="option" data-value="50">50</button></div></details></div>
+      <nav id="pagination" class="pagination"></nav>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-grid">
+      <div><div class="footer-logo"><img src="../assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" decoding="async"></div><p data-i18n="footerIntro">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i kompleksowa obsługa nieruchomości.</p></div>
+      <div><h2 data-i18n="navigation">Nawigacja</h2><a data-i18n="chooseProperty" href="../index.html#categories">Wybierz nieruchomość</a><a data-i18n="whyUs" href="../index.html#why-us">Dlaczego my</a><a data-i18n="reviews" href="../index.html#testimonials">Opinie klientów</a></div>
+      <div><h2 data-i18n="offers">Oferty</h2><a data-type-link="mieszkania" href="?type=mieszkania&transaction=sprzedaz">Mieszkania</a><a data-type-link="domy" href="?type=domy&transaction=sprzedaz">Domy</a><a data-type-link="dzialki" href="?type=dzialki&transaction=sprzedaz">Działki</a><a data-type-link="lokale" href="?type=lokale&transaction=wynajem">Lokale komercyjne</a></div>
+      <div><h2 data-i18n="contact">Kontakt</h2><p>ul. Franciszka Klimczaka 10A, lok. 5<br>02-797 Warszawa</p><a href="tel:+48503937749" aria-label="Zadzwoń do MazurEstate: +48 503 937 749">+48 503 937 749</a><a href="mailto:info@mazurestate.pl">info@mazurestate.pl</a></div>
+    </div>
+    <div class="shell copyright">© 2026 MazurEstate. <span data-i18n="rights">Wszelkie prawa zastrzeżone.</span></div>
+  </footer>
+  <script src="script.js?v=20260929-location-fix"></script>
+  <script src="../assets/js/site-chrome.js?v=20261002-layout"></script>
+<script src="../assets/js/cookie-consent.js?v=ga4-20260928"></script>
+</body>
+</html>
