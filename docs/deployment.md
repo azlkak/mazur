@@ -110,3 +110,15 @@ retencja, ostatni udany backup oraz test odtworzenia w izolowanej lokalizacji.
 Nie traktować snapshotu DNS ani artefaktów GitHub jako kopii danych CRM.
 Do potwierdzenia w Google Search Console: zgłoszenie obu sitemap oraz
 inspekcja aktywnej karty i brak indeksowalności ukrytej oferty testowej.
+
+## Retencja logów importera
+
+`server/mls/public/api/rotate-import-log.php` to narzędzie wyłącznie CLI,
+wdrażane osobno obok istniejącego API (nie jest częścią publicznego buildu).
+Harmonogram dzienny wykonuje najpierw `php -l`, potem skrypt. Skrypt blokuje
+`import.log` zgodnie z blokadą używaną przez importer, zapisuje pełną kopię
+z prawami prywatnymi i dopiero po udanym zapisie opróżnia bieżący plik.
+Usuwa po 30 dniach wyłącznie własne pliki `rotation-import-YYYYMMDD-HHMMSS.log`.
+Nie dotyka logów statusu, raportów pominiętych rekordów ani paczek.
+Paczki archiwalne mają osobną retencję importera, potwierdzoną jako 7 dni.
+Retencja paczek i logów nie zastępuje kopii bazy ani zdjęć.

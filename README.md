@@ -68,14 +68,14 @@ The production website is available at:
 
 https://mazurestate.pl/
 
-GitHub is the source of truth, but pushing `main` does **not** automatically
-publish the production Hostinger site. Build only the public files with
-`python3 scripts/build-hostinger-site.py /absolute/output-directory`, deploy
-its static archive into `public_html/site/`, then deploy the selected PHP and
-`.htaccess` files from the generated `public/` directory separately. The
+GitHub is the source of truth. Pushing `main` runs the `Hostinger release`
+workflow: validate, build public files, update `hostinger-live`. Hostinger's
+Git auto-deployment publishes that branch into `public_html/site-live/`.
+Compare `/release.json` with the source commit after deployment. The
+builder excludes documentation, draft pages and private importer sources. The
 main document root retains the existing `api/` directory and uses
 `server/mls/hostinger-root.htaccess` to route only apex/www traffic into
-`site/`. The `api.mazurestate.pl` host and private `mls/` importer remain
+`site-live/`. The `api.mazurestate.pl` host and private `mls/` importer remain
 separate. Never deploy the archive over `public_html/` or commit private
 `config.php`, MLS packages, imported images, database exports or credentials.
 
@@ -83,6 +83,13 @@ Test an active and a hidden offer, the dynamic sitemap, images, search,
 contact form display, language routes and API before changing DNS. A DNS
 rollback changes only `@` and `www`; the `ftp`, `api`, email and other records
 must be left untouched.
+
+`Production health` checks the site, API, sitemap, images and importer liveness
+on a best-effort 15-minute schedule, retaining diagnostic artifacts for 14 days.
+Enable GitHub Actions failure notifications on the repository owner's account.
+The retained old `site/` build is a frontend rollback point, not a database backup.
+See [deployment and recovery instructions](docs/deployment.md) for pending
+backup/Search Console verification and the separate 30-day import log rotation.
 
 Before committing, check that the working tree contains only intentional files:
 
