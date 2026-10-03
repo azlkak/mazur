@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { prepareDescription } from '../assets/js/offer-description.mjs';
+import { prepareDescription } from '../assets/js/offer-description.js';
 const p = text => ({type:'paragraph',runs:[{text}]});
 const document = blocks => ({schemaVersion:1,language:'pl',blocks});
 const asOffer = blocks => ({description:'Legacy fallback.', descriptionDocument:document(blocks)});

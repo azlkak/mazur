@@ -7,7 +7,7 @@
   const lang = ['pl','uk','en','ru'].includes(requestedLang) ? requestedLang : 'pl';
   // Keep search usable if a stale CDN cache temporarily cannot load the module.
   let galleryController = null;
-  const galleryPromise = import('../assets/js/results-gallery.mjs?v=20261003-swipe')
+  const galleryPromise = import('../assets/js/results-gallery.js?v=20261003-module-mime')
     .then(({createResultsGallery}) => { galleryController = createResultsGallery({lang}); })
     .catch(error => { console.warn('Full gallery module unavailable', error); });
   const translations = {
