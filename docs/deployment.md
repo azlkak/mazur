@@ -93,12 +93,14 @@ Nie commitować sekretów, plików XML/ZIP, zdjęć zaimportowanych ani dumpów 
 
 Workflow `Production health` wykonuje odczytowe testy strony, sitemap,
 losowanej przez kolejność sitemapy aktywnej oferty, API, pierwszego zdjęcia
-i ukrytej oferty testowej `esti-215181`. Harmonogram co 15 minut jest
+i ukrytej oferty testowej `esti-215181`. Endpoint `/health.php` sprawdza
+połączenie z bazą, uruchomienie obu importerów w ostatnich 135 minutach,
+błędy i zaległe paczki; ujawnia tylko `ok: true/false`. Harmonogram co 15 minut jest
 best-effort GitHub Actions, nie gwarantowanym SLA. Wyniki artefaktów: 14 dni.
 Powiadomienia o błędach należy włączyć w ustawieniach GitHub Actions właściciela
 repozytorium. Dla krytycznego SLA dodać niezależny monitoring zewnętrzny.
 
-Zielony test WWW **nie potwierdza świeżości importów**. Osobno sprawdzać panel
+Zielony test WWW **nie potwierdza wysyłki nowych paczek przez CRM**. Osobno sprawdzać panel
 integracji: ostatnie uruchomienie i sukces MLS/EstiCRM, błędy oraz kolejkę paczek.
 Brak nowych paczek nie oznacza awarii — MLS wysyła aktualizacje po zmianach.
 Nie uruchamiać ponownie importera w celu testowania dostępności.

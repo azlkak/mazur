@@ -25,6 +25,7 @@ def get(url, expected=200):
 
 
 def check():
+    assert json.loads(get(BASE + '/health.php')).get('ok') is True, 'Importer health check failed'
     assert b'<html' in get(BASE + '/').lower(), 'Homepage is not HTML'
     robots = get(BASE + '/robots.txt').decode()
     assert 'sitemap-oferty.xml' in robots, 'Offer sitemap missing from robots.txt'
@@ -53,12 +54,12 @@ def check():
 
 
 if __name__ == '__main__':
-    for attempt in range(3):
+    for attempt in range(6):
         try:
             print(json.dumps(check(), ensure_ascii=False))
             sys.exit(0)
         except Exception as error:
-            if attempt == 2:
+            if attempt == 5:
                 print(json.dumps({'ok': False, 'error': str(error)}, ensure_ascii=False))
                 sys.exit(1)
-            time.sleep(10)
+            time.sleep(20)

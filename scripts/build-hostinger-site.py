@@ -19,6 +19,7 @@ PAGE_DIRS = [
 ]
 ROOT_FILES = ["index.html", "sitemap.xml", "robots.txt", "favicon.ico"]
 SERVER_FILES = {
+    "public/health.php": "health.php",
     "public/.htaccess": ".htaccess",
     "public/sitemap-oferty.php": "sitemap-oferty.php",
     "public/oferta/.htaccess": "oferta/.htaccess",
