@@ -118,6 +118,13 @@ body[data-section-layout="services"] main>.shell{width:min(1360px,calc(100% - va
 
 @media(max-width:650px){
   :root{--me-section-space:28px;--me-section-half:14px;--me-page-gutter:16px}
+  /* Match the contact block's 16px mobile gutter across homepage sections. */
+  #page-root>main>section{padding-left:16px!important;padding-right:16px!important}
+  #page-root>main>#featured-offers{width:100%!important;margin-inline:0!important}
+  #search-tabs-row{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px!important;padding:6px!important}
+  #search-tabs-row button{width:100%;min-width:0;justify-content:center;white-space:normal;text-align:center}
+  #search-fields-row .location-field{padding-right:54px!important}
+  #search-fields-row .location-chevron{right:10px!important;top:50%!important;bottom:auto!important;transform:translateY(-50%);width:36px!important;height:36px!important;padding:0!important}
   #hero-section{padding-top:var(--me-section-space)!important}
   #featured-offers{padding-top:var(--me-section-space)!important;padding-bottom:0!important}
   #why-us,#faq,#testimonials{padding-top:var(--me-section-space)!important;padding-bottom:0!important}
@@ -146,5 +153,6 @@ body[data-section-layout="services"] main>.shell{width:min(1360px,calc(100% - va
   .hero-photos .portrait-two{border-bottom-right-radius:72px}
   .hero-photos .experience-chip{position:relative;grid-column:1/-1;justify-self:center;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;white-space:normal}
 
-  .site-footer .footer-social,#footer-grid>div:first-child>div:last-child{grid-column:1/-1!important;justify-content:center!important;gap:12px!important;margin-top:8px!important}
+  .site-footer .footer-social,#footer-grid>div:first-child>.footer-social{grid-column:1/-1!important;display:flex!important;justify-self:stretch!important;justify-content:center!important;flex-wrap:wrap!important;width:100%!important;gap:12px!important;margin-top:8px!important}
+  .site-footer .footer-social a,#footer-grid .footer-social a{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 36px;margin:0!important;padding:0!important}
 }
