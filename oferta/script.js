@@ -2,7 +2,7 @@ const MLS_DETAIL_API='https://api.mazurestate.pl/api/mls-offer.php';
 
 // Resolve from this shared script, including language-prefixed and project URLs.
 const descriptionAssets=new URL('../assets/',document.currentScript?.src||document.baseURI);
-const descriptionRenderer=import(new URL('js/offer-description.mjs?v=20261003-sections',descriptionAssets).href).catch(()=>null);
+const descriptionRenderer=import(new URL('js/offer-description.js?v=20261003-module-mime',descriptionAssets).href).catch(()=>null);
 
 const text=(selector,value)=>{const element=document.querySelector(selector);if(element)element.textContent=value};
 const categoryFor=value=>{const name=String(value||'').toLocaleLowerCase('pl');if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return 'mieszkania'};

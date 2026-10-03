@@ -8,7 +8,7 @@ Frontend korzysta z `descriptionDocument` (schemaVersion 1, language pl, blocks)
 
 ## GitHub Pages
 
-Publikacja `main` dostarcza `oferta/script.js`, `assets/js/offer-description.mjs` i `assets/css/offer-description.css`. Nie aktualizuje PHP na Hostingerze. Nie zmieniono galerii, parametrów, formularza ani tłumaczeń pozostałych części strony. Moduł nie blokuje wczytania oferty: do czasu jego załadowania dostępny jest zwykły opis. Po publikacji może być potrzebne odświeżenie z pominięciem pamięci podręcznej.
+Publikacja `main` dostarcza `oferta/script.js`, `assets/js/offer-description.js` i `assets/css/offer-description.css`. Nie aktualizuje PHP na Hostingerze. Nie zmieniono galerii, parametrów, formularza ani tłumaczeń pozostałych części strony. Moduł nie blokuje wczytania oferty: do czasu jego załadowania dostępny jest zwykły opis. Po publikacji może być potrzebne odświeżenie z pominięciem pamięci podręcznej.
 
 ## Hostinger — minimalna zmiana istniejącego API
 

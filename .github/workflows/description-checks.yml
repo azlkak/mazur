@@ -3,25 +3,31 @@ on:
   push:
     branches: [feat/formatted-offer-descriptions, main]
     paths:
-      - 'assets/js/offer-description.mjs'
+      - 'assets/js/offer-description.js'
+      - 'assets/js/results-gallery.js'
       - 'assets/css/offer-description.css'
       - 'oferta/script.js'
       - 'server/mls/public/api/description-formatter.php'
       - 'server/mls/public/api/mls-offer.php'
       - 'scripts/test-description-formatter.php'
       - 'scripts/test-offer-description.mjs'
+      - 'scripts/test-results-gallery.mjs'
+      - 'wyniki-wyszukiwania/script.js'
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
       - '.github/workflows/description-checks.yml'
   pull_request:
     paths:
-      - 'assets/js/offer-description.mjs'
+      - 'assets/js/offer-description.js'
+      - 'assets/js/results-gallery.js'
       - 'assets/css/offer-description.css'
       - 'oferta/script.js'
       - 'server/mls/public/api/description-formatter.php'
       - 'server/mls/public/api/mls-offer.php'
       - 'scripts/test-description-formatter.php'
       - 'scripts/test-offer-description.mjs'
+      - 'scripts/test-results-gallery.mjs'
+      - 'wyniki-wyszukiwania/script.js'
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
       - '.github/workflows/description-checks.yml'
@@ -51,5 +57,7 @@ jobs:
       - name: JavaScript syntax and description regression checks
         run: |
           node --check oferta/script.js
-          node --check assets/js/offer-description.mjs
-          node --test scripts/test-offer-description.mjs
+          node --check assets/js/offer-description.js
+          node --check assets/js/results-gallery.js
+          node --check wyniki-wyszukiwania/script.js
+          node --test scripts/test-offer-description.mjs scripts/test-results-gallery.mjs
