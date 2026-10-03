@@ -1,0 +1,7 @@
+# Keep the existing /api directory and the private MLS import untouched.
+# Only public WWW requests are internally served from the isolated /site build.
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?mazurestate\.pl$ [NC]
+RewriteCond %{REQUEST_URI} !^/api(/|$) [NC]
+RewriteCond %{REQUEST_URI} !^/site(/|$) [NC]
+RewriteRule ^(.*)$ site/$1 [L]

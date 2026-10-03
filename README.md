@@ -1,7 +1,8 @@
 # MazurEstate website
 
-Static multilingual website deployed with GitHub Pages. The project does not
-require a build step or package manager.
+Multilingual website with static service pages and server-rendered property
+details on Hostinger. GitHub remains the source repository. The frontend needs
+no package manager; a small Python script prepares a public-only deployment.
 
 ## Structure
 
@@ -14,13 +15,13 @@ require a build step or package manager.
 - `mieszkanie-pod-wynajem/` — multilingual landing page for end-to-end rental apartment investment, fit-out and management
 - `kim-jestesmy/` — about page
 - `wyniki-wyszukiwania/` — search results page
-- `oferta/` — property details page
+- `oferta/` — property details template and client-side interactions
 - `domy/`, `dzialki/`, `lokale-komercyjne/` — property category pages
 - `polityka-prywatnosci/`, `polityka-cookies/`, `regulamin/` — legal pages
 - `assets/css/` — shared styles
 - `assets/js/` — shared scripts and translations
 - `assets/images/` — images and brand assets
-- `server/mls/` — versioned Hostinger importer, database migrations and API; see its README for deployment
+- `server/mls/` — versioned Hostinger importer, API, offer renderer and deployment routing; see its README
 - `assets/images/developers/` — imagery used by the developer landing page
 - `assets/images/medical-premises/` — imagery used by the medical-premises landing page
 - `assets/images/hospitality/` — imagery used by the hospitality-premises landing page
@@ -32,12 +33,12 @@ Each public page folder contains its own `index.html` and, where needed, local
 `styles.css` and `script.js`. Shared files remain in `assets` to avoid
 duplication.
 
-Public content is available in Polish (`pl`), English (`en`), Ukrainian (`uk`)
-and Russian (`ru`) at separate paths: `/` for Polish and `/en/`, `/uk/`, `/ru/` for translations. The same prefixes apply to every public page. Old `?lang=` links are redirected in the browser to the corresponding path, preserving filters and fragments. GitHub Pages cannot issue HTTP 301 redirects for query parameters; those would require a proxy or hosting configuration outside this repository.
+Public service content is available in Polish (`pl`), English (`en`), Ukrainian (`uk`)
+and Russian (`ru`) at separate paths: `/` for Polish and `/en/`, `/uk/`, `/ru/` for translations. The same prefixes apply to service pages. Old `?lang=` links are redirected in the browser to the corresponding path, preserving filters and fragments. MLS/EstiCRM descriptions remain Polish; offer URLs have one Polish canonical regardless of the UI language.
 
 ## Repository conventions
 
-- Public pages use folder-based URLs and an `index.html` entry point.
+- Service pages use folder-based URLs and an `index.html` entry point. On Hostinger, `/oferta/?id=...` is rendered by `oferta/index.php` for active, non-hidden offers.
 - Page-specific CSS and JavaScript stay next to the page they support.
 - Page-specific translations stay in the page folder as `i18n.js`; shared navigation and footer translations remain in `assets/js/`.
 - Reusable styles, scripts, translations and images belong in `assets/`.
@@ -59,19 +60,29 @@ Then open `http://127.0.0.1:4173/`.
 
 Run `python3 scripts/prepare-seo.py` after changing a public page, SEO copy or the production domain. The generator owns the marked head blocks, translated HTML copies in `en/`, `uk/`, `ru/`, `assets/js/seo-config.js`, `sitemap.xml` and `robots.txt`. Edit the original page and generator, not the translated HTML copies. Each language has a static canonical and hreflang links; shared `seo.js` maintains matching structured data at runtime. Search/listing pages remain noindex. Run `python3 scripts/check-language-routes.py` to validate generated paths and the sitemap.
 
-On GitHub project Pages, `/mazur/robots.txt` is not the host-root robots policy: submit the sitemap directly in Search Console. On a custom domain, update `BASE` in the generator and serve robots at the origin root. See [SEO plan and 36 blog topics](docs/seo-plan.md) for limitations and next steps.
+The public `robots.txt` lists both `sitemap.xml` (service pages) and the live `sitemap-oferty.xml` (visible offers). The offer sitemap reads the database on request; it does not need a scheduled build. See [SEO plan and 36 blog topics](docs/seo-plan.md) for content planning.
 
 ## Deployment
 
-GitHub Pages publishes the `main` branch. The QA preview is available at:
+The production website is available at:
 
 https://mazurestate.pl/
 
-GitHub is the source of truth for application code. Pushing `main` publishes
-the static frontend through GitHub Pages; it does **not** deploy `server/mls/`
-to Hostinger. The Hostinger installation uses a separate private `config.php`
-and receives reviewed server changes separately. Never commit that file, MLS
-ZIP packages, imported images, database exports or API credentials.
+GitHub is the source of truth, but pushing `main` does **not** automatically
+publish the production Hostinger site. Build only the public files with
+`python3 scripts/build-hostinger-site.py /absolute/output-directory`, deploy
+its static archive into `public_html/site/`, then deploy the selected PHP and
+`.htaccess` files from the generated `public/` directory separately. The
+main document root retains the existing `api/` directory and uses
+`server/mls/hostinger-root.htaccess` to route only apex/www traffic into
+`site/`. The `api.mazurestate.pl` host and private `mls/` importer remain
+separate. Never deploy the archive over `public_html/` or commit private
+`config.php`, MLS packages, imported images, database exports or credentials.
+
+Test an active and a hidden offer, the dynamic sitemap, images, search,
+contact form display, language routes and API before changing DNS. A DNS
+rollback changes only `@` and `www`; the `ftp`, `api`, email and other records
+must be left untouched.
 
 Before committing, check that the working tree contains only intentional files:
 

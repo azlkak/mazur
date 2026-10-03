@@ -2,6 +2,9 @@
 (() => {
   const config = window.MAZUR_SEO;
   if (!config) return;
+  // The PHP offer route supplies offer-specific metadata in the initial HTML.
+  // Never replace it with the generic, noindex metadata for /oferta/.
+  if (document.head.querySelector('meta[name="mazur-offer-ssr"]')) return;
   const segments = location.pathname.replace(/index\.html$/, '').split('/').filter(Boolean);
   const candidate = segments.length ? segments[segments.length - 1] + '/' : '';
   const route = config.pages[candidate] ? candidate : '';

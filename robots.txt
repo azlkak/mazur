@@ -1,5 +1,4 @@
-# GitHub project Pages serves this file below the origin root.
-# Submit sitemap.xml directly in Search Console; install this policy at /robots.txt on the final domain.
 User-agent: *
 Allow: /
 Sitemap: https://mazurestate.pl/sitemap.xml
+Sitemap: https://mazurestate.pl/sitemap-oferty.xml
