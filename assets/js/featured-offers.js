@@ -31,8 +31,19 @@
   function card(offer) {
     const anchor = make('a', 'featured-card');
     anchor.href = window.mazurLocalizedUrl(`oferta/?id=${encodeURIComponent(offer.id)}`);
-    if (offer.images?.[0]) {
-      const img = make('img'); img.src = offer.images[0]; img.alt = offer.title || ''; img.loading = 'lazy'; img.decoding = 'async'; anchor.append(img);
+    const photos = Array.isArray(offer.images) ? offer.images.filter(src => typeof src === 'string' && src.trim()) : [];
+    if (photos.length) {
+      const media = make('div', 'featured-card-media');
+      const img = make('img'); img.src = photos[0]; img.alt = offer.title || ''; img.loading = 'lazy'; img.decoding = 'async'; media.append(img);
+      const count = make('span', 'featured-photo-count', `1 / ${photos.length}`); count.setAttribute('aria-live', 'polite'); media.append(count);
+      if (photos.length > 1) {
+        let index = 0, start = null, suppressClickUntil = 0;
+        media.addEventListener('touchstart', event => { start = event.touches.length === 1 ? {x:event.touches[0].clientX,y:event.touches[0].clientY} : null; }, {passive:true});
+        media.addEventListener('touchend', event => { if (!start || !event.changedTouches.length) return; const dx = event.changedTouches[0].clientX - start.x, dy = event.changedTouches[0].clientY - start.y; start = null; if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.25) return; index = (index + (dx < 0 ? 1 : -1) + photos.length) % photos.length; img.src = photos[index]; count.textContent = `${index + 1} / ${photos.length}`; suppressClickUntil = Date.now() + 500; }, {passive:true});
+        media.addEventListener('touchcancel', () => { start = null; }, {passive:true});
+        anchor.addEventListener('click', event => { if (Date.now() < suppressClickUntil) event.preventDefault(); });
+      }
+      anchor.append(media);
     }
     const body = make('div', 'featured-card-body');
     const place = [offer.city, offer.district].filter(Boolean).join(' · ');

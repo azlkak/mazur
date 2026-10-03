@@ -12,6 +12,14 @@ test('Old API stays usable and detects unambiguous headings and consecutive bull
  assert.equal(d.blocks[1].items.length,2);
  assert.equal(texts(d.blocks),'LOKALIZACJA:\nBlisko parku.\nPrzystanek 300 m.\nOpłaty dodatkowo.');
 });
+test('Labels followed by text become readable sections without losing rich-text emphasis',()=>{
+ const d=prepareDescription(asOffer([{type:'paragraph',runs:[{text:'Lokalizacja: '},{text:'Warszawa, blisko parku.',strong:true}]}]));
+ assert.deepEqual(d.blocks,[{type:'heading',runs:[{text:'Lokalizacja'}]},{type:'paragraph',runs:[{text:'Warszawa, blisko parku.',strong:true}]}]);
+});
+test('Ordinary colons do not create guessed headings',()=>{
+ const source='Cena: 900 000 zł. Kontakt: telefonicznie.';
+ assert.deepEqual(prepareDescription({description:source}).blocks,[p(source)]);
+});
 test('Keeps Polish source language',()=>assert.equal(prepareDescription({description:'Tekst.'}).language,'pl'));
 test('A lone bullet is not guessed into a list',()=>assert.equal(prepareDescription({description:'- Jedno zdanie.'}).blocks[0].type,'paragraph'));
 test('Continuous ordered numbers preserve start',()=>{

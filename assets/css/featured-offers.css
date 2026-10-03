@@ -15,6 +15,8 @@
 .featured-card{flex:0 0 calc((100% - 44px)/3);scroll-snap-align:start}
 .featured-card:hover{transform:translateY(-4px);box-shadow:0 16px 36px #1724361d;color:#192638}
 .featured-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#e9eef4}
+.featured-card-media{position:relative;touch-action:pan-y}
+.featured-photo-count{position:absolute;right:12px;bottom:12px;padding:6px 10px;border-radius:999px;background:rgba(15,30,49,.82);color:#fff;font-size:12px;font-weight:800;pointer-events:none}
 .featured-card-body{padding:20px}
 .featured-card-location{color:#0866a9;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
 .featured-card h3{font:800 19px/1.35 'Plus Jakarta Sans',sans-serif;margin:10px 0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}

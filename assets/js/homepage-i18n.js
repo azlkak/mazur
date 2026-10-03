@@ -136,6 +136,7 @@
     const nodes = [];
     while (walker.nextNode()) nodes.push(walker.currentNode);
     nodes.forEach(node => {
+      if (node.parentElement?.closest('.featured-card')) return;
       const translated = translatedValue(node.nodeValue || '');
       if (translated !== node.nodeValue) node.nodeValue = translated;
     });
@@ -159,12 +160,14 @@
   translate(document);
   const observer = new MutationObserver(records => records.forEach(record => {
     if (record.type === 'characterData') {
+      if (record.target.parentElement?.closest('.featured-card')) return;
       const translated = translatedValue(record.target.nodeValue || '');
       if (translated !== record.target.nodeValue) record.target.nodeValue = translated;
     }
     record.addedNodes.forEach(node => {
-      if (node.nodeType === 1) translate(node);
+      if (node.nodeType === 1 && !node.closest('.featured-card')) translate(node);
       else if (node.nodeType === 3) {
+        if (node.parentElement?.closest('.featured-card')) return;
         const translated = translatedValue(node.nodeValue || '');
         if (translated !== node.nodeValue) node.nodeValue = translated;
       }

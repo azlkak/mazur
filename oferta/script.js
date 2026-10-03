@@ -2,7 +2,7 @@ const MLS_DETAIL_API='https://api.mazurestate.pl/api/mls-offer.php';
 
 // Resolve from this shared script, including language-prefixed and project URLs.
 const descriptionAssets=new URL('../assets/',document.currentScript?.src||document.baseURI);
-const descriptionRenderer=import(new URL('js/offer-description.mjs?v=20261001-2',descriptionAssets).href).catch(()=>null);
+const descriptionRenderer=import(new URL('js/offer-description.mjs?v=20261003-sections',descriptionAssets).href).catch(()=>null);
 
 const text=(selector,value)=>{const element=document.querySelector(selector);if(element)element.textContent=value};
 const categoryFor=value=>{const name=String(value||'').toLocaleLowerCase('pl');if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return 'mieszkania'};
@@ -23,13 +23,21 @@ function setupGallery(images,title){
     if(index===4&&safeImages.length>5){const label=document.createElement('span');label.textContent=`Zobacz wszystkie zdjęcia · ${safeImages.length}`;button.appendChild(label)}
     gallery.appendChild(button);
   });
+  const main=gallery.querySelector('.gallery-main'),mainImage=main?.querySelector('img');
+  const mobileCounter=document.createElement('span');mobileCounter.className='gallery-mobile-count';mobileCounter.setAttribute('aria-live','polite');gallery.appendChild(mobileCounter);
   const buttons=[...gallery.querySelectorAll('button')],box=document.getElementById('lightbox'),lightboxImage=box?.querySelector('img'),counter=box?.querySelector('.lb-count');
   if(!box||!lightboxImage||!counter)return;
   let current=0;
-  const show=index=>{current=(index+safeImages.length)%safeImages.length;lightboxImage.src=safeImages[current];lightboxImage.alt=`${title} — zdjęcie ${current+1}`;counter.textContent=`${current+1} / ${safeImages.length}`;box.classList.add('open');box.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'};
+  const select=index=>{current=(index+safeImages.length)%safeImages.length;if(mainImage){mainImage.src=safeImages[current];mainImage.alt=`${title} — zdjęcie ${current+1}`}mobileCounter.textContent=`${current+1} / ${safeImages.length}`;lightboxImage.src=safeImages[current];lightboxImage.alt=`${title} — zdjęcie ${current+1}`;counter.textContent=`${current+1} / ${safeImages.length}`};
+  const show=index=>{select(index);box.classList.add('open');box.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'};
   const close=()=>{box.classList.remove('open');box.setAttribute('aria-hidden','true');document.body.style.overflow=''};
-  buttons.forEach((button,index)=>button.addEventListener('click',()=>show(index)));
-  box.querySelector('.close')?.addEventListener('click',close);box.querySelector('.prev')?.addEventListener('click',()=>show(current-1));box.querySelector('.next')?.addEventListener('click',()=>show(current+1));
+  select(0);
+  let suppressClickUntil=0;
+  buttons.forEach((button,index)=>button.addEventListener('click',event=>{if(Date.now()<suppressClickUntil){event.preventDefault();return}show(index===0?current:index)}));
+  const addSwipe=(element,onStep)=>{let start=null;element.addEventListener('touchstart',event=>{start=event.touches.length===1?{x:event.touches[0].clientX,y:event.touches[0].clientY}:null},{passive:true});element.addEventListener('touchend',event=>{if(!start||!event.changedTouches.length)return;const dx=event.changedTouches[0].clientX-start.x,dy=event.changedTouches[0].clientY-start.y;start=null;if(Math.abs(dx)<40||Math.abs(dx)<Math.abs(dy)*1.25)return;suppressClickUntil=Date.now()+500;onStep(dx<0?1:-1)},{passive:true});element.addEventListener('touchcancel',()=>{start=null},{passive:true})};
+  if(main)addSwipe(main,delta=>select(current+delta));
+  addSwipe(box,delta=>select(current+delta));
+  box.querySelector('.close')?.addEventListener('click',close);box.querySelector('.prev')?.addEventListener('click',()=>select(current-1));box.querySelector('.next')?.addEventListener('click',()=>select(current+1));
   box.addEventListener('click',event=>{if(event.target===box)close()});
   document.addEventListener('keydown',event=>{if(event.key==='Escape')close();if(box.classList.contains('open')&&event.key==='ArrowLeft')show(current-1);if(box.classList.contains('open')&&event.key==='ArrowRight')show(current+1)});
 }

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20260929-location-fix">
+  <link rel="stylesheet" href="styles.css?v=20261003-floor-dropdown">
   <link rel="stylesheet" href="../assets/css/site-chrome.css?v=20261002-logo">
   <link rel="stylesheet" href="../assets/css/cookie-consent.css">
 <!-- Google tag (gtag.js) with Consent Mode -->
@@ -69,7 +69,7 @@
       <div class="search-actions"><button type="reset" id="filter-clear">Wyczyść filtry</button><button type="button" id="more-filters" aria-controls="advanced-panel" aria-expanded="true">Mniej filtrów <span aria-hidden="true">⌃</span></button><button type="submit" id="filter-submit">Pokaż oferty</button></div>
       <div class="advanced-panel" id="advanced-panel">
         <div class="advanced-grid">
-          <label class="advanced-field" id="floor-filter"><span id="floor-label">Piętro</span><select id="filter-floor"><option value="">Dowolne</option><option value="0">Parter</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4 i wyżej</option></select></label>
+          <div class="advanced-field custom-filter" id="floor-filter"><span id="floor-label">Piętro</span><select id="filter-floor" hidden tabindex="-1" aria-hidden="true"><option value="">Dowolne</option><option value="0">Parter</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4 i wyżej</option></select><button class="filter-trigger" type="button" id="filter-floor-trigger" aria-labelledby="floor-label filter-floor-current" aria-haspopup="listbox" aria-expanded="false" aria-controls="filter-floor-menu"><span id="filter-floor-current">Dowolne</span><i aria-hidden="true">⌄</i></button><div class="filter-menu" id="filter-floor-menu" role="listbox" aria-labelledby="floor-label"></div></div>
           <div class="filter-range" id="unit-price-filter"><span id="unit-price-label">Cena za m²</span><div class="range-inputs"><label><span class="sr-only" id="unit-min-label">Cena za m² od</span><input id="filter-unit-min" inputmode="numeric" aria-labelledby="unit-min-label" placeholder="od" autocomplete="off"><small>zł/m²</small></label><label><span class="sr-only" id="unit-max-label">Cena za m² do</span><input id="filter-unit-max" inputmode="numeric" aria-labelledby="unit-max-label" placeholder="do" autocomplete="off"><small>zł/m²</small></label></div></div>
           <div class="filter-range" id="plot-filter" hidden><span id="plot-label">Powierzchnia działki</span><div class="range-inputs"><label><span class="sr-only" id="plot-min-label">Działka od</span><input id="filter-plot-min" inputmode="numeric" aria-labelledby="plot-min-label" placeholder="od" autocomplete="off"><small>m²</small></label><label><span class="sr-only" id="plot-max-label">Działka do</span><input id="filter-plot-max" inputmode="numeric" aria-labelledby="plot-max-label" placeholder="do" autocomplete="off"><small>m²</small></label></div></div>
           <label class="photo-filter"><input id="filter-photos" type="checkbox"><span id="photos-label">Tylko oferty ze zdjęciami</span></label>
@@ -101,7 +101,7 @@
     </div>
     <div class="shell copyright">© 2026 MazurEstate. <span data-i18n="rights">Wszelkie prawa zastrzeżone.</span></div>
   </footer>
-  <script src="script.js?v=20260929-location-fix"></script>
+  <script src="script.js?v=20261003-floor-dropdown"></script>
   <script src="../assets/js/site-chrome.js?v=20261002-layout"></script>
 <script src="../assets/js/cookie-consent.js?v=ga4-20260928"></script>
 </body>

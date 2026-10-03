@@ -2,6 +2,7 @@
  * API returns allowlisted text/block data; older APIs use a plain-text fallback.
  */
 const HEADING = /^(?:lokalizacja|układ|układ pomieszczeń|rozkład|rozkład pomieszczeń|standard|wykończenie|opłaty|koszty|dodatkowe informacje|warunki najmu|budynek|atuty|komunikacja|stan prawny|media|wyposażenie|nieruchomość|powierzchnia|działka|okolica)\s*:?$/iu;
+const HEADING_WITH_TEXT = /^((?:lokalizacja|układ|układ pomieszczeń|rozkład|rozkład pomieszczeń|standard|wykończenie|opłaty|koszty|dodatkowe informacje|warunki najmu|budynek|atuty|komunikacja|stan prawny|media|wyposażenie|nieruchomość|powierzchnia|działka|okolica))\s*:\s*(\S.*)$/iu;
 const clean = s => String(s).replace(/\r\n?/g,'\n').replace(/[\u00a0\u202f]/g,' ');
 const flatText = runs => (runs || []).map(r => r.text).join('');
 function compact(runs) {
@@ -56,7 +57,12 @@ function structure(blocks, enabled) {
       }
     }
     if (b.type==='paragraph' && HEADING.test(flatText(b.runs))) out.push({...b,type:'heading'});
-    else out.push(b);
+    else if (b.type==='paragraph' && HEADING_WITH_TEXT.test(flatText(b.runs))) {
+      const match = flatText(b.runs).match(HEADING_WITH_TEXT);
+      const prefix = flatText(b.runs).indexOf(':') + 1;
+      out.push({type:'heading',runs:[{text:match[1]}]});
+      out.push({type:'paragraph',runs:dropPrefix(b.runs,prefix)});
+    } else out.push(b);
   }
   return out;
 }
