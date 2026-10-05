@@ -93,7 +93,7 @@
     });
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.applySiteChrome); else window.applySiteChrome();
-  const translations=document.createElement('script');translations.src='../assets/js/page-translations.js?v=20260930-i18n';document.body.appendChild(translations);
+  const translations=document.createElement('script');translations.src='../assets/js/page-translations.js?v=20261005-original-offers';document.body.appendChild(translations);
   const residual=document.createElement('script');residual.src='../assets/js/residual-i18n.js';document.body.appendChild(residual);
   const contactStyles=document.createElement('link');contactStyles.rel='stylesheet';contactStyles.href='../assets/css/contact-options.css?v=7';document.head.appendChild(contactStyles);
   const contactOptions=document.createElement('script');contactOptions.src='../assets/js/contact-options.js?v=7';document.body.appendChild(contactOptions);
