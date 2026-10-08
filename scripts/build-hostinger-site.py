@@ -25,6 +25,7 @@ SERVER_FILES = {
     "public/oferta/.htaccess": "oferta/.htaccess",
     "public/oferta/index.php": "oferta/index.php",
     "public/api/offer-seo-lib.php": "api/offer-seo-lib.php",
+    "public/api/offer-source.php": "api/offer-source.php",
     "public/api/portal-visibility.php": "api/portal-visibility.php",
     "public/api/description-formatter.php": "api/description-formatter.php",
 }
