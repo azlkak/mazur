@@ -69,9 +69,9 @@ function offerRender(array $offer, string $template): string
         . '<script type="application/ld+json">'
         . json_encode($schema, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG)
         . '</script>' . "\n"
-        . '<script src="../assets/js/language-routing.js"></script>' . "\n"
+        . '<script src="../assets/js/language-routing.js?v=20261006-offer-translation"></script>' . "\n"
         . '<script src="../assets/js/seo-config.js"></script>' . "\n"
-        . '<script src="../assets/js/seo.js"></script>' . "\n"
+        . '<script src="../assets/js/seo.js?v=20261006-offer-translation"></script>' . "\n"
         . '<!-- SEO END -->';
     $count = 0;
     $template = preg_replace_callback('/<!-- SEO START -->.*?<!-- SEO END -->/s', static fn(): string => $seo, $template, 1, $count);

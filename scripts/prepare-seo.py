@@ -73,9 +73,9 @@ for route, page in pages.items():
             for alternate in LANGS:
                 tags.append(f'<link rel="alternate" hreflang="{alternate}" href="{url_for(route, alternate)}">')
             tags.append(f'<link rel="alternate" hreflang="x-default" href="{url_for(route, "pl")}">')
-        tags += [f'<script src="{prefix}assets/js/language-routing.js"></script>',
+        tags += [f'<script src="{prefix}assets/js/language-routing.js?v=20261006-offer-translation"></script>',
                  f'<script src="{prefix}assets/js/seo-config.js"></script>',
-                 f'<script src="{prefix}assets/js/seo.js"></script>', '<!-- SEO END -->']
+                 f'<script src="{prefix}assets/js/seo.js?v=20261006-offer-translation"></script>', '<!-- SEO END -->']
         return '\n'.join(tags)
     source = source.replace('</head>', '\n' + seo_tags('pl') + '\n</head>', 1)
     # Preserve existing geometry and copy; defer only below-the-fold static images.

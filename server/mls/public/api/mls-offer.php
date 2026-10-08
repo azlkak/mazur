@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/offer-translation-read.php';
 // Optional during a rolling deployment: missing formatter keeps the plain API.
 if (is_file(__DIR__ . '/description-formatter.php')) require_once __DIR__ . '/description-formatter.php';
 
@@ -35,6 +36,7 @@ function publicDescription(string $value): string
 }
 
 try {
+    $requestedLanguage = mazurTranslationLanguage($_GET['lang'] ?? 'pl');
     $id = (string)($_GET['id'] ?? '');
     $parsedId = portalParseOfferId($id);
     if ($parsedId === null) {
@@ -136,6 +138,14 @@ try {
             array_values(array_filter($images, static fn($name): bool => is_string($name)))
         ),
     ];
+
+    $localized = mazurTranslationForOffer($db, $source, $sourceId, $requestedLanguage);
+    if ($localized !== null) {
+        $offer['title'] = $localized['title'];
+        $offer['description'] = $localized['description'];
+        $offer['descriptionDocument'] = $localized['descriptionDocument'];
+        $offer['descriptionLanguage'] = $requestedLanguage;
+    }
 
     echo json_encode(['demo' => false, 'offer' => $offer], JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } catch (Throwable $error) {
