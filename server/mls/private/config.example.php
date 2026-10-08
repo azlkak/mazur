@@ -27,4 +27,10 @@ return [
     'esticrm_company' => '',
     'esticrm_token' => '',
     'esticrm_agent_email' => '',
+    // Offer translation runs separately after import. Keep the key server-side.
+    'openai_api_key' => '',
+    'openai_translation_model' => 'gpt-4o-mini',
+    'translation_max_jobs_per_run' => 30,
+    // Set explicitly if public_html/api is deployed elsewhere.
+    'translation_formatter_path' => dirname(__DIR__) . '/public_html/api/description-formatter.php',
 ];

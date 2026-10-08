@@ -14,6 +14,43 @@ Hostingerze.
 - `public/api/` — jawne punkty API; tylko ten podkatalog trafia pod `public_html/api`.
 - `private/config.example.php` — wzór konfiguracji bez sekretów.
 
+### Tłumaczenia treści ofert — przygotowane lokalnie 06.10.2026
+
+Kod tłumaczy **polskie tytuły i opisy ofert** z MLS i EstiCRM na EN, UK i RU.
+Nie tłumaczy interfejsu. `private/bin/translate-offers.php --sync` porównuje
+aktualne akapity, nagłówki i elementy list po imporcie, zachowuje przekłady
+niezmienionych fragmentów oraz zleca wyłącznie nowe/zmienione fragmenty.
+`--work` pobiera te zadania i wywołuje Responses API OpenAI. Przy edycji
+fragmentu wysyła także jego poprzednią polską i przetłumaczoną wersję.
+Klucz nie jest potrzebny do `--sync`. Wersja językowa jest publiczna dopiero
+po skompletowaniu wszystkich fragmentów, więc nie pokazujemy starego lub
+częściowego tłumaczenia. Przy zmianie paczki przed następną synchronizacją
+API wraca chwilowo do polskiego oryginału.
+
+Przy przyszłym uruchomieniu, **po kopii bazy i próbie na kilku ofertach**:
+
+1. Wykonać `private/migrations/20261006_offer_translations.sql` na istniejącej
+   bazie. Dla nowej instalacji tabele są także w `private/schema.sql`.
+2. Wdrożyć prywatne `offer-translations.php` i `bin/translate-offers.php`,
+   publiczne `api/offer-translation-read.php`, zmienione API oraz pliki WWW.
+   Ścieżka do `description-formatter.php` musi być ustawiona w prywatnym
+   `config.php`, jeśli odbiega od `public_html/api/description-formatter.php`.
+3. Najpierw uruchomić `php bin/translate-offers.php --sync --offer=NUMER`
+   dla jednej oferty MLS lub `--offer=esti-NUMER` dla EstiCRM. To przygotuje
+   kolejkę bez żadnego wywołania OpenAI; sprawdzić liczbę zadań i fragmenty.
+4. Dodać `openai_api_key` **wyłącznie** do prywatnego `config.php` i uruchomić
+   `php bin/translate-offers.php --work --offer=NUMER` dla pilotażu. Limit
+   `translation_max_jobs_per_run` domyślnie wynosi 30. Po sprawdzeniu wyniku
+   uruchamiać `--sync` bez `--offer` po importerze,
+   a `--work` z cronem w wybranym interwale.
+
+Po usunięciu przyczyny trwałego błędu (np. błędnego klucza) można ponowić
+zatrzymane zadania przez `php bin/translate-offers.php --retry-failed`,
+opcjonalnie z `--offer=NUMER`.
+
+Nie umieszczać klucza w Git, publicznym HTML ani JavaScript. Ten kod nie został
+jeszcze wdrożony na Hostingerze i nie wykonał płatnych wywołań API.
+
 ### Wybrane oferty na stronie głównej — wdrożone 29.09.2026
 
 Panel `https://api.mazurestate.pl/api/featured-admin.php` pozwala osobie

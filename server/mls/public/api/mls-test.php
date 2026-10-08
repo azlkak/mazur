@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/offer-translation-read.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -13,6 +14,7 @@ if (in_array($origin, $allowedOrigins, true)) {
 }
 
 try {
+    $requestedLanguage = mazurTranslationLanguage($_GET['lang'] ?? 'pl');
     $privateRoot = dirname(__DIR__, 2) . '/mls';
     $config = require $privateRoot . '/config.php';
     $db = new PDO($config['dsn'], $config['user'], $config['password'], [
@@ -22,6 +24,7 @@ try {
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
     ]);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+    $translatedTitles = mazurTranslationTitles($db, $requestedLanguage);
     $hasSource = portalOffersHaveSource($db);
     $rows = $db->query($hasSource
         ? "SELECT source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE publishable = 1 ORDER BY (source = 'esticrm') DESC, source_export_at DESC, source_id DESC"
@@ -44,11 +47,15 @@ try {
         $type = trim((string)($fields['typeName'] ?? 'Nieruchomość'));
         $title = trim((string)($fields['portalTitle'] ?? ''));
         if ($title === '') $title = $type . ($city !== '' ? ' — ' . $city : '');
+        $titleKey = $row['source'] . ':' . $row['source_id'];
+        $titleLanguage = isset($translatedTitles[$titleKey]) ? $requestedLanguage : 'pl';
+        $title = $translatedTitles[$titleKey] ?? $title;
 
         $offers[] = [
             'id' => portalPublicOfferId((string)$row['source'], (string)$row['source_id']),
             'number' => (string)($fields['numberExport'] ?? $fields['number'] ?? ''),
             'title' => $title,
+            'titleLanguage' => $titleLanguage,
             'type' => $type,
             'transaction' => match ((string)($fields['transaction'] ?? '')) {
                 '131' => 'sprzedaż',

@@ -36,6 +36,8 @@ duplication.
 Public service content is available in Polish (`pl`), English (`en`), Ukrainian (`uk`)
 and Russian (`ru`) at separate paths: `/` for Polish and `/en/`, `/uk/`, `/ru/` for translations. The same prefixes apply to service pages. Old `?lang=` links are redirected in the browser to the corresponding path, preserving filters and fragments. MLS/EstiCRM descriptions remain Polish; offer URLs have one Polish canonical regardless of the UI language.
 
+The local implementation for translating Polish offer titles and descriptions into English, Ukrainian, and Russian through the OpenAI API is described in [offer translation architecture](docs/translation-architecture.md). It still needs the database migration, a private API key, a cron job, and deployment before it can translate live offers.
+
 ## Repository conventions
 
 - Service pages use folder-based URLs and an `index.html` entry point. On Hostinger, `/oferta/?id=...` is rendered by `oferta/index.php` for active, non-hidden offers.

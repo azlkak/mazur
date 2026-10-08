@@ -1,4 +1,4 @@
-/** MazurEstate offer descriptions v1. No HTML insertion, rewriting or translation.
+/** MazurEstate offer descriptions v1. No HTML insertion or browser translation.
  * API returns allowlisted text/block data; older APIs use a plain-text fallback.
  */
 const HEADING = /^(?:lokalizacja|układ|układ pomieszczeń|rozkład|rozkład pomieszczeń|standard|wykończenie|opłaty|koszty|dodatkowe informacje|warunki najmu|budynek|atuty|komunikacja|stan prawny|media|wyposażenie|nieruchomość|powierzchnia|działka|okolica)\s*:?$/iu;
@@ -76,7 +76,7 @@ const COPY = {
 
 /** Copy only recognized fields, with limits, before creating any DOM elements. */
 function validateDocument(value) {
-  if (!value || value.schemaVersion !== 1 || value.language !== 'pl' || !Array.isArray(value.blocks)) throw new TypeError('Unsupported description document');
+  if (!value || value.schemaVersion !== 1 || !['pl','en','uk','ru'].includes(value.language) || !Array.isArray(value.blocks)) throw new TypeError('Unsupported description document');
   let nodes = 0, length = 0;
   const visit = (blocks, depth = 0) => {
     if (!Array.isArray(blocks) || depth > 40) throw new TypeError('Invalid description blocks');
@@ -107,7 +107,7 @@ function validateDocument(value) {
       return {type:block.type,runs};
     });
   };
-  return {schemaVersion:1,language:'pl',blocks:visit(value.blocks)};
+  return {schemaVersion:1,language:value.language,blocks:visit(value.blocks)};
 }
 
 /** Public data API, also used by regression tests. Never guesses lost HTML. */
@@ -136,16 +136,16 @@ export function renderOfferDescription(section, offer, {language = 'pl'} = {}) {
   eyebrow.className = 'eyebrow'; eyebrow.lang = uiLanguage;
   eyebrow.textContent = copy.eyebrow;
   const heading = owner.createElement('h2');
-  heading.id = 'offer-description-heading'; heading.lang = offer.title ? 'pl' : uiLanguage;
+  heading.id = 'offer-description-heading'; heading.lang = offer.title ? (offer.descriptionLanguage || 'pl') : uiLanguage;
   heading.textContent = offer.title || copy.heading;
   fragment.append(eyebrow,heading);
-  if (uiLanguage !== 'pl' && doc.blocks.length) {
+  if (uiLanguage !== 'pl' && doc.language === 'pl' && doc.blocks.length) {
     const note = owner.createElement('p');
     note.className = 'description-language-note'; note.lang = uiLanguage;
     note.textContent = copy.source; fragment.append(note);
   }
   const reader = owner.createElement('div');
-  reader.className = 'description-reader'; reader.lang = 'pl';
+  reader.className = 'description-reader'; reader.lang = doc.language;
   const append = (parent, blocks) => {
     for (const block of blocks) {
       if (block.type === 'list') {

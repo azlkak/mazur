@@ -21,6 +21,12 @@ test('Ordinary colons do not create guessed headings',()=>{
  assert.deepEqual(prepareDescription({description:source}).blocks,[p(source)]);
 });
 test('Keeps Polish source language',()=>assert.equal(prepareDescription({description:'Tekst.'}).language,'pl'));
+test('Accepts a server-translated document without changing its language or structure',()=>{
+ const offer={title:'Bright apartment',description:'Bright living room.',descriptionLanguage:'en',descriptionDocument:{schemaVersion:1,language:'en',blocks:[{type:'heading',runs:[{text:'Layout'}]},p('Bright living room.')]}};
+ const result=prepareDescription(offer);
+ assert.equal(result.language,'en');
+ assert.deepEqual(result.blocks,offer.descriptionDocument.blocks);
+});
 test('A lone bullet is not guessed into a list',()=>assert.equal(prepareDescription({description:'- Jedno zdanie.'}).blocks[0].type,'paragraph'));
 test('Continuous ordered numbers preserve start',()=>{
  const l=prepareDescription({description:'3. A\n4. B'}).blocks[0]; assert.equal(l.type,'list'); assert.equal(l.start,3);
