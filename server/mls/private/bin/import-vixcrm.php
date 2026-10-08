@@ -81,10 +81,10 @@ function readVix(string $path, int $maxBytes): array
     if ($xml === false || $xml->getName() !== 'objects') failVix('Invalid VixCRM feed');
 
     $types = [
-        '10' => ['Mieszkanie', '1'],
+        '10' => ['Mieszkanie', '2'],
         // The one type-22 record has an apartment-sized area and room count.
-        '22' => ['Mieszkanie', '1'],
-        '30' => ['Dom', '2'],
+        '22' => ['Mieszkanie', '2'],
+        '30' => ['Dom', '1'],
         '40' => ['Lokal komercyjny', '4'],
         '50' => ['Działka', '3'],
     ];
