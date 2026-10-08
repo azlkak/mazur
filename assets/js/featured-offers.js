@@ -48,7 +48,9 @@
     const body = make('div', 'featured-card-body');
     const place = [offer.city, offer.district].filter(Boolean).join(' · ');
     body.append(make('span', 'featured-card-location', place || copy[0]));
-    body.append(make('h3', '', offer.title || offer.type || copy[0]));
+    const heading = make('h3', '', offer.title || offer.type || copy[0]);
+    heading.lang = offer.descriptionLanguage || 'pl';
+    body.append(heading);
     const meta = make('p', 'featured-card-meta');
     if (Number(offer.area) > 0) meta.append(make('span', '', `${copy[3]} ${number.format(offer.area)} m²`));
     if (Number(offer.rooms) > 0) meta.append(make('span', '', `${number.format(offer.rooms)} ${copy[4]}`));
@@ -101,7 +103,7 @@
     if (!Array.isArray(ids) || !ids.length) return;
     const selected = await Promise.all(ids.slice(0, 10).map(async id => {
       try {
-        const response = await fetch(api + 'mls-offer.php?id=' + encodeURIComponent(id));
+        const response = await fetch(api + 'mls-offer.php?id=' + encodeURIComponent(id) + '&lang=' + encodeURIComponent(lang));
         return response.ok ? (await response.json()).offer : null;
       } catch { return null; }
     }));

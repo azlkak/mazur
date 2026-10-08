@@ -2,7 +2,7 @@ const MLS_DETAIL_API='https://api.mazurestate.pl/api/mls-offer.php';
 
 // Resolve from this shared script, including language-prefixed and project URLs.
 const descriptionAssets=new URL('../assets/',document.currentScript?.src||document.baseURI);
-const descriptionRenderer=import(new URL('js/offer-description.js?v=20261003-module-mime',descriptionAssets).href).catch(()=>null);
+const descriptionRenderer=import(new URL('js/offer-description.js?v=20261006-offer-translation',descriptionAssets).href).catch(()=>null);
 
 const text=(selector,value)=>{const element=document.querySelector(selector);if(element)element.textContent=value};
 const categoryFor=value=>{const name=String(value||'').toLocaleLowerCase('pl');if(name.includes('mieszkan'))return 'mieszkania';if(name.includes('dom'))return 'domy';if(name.includes('dział')||name.includes('grunt'))return 'dzialki';if(/lokal|komerc|biuro|magazyn|hala|obiekt/.test(name))return 'lokale';return 'mieszkania'};
@@ -58,10 +58,10 @@ function renderDescription(offer){
   const section=document.querySelector('.description');if(!section)return;
   section.innerHTML='';
   const eyebrow=document.createElement('p');eyebrow.className='eyebrow';eyebrow.textContent='O NIERUCHOMOŚCI';
-  const heading=document.createElement('h2');heading.textContent=offer.title;
+  const heading=document.createElement('h2');heading.textContent=offer.title;heading.lang=offer.descriptionLanguage||'pl';
   section.append(eyebrow,heading);
   const paragraphs=String(offer.description||'Skontaktuj się z nami, aby poznać szczegóły tej nieruchomości.').split(/\n+/).map(item=>item.trim()).filter(Boolean);
-  const reader=document.createElement('div');reader.className='description-reader';reader.lang='pl';
+  const reader=document.createElement('div');reader.className='description-reader';reader.lang=offer.descriptionLanguage||'pl';
   paragraphs.forEach(content=>{const paragraph=document.createElement('p');paragraph.textContent=content;reader.appendChild(paragraph)});
   section.appendChild(reader);
   // The plain description is always available, even if the new module fails.
@@ -98,7 +98,7 @@ async function loadOffer(){
     if(serverSeed){
       payload=JSON.parse(serverSeed.textContent);
     }else{
-      const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}`,{headers:{Accept:'application/json'}});
+      const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}&lang=${encodeURIComponent(lang)}`,{headers:{Accept:'application/json'}});
       payload=await response.json();
       if(!response.ok)throw new Error(payload.error||'Oferta nie jest dostępna');
     }
@@ -109,7 +109,7 @@ async function loadOffer(){
     const currency=offer.currency||'PLN',price=offer.price?`${formatNumber(offer.price)} ${currency}`:'Cena na zapytanie';
     const unit=offer.price&&offer.area?`${formatNumber(Math.round(offer.price/offer.area))} ${currency}/m²`:'';
     document.title=`${offer.title} | MazurEstate`;document.querySelector('meta[name="description"]')?.setAttribute('content',`${offer.title}. ${locationName}. Cena i szczegóły oferty MazurEstate.`);
-    text('.property-head .eyebrow',eyebrow);text('.property-head h1',offer.title);text('.property-head .location',locationFull);text('.head-price strong',price);text('.head-price span',[isRent?'miesięcznie':'',unit].filter(Boolean).join(' · '));
+    text('.property-head .eyebrow',eyebrow);text('.property-head h1',offer.title);document.querySelector('.property-head h1')?.setAttribute('lang',offer.descriptionLanguage||'pl');text('.property-head .location',locationFull);text('.head-price strong',price);text('.head-price span',[isRent?'miesięcznie':'',unit].filter(Boolean).join(' · '));
     const crumbs=document.querySelectorAll('.breadcrumbs a');if(crumbs[0])crumbs[0].href=`../index.html?lang=${lang}`;if(crumbs[1]){crumbs[1].textContent=`${categoryNames[category]} ${transactionText}`;crumbs[1].href=`../wyniki-wyszukiwania/?type=${category}&transaction=${isRent?'wynajem':'sprzedaz'}&lang=${lang}`};text('.breadcrumbs strong',locationName||offer.title);
     document.querySelector('.head-price').hidden=false;document.getElementById('gallery').hidden=false;document.querySelector('.property-layout').hidden=false;
     renderParameters(offer,category);renderDescription(offer);renderFeatures(offer.features||[]);setupGallery(offer.images||[],offer.title);window.MazurContactForm?.setOffer({id:offer.id,number:offer.number||offer.id,title:offer.title});

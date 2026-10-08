@@ -6,7 +6,8 @@
   const query = new URLSearchParams(location.search);
   const oldLanguage = query.get('lang');
   const validOldLanguage = languages.includes(oldLanguage);
-  const cleanPath = '/' + segments.slice(pathLanguage === 'pl' ? 0 : 1).join('/');
+  const bareSegments = segments.slice(pathLanguage === 'pl' ? 0 : 1);
+  const cleanPath = '/' + bareSegments.join('/') + (bareSegments.length && location.pathname.endsWith('/') ? '/' : '');
   const routePath = cleanPath === '/' || cleanPath.endsWith('/') ? cleanPath : cleanPath.replace(/index\.html$/, '');
   const normalizedPath = routePath || '/';
   const pathFor = (path, lang) => (lang === 'pl' ? path : `/${lang}${path}`);
@@ -21,21 +22,13 @@
     if (url.pathname.endsWith('/') && !path.endsWith('/')) path += '/';
     if (path.endsWith('/index.html')) path = path.slice(0, -10);
     if (path === '/index.html') path = '/';
-    // Offer details use the Polish source content until their translations exist.
-    if (path === '/oferta/' && url.searchParams.has('id')) lang = 'pl';
     url.pathname = pathFor(path, lang);
     url.searchParams.delete('lang');
     return url.pathname + url.search + url.hash;
   };
-  const isOfferDetail = normalizedPath.replace(/\/$/, '') === '/oferta' && query.has('id');
-  if (isOfferDetail && pathLanguage !== 'pl' && location.protocol !== 'file:') {
-    query.delete('lang');
-    location.replace('/oferta/' + (query.size ? '?' + query : '') + location.hash);
-    return;
-  }
   if (validOldLanguage) {
     query.delete('lang');
-    const destination = (isOfferDetail ? '/oferta/' : pathFor(normalizedPath, oldLanguage)) + (query.size ? '?' + query : '') + location.hash;
+    const destination = pathFor(normalizedPath, oldLanguage) + (query.size ? '?' + query : '') + location.hash;
     if (location.protocol !== 'file:' && destination !== location.pathname + location.search + location.hash) {
       location.replace(destination);
       return;
