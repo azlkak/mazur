@@ -53,7 +53,7 @@
       const id = String(offer.id); const li = document.createElement('li');
       text(li, 'span', offerLabel(offer, id));
       const actions = document.createElement('div'); actions.className = 'actions';
-      const canFeature = !id.startsWith('esti-');
+      const canFeature = /^\d+$/.test(id);
       const add = text(actions, 'button', !canFeature ? 'Tylko MLS w wybranych' : selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = !canFeature || selected.includes(id) || selected.length >= 10;
       add.onclick = () => { selected.push(id); renderSelected(); renderResults(); };
       const hide = text(actions, 'button', 'Ukryj z portalu'); hide.type = 'button'; hide.className = 'danger';
@@ -80,7 +80,7 @@
       const li = document.createElement('li');
       const info = document.createElement('div');
       text(info, 'strong', `${offer.title || 'Oferta'} · nr ${offer.offer_number || offer.id}`);
-      text(info, 'span', offer.source === 'esticrm' ? 'EstiCRM' : 'MLS');
+      text(info, 'span', offer.source === 'esticrm' ? 'EstiCRM' : offer.source === 'vixcrm' ? 'VixCRM' : 'MLS');
       const restore = text(li, 'button', 'Przywróć'); restore.type = 'button'; restore.className = 'quiet';
       restore.onclick = async () => {
         restore.disabled = true;
@@ -94,8 +94,9 @@
     $('integration-intro').textContent = `Stan z ${dateTime(data.checked_at)} · paczki w archiwum są przechowywane ${data.retention_days} dni. Odświeżanie co minutę.`;
     const cards = $('integration-cards'); cards.replaceChildren();
     const labels = {ok: 'Importer działa', running: 'Import trwa', quiet: 'Brak nowych paczek', stale: 'Sprawdź harmonogram', error: 'Wymaga uwagi', unknown: 'Brak telemetrii', disabled: 'Niewłączone'};
-    for (const [source, name] of [['mls', 'MLS'], ['esticrm', 'EstiCRM']]) {
+    for (const [source, name] of [['mls', 'MLS'], ['esticrm', 'EstiCRM'], ['vixcrm', 'VixCRM']]) {
       const feed = data.feeds[source];
+      if (!feed) continue;
       const card = document.createElement('article'); card.className = 'integration-card';
       const heading = document.createElement('div'); heading.className = 'integration-card-header';
       text(heading, 'h3', name);
@@ -118,8 +119,10 @@
         ['Ostatnie uruchomienie', dateTime(feed.last_run_at)],
         ['Ostatni import', dateTime(feed.batches[0]?.imported_at)],
         ['Aktywne w imporcie', `${feed.offers_publishable} / ${feed.offers_total}`],
-        ['Oczekujące / w trakcie', `${feed.incoming} / ${feed.processing}`],
-        ['Paczki z błędem', String(feed.errors)]
+        ...(source === 'vixcrm' ? [] : [
+          ['Oczekujące / w trakcie', `${feed.incoming} / ${feed.processing}`],
+          ['Paczki z błędem', String(feed.errors)]
+        ])
       ]) { text(details, 'dt', label); text(details, 'dd', value); }
       card.append(details); cards.append(card);
     }
@@ -129,7 +132,7 @@
     if (!recent.length) { text(batches, 'li', 'Nie ma jeszcze zaimportowanych paczek.'); return; }
     for (const batch of recent) {
       const item = document.createElement('li'); const info = document.createElement('div');
-      text(info, 'strong', `${batch.source === 'mls' ? 'MLS' : 'EstiCRM'} · ${batch.file_name}`);
+      text(info, 'strong', `${batch.source === 'mls' ? 'MLS' : batch.source === 'vixcrm' ? 'VixCRM' : 'EstiCRM'} · ${batch.file_name}`);
       text(info, 'span', `${dateTime(batch.imported_at)} · ${batch.export_type === 'full' ? 'pełna' : 'przyrostowa'} · ${batch.offer_count} rekordów`);
       item.append(info); batches.append(item);
     }

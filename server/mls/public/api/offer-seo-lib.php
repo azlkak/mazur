@@ -4,6 +4,7 @@ declare(strict_types=1);
 // Shared read model for the server-rendered offer page and the offer sitemap.
 // This file has no public output when requested directly.
 require_once __DIR__ . '/portal-visibility.php';
+require_once __DIR__ . '/offer-source.php';
 if (is_file(__DIR__ . '/description-formatter.php')) {
     require_once __DIR__ . '/description-formatter.php';
 }
@@ -46,11 +47,11 @@ function mazurSeoPlainDescription(string $value): string
 
 function mazurSeoFindOffer(PDO $db, string $id): ?array
 {
-    if (!preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $id)) return null;
-    $source = str_starts_with($id, 'esti-') ? 'esticrm' : 'mls';
-    $sourceId = $source === 'esticrm' ? substr($id, 5) : $id;
+    $parsedId = portalParseOfferId($id);
+    if ($parsedId === null) return null;
+    [$source, $sourceId] = $parsedId;
     $hasSource = portalOffersHaveSource($db);
-    if ($source === 'esticrm' && !$hasSource) return null;
+    if ($source !== 'mls' && !$hasSource) return null;
     $statement = $db->prepare($hasSource
         ? 'SELECT source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE source=? AND source_id=? AND publishable=1 LIMIT 1'
         : "SELECT 'mls' AS source, source_id, source_export_at, fields_json, images_json FROM mls_offers WHERE source_id=? AND publishable=1 LIMIT 1"
@@ -86,7 +87,7 @@ function mazurSeoPublicOffer(array $row, array $fields): array
     }
     $images = array_values(array_filter($images, static fn($name): bool => is_string($name)));
     return [
-        'id' => $row['source'] === 'esticrm' ? 'esti-' . $row['source_id'] : (string)$row['source_id'],
+        'id' => portalPublicOfferId((string)$row['source'], (string)$row['source_id']),
         'number' => mazurSeoText($fields, 'numberExport', 'number'),
         'title' => $title,
         'type' => $type,
@@ -113,7 +114,7 @@ function mazurSeoPublicOffer(array $row, array $fields): array
         'features' => array_slice(array_values(array_unique($features)), 0, 20),
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
-            static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
+            static fn(string $name): string => portalImageUrl($name),
             $images
         ),
     ];
@@ -143,7 +144,7 @@ function mazurSeoVisibleOfferUrls(PDO $db): Generator
         if ($propertyKey !== '' && isset($seenProperties[$propertyKey])) continue;
         if ($propertyKey !== '') $seenProperties[$propertyKey] = true;
         yield [
-            'id' => $source === 'esticrm' ? 'esti-' . $sourceId : $sourceId,
+            'id' => portalPublicOfferId($source, $sourceId),
             'lastmod' => (string)($row['seo_modified_at'] ?? ''),
         ];
     }

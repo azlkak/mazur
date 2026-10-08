@@ -154,7 +154,7 @@ if ($id === '' && is_file($template)) {
     readfile($template);
     exit;
 }
-if (!preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $id)) {
+if (portalParseOfferId($id) === null) {
     http_response_code(404);
     header('Cache-Control: no-store');
     if (is_file($template)) readfile($template);

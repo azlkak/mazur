@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
+require_once __DIR__ . '/offer-source.php';
 
 header('Cache-Control: no-store');
 header('X-Content-Type-Options: nosniff');
@@ -126,6 +127,32 @@ function integrationStatus(PDO $db, array $config): array
             'batches' => $batches,
         ];
     }
+    // VixCRM is fetched as a full XML snapshot, without FTP ZIP folders.
+    if ($offerSourceColumn && $sourceColumn) {
+        $count = $db->query("SELECT COUNT(*) AS total, COALESCE(SUM(publishable = 1), 0) AS publishable FROM mls_offers WHERE source='vixcrm'")->fetch();
+        $batches = $db->query("SELECT file_name, export_type, offer_count, UNIX_TIMESTAMP(imported_at) AS imported_at FROM mls_batches WHERE source='vixcrm' ORDER BY imported_at DESC LIMIT 6")->fetchAll();
+        foreach ($batches as &$batch) {
+            $batch['offer_count'] = (int)$batch['offer_count'];
+            $batch['imported_at'] = (int)$batch['imported_at'];
+        }
+        unset($batch);
+        $statusPath = $root . '/logs/status-vixcrm.json';
+        $health = is_file($statusPath) && filesize($statusPath) <= 2048 ? json_decode((string)file_get_contents($statusPath), true) : null;
+        if (!is_array($health)) $health = [];
+        $enabled = (bool)($config['vixcrm_import_enabled'] ?? false);
+        $state = !$enabled ? 'disabled' : (($health['result'] ?? '') === 'error' ? 'error' : (($health['result'] ?? '') === 'running' ? 'running' : ($batches ? 'ok' : 'unknown')));
+        $feeds['vixcrm'] = [
+            'state' => $state, 'state_reason' => '', 'enabled' => $enabled,
+            'last_run_at' => (int)($health['last_run_at'] ?? 0) ?: null,
+            'last_success_at' => (int)($health['last_success_at'] ?? 0) ?: null,
+            'last_error_at' => (int)($health['last_error_at'] ?? 0) ?: null,
+            'last_error' => $state === 'error' ? (string)($health['last_error'] ?? '') : '',
+            'offers_total' => (int)$count['total'],
+            'offers_publishable' => (int)$count['publishable'],
+            'incoming' => 0, 'processing' => 0, 'errors' => $state === 'error' ? 1 : 0,
+            'batches' => $batches,
+        ];
+    }
     return ['checked_at' => time(), 'retention_days' => max(1, (int)($config['archive_retention_days'] ?? 7)), 'feeds' => $feeds];
 }
 
@@ -153,7 +180,7 @@ try {
         }
         unset($row);
         $hidden = $db->query('SELECT source, source_id, offer_number, title, hidden_at FROM portal_hidden_offers ORDER BY hidden_at DESC, source, source_id')->fetchAll();
-        foreach ($hidden as &$row) $row['id'] = $row['source'] === 'esticrm' ? 'esti-' . $row['source_id'] : $row['source_id'];
+        foreach ($hidden as &$row) $row['id'] = portalPublicOfferId((string)$row['source'], (string)$row['source_id']);
         unset($row);
         respond(200, ['authorized' => true, 'email' => $_SESSION['admin_email'], 'csrf' => $_SESSION['csrf'], 'selected' => $rows, 'hidden' => $hidden]);
     }
@@ -216,16 +243,16 @@ try {
     }
     if ($action === 'hide' || $action === 'restore') {
         $id = $input['id'] ?? null;
-        if (!is_string($id) || !preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $id)) respond(422, ['error' => 'invalid_offer']);
-        $source = str_starts_with($id, 'esti-') ? 'esticrm' : 'mls';
-        $sourceId = $source === 'esticrm' ? substr($id, 5) : $id;
+        $parsedId = is_string($id) ? portalParseOfferId($id) : null;
+        if ($parsedId === null) respond(422, ['error' => 'invalid_offer']);
+        [$source, $sourceId] = $parsedId;
         $db = db($config);
         $hasSource = portalOffersHaveSource($db);
         if ($action === 'restore') {
             $db->prepare('DELETE FROM portal_hidden_offers WHERE source = ? AND source_id = ?')->execute([$source, $sourceId]);
             respond(200, ['ok' => true]);
         }
-        if ($source === 'esticrm' && !$hasSource) respond(404, ['error' => 'offer_unavailable']);
+        if ($source !== 'mls' && !$hasSource) respond(404, ['error' => 'offer_unavailable']);
         $lookup = $db->prepare($hasSource
             ? 'SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1'
             : 'SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
