@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
+require_once __DIR__ . '/offer-source.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -45,7 +46,7 @@ try {
         if ($title === '') $title = $type . ($city !== '' ? ' — ' . $city : '');
 
         $offers[] = [
-            'id' => $row['source'] === 'esticrm' ? 'esti-' . $row['source_id'] : (string)$row['source_id'],
+            'id' => portalPublicOfferId((string)$row['source'], (string)$row['source_id']),
             'number' => (string)($fields['numberExport'] ?? $fields['number'] ?? ''),
             'title' => $title,
             'type' => $type,
@@ -65,7 +66,7 @@ try {
             'exportedAt' => (string)$row['source_export_at'],
             'imageCount' => count(array_filter($images, static fn($name): bool => is_string($name))),
             'images' => array_map(
-                static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
+                static fn(string $name): string => portalImageUrl($name),
                 array_slice(array_values(array_filter($images, static fn($name): bool => is_string($name))), 0, 5)
             ),
         ];

@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/offer-source.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -101,7 +102,7 @@ try {
     if ($phone === '' && $email === '') reply(422, 'missing_contact');
     if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) reply(422, 'invalid_email');
     if ($phone !== '' && !preg_match('/\A[0-9+() .-]{6,32}\z/u', $phone)) reply(422, 'invalid_phone');
-    if ($offerId !== '' && !preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $offerId)) reply(422, 'invalid_offer');
+    if ($offerId !== '' && portalParseOfferId($offerId) === null) reply(422, 'invalid_offer');
 
     $config = require $privateRoot . '/config.php';
     $company = trim((string)($config['esticrm_company'] ?? ''));
@@ -128,8 +129,7 @@ try {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ]);
-        $source = str_starts_with($offerId, 'esti-') ? 'esticrm' : 'mls';
-        $sourceId = $source === 'esticrm' ? substr($offerId, 5) : $offerId;
+        [$source, $sourceId] = portalParseOfferId($offerId);
         $statement = $db->prepare('SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1');
         $statement->execute([$source, $sourceId]);
         $row = $statement->fetch();

@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
+require_once __DIR__ . '/offer-source.php';
 // Optional during a rolling deployment: missing formatter keeps the plain API.
 if (is_file(__DIR__ . '/description-formatter.php')) require_once __DIR__ . '/description-formatter.php';
 
@@ -35,13 +36,13 @@ function publicDescription(string $value): string
 
 try {
     $id = (string)($_GET['id'] ?? '');
-    if (!preg_match('/\A(?:esti-)?[0-9]{1,40}\z/', $id)) {
+    $parsedId = portalParseOfferId($id);
+    if ($parsedId === null) {
         http_response_code(400);
         echo '{"error":"Nieprawidłowy numer oferty"}';
         exit;
     }
-    $source = str_starts_with($id, 'esti-') ? 'esticrm' : 'mls';
-    $sourceId = $source === 'esticrm' ? substr($id, 5) : $id;
+    [$source, $sourceId] = $parsedId;
 
     $privateRoot = dirname(__DIR__, 2) . '/mls';
     $config = require $privateRoot . '/config.php';
@@ -51,7 +52,7 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
     $hasSource = portalOffersHaveSource($db);
-    if ($source === 'esticrm' && !$hasSource) {
+    if ($source !== 'mls' && !$hasSource) {
         http_response_code(404);
         echo '{"error":"Oferta nie jest dostępna"}';
         exit;
@@ -102,7 +103,7 @@ try {
     $features = array_values(array_unique($features));
 
     $offer = [
-        'id' => $source === 'esticrm' ? 'esti-' . $row['source_id'] : (string)$row['source_id'],
+        'id' => portalPublicOfferId($source, (string)$row['source_id']),
         'number' => firstText($fields, 'numberExport', 'number'),
         'title' => $title,
         'type' => $type,
@@ -131,7 +132,7 @@ try {
         'features' => array_slice($features, 0, 20),
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
-            static fn(string $name): string => 'https://api.mazurestate.pl/api/mls-image.php?name=' . rawurlencode($name),
+            static fn(string $name): string => portalImageUrl($name),
             array_values(array_filter($images, static fn($name): bool => is_string($name)))
         ),
     ];

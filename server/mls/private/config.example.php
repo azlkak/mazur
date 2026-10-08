@@ -6,6 +6,11 @@ return [
     'password' => 'REPLACE',
     'enabled' => false,
     'esticrm_import_enabled' => false,
+    // VixCRM is a separate full XML snapshot. Enable only after a dry run.
+    'vixcrm_import_enabled' => false,
+    'vixcrm_feed_url' => '', // keep the private feed URL in config.php only
+    'vixcrm_publish_mode' => 'none', // none, selected, all
+    'vixcrm_publish_ids' => [], // external IDs when mode=selected
     'max_zip_bytes' => 20 * 1024 ** 3,
     'max_expanded_bytes' => 30 * 1024 ** 3,
     'max_entries' => 200000,
