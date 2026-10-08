@@ -21,10 +21,11 @@
     if (header) header.innerHTML = `<div class="header-bar shell"><a class="brand" href="${home}#top" aria-label="MazurEstate — strona główna"><img src="../assets/images/mazur-estate-logo-transparent.png" alt="MazurEstate"></a><nav class="main-nav"><a href="${home}#categories">${t.choose}</a><a href="${advisoryUrl}">${t.advisory}</a><a href="${home}#why-us">${t.why}</a><a href="${developersUrl}">${t.developers}</a><a href="${aboutUrl}">${t.about}</a><a href="tel:+48503937749">${t.contact}</a></nav><div class="header-actions"><div class="chrome-language"><button type="button" aria-expanded="false">🌐 <span>${lang==='en'?'ENG':lang==='uk'?'UKR':lang.toUpperCase()}</span><b>⌄</b></button><div>${[['pl','PL'],['uk','UKR'],['en','ENG'],['ru','RU']].map(([code,label])=>`<a href="${withLang(currentBase,code)}">${label}</a>`).join('')}</div></div><a class="phone" href="tel:+48503937749">+48 503 937 749</a><a class="button chrome-primary" href="tel:+48503937749">${t.contactUs}</a></div></div>`;
     if (header) {
       const bar = header.querySelector('.header-bar');
+      header.querySelector('.brand')?.setAttribute('aria-label', `MazurEstate — ${{pl:'strona główna',en:'home',uk:'головна',ru:'главная'}[lang]}`);
       const menuButton = document.createElement('button');
       menuButton.className = 'chrome-menu-button';
       menuButton.type = 'button';
-      menuButton.setAttribute('aria-label', 'Menu');
+      menuButton.setAttribute('aria-label', {pl:'Menu',en:'Menu',uk:'Меню',ru:'Меню'}[lang]);
       menuButton.setAttribute('aria-expanded', 'false');
       menuButton.setAttribute('aria-controls', 'chrome-mobile-nav');
       menuButton.innerHTML = '<span></span><span></span><span></span>';

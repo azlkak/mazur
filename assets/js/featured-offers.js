@@ -15,6 +15,7 @@
     uk: 'Обрані пропозиції доступні на сайті. Локальний перегляд не може завантажити їх через API.',
     ru: 'Избранные предложения доступны на сайте. Локальный просмотр не может загрузить их через API.'
   }[lang];
+  const propertyNumberLabel = {pl:'nr',en:'no.',uk:'№',ru:'№'}[lang];
   function updateControls(grid, previous, next) {
     const last = grid.scrollWidth - grid.clientWidth;
     previous.disabled = grid.scrollLeft <= 1;
@@ -27,7 +28,7 @@
   }
   const api = 'https://api.mazurestate.pl/api/';
   const make = (tag, className, value) => { const el = document.createElement(tag); if (className) el.className = className; if (value !== undefined) el.textContent = value; return el; };
-  const number = new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'pl-PL');
+  const number = new Intl.NumberFormat({pl:'pl-PL',en:'en-GB',uk:'uk-UA',ru:'ru-RU'}[lang]);
   function card(offer) {
     const anchor = make('a', 'featured-card');
     anchor.href = window.mazurLocalizedUrl(`oferta/?id=${encodeURIComponent(offer.id)}`);
@@ -54,7 +55,7 @@
     const meta = make('p', 'featured-card-meta');
     if (Number(offer.area) > 0) meta.append(make('span', '', `${copy[3]} ${number.format(offer.area)} m²`));
     if (Number(offer.rooms) > 0) meta.append(make('span', '', `${number.format(offer.rooms)} ${copy[4]}`));
-    if (offer.number) meta.append(make('span', '', `nr ${offer.number}`));
+    if (offer.number) meta.append(make('span', '', `${propertyNumberLabel} ${offer.number}`));
     body.append(meta);
     if (Number(offer.price) > 0) body.append(make('p', 'featured-card-price', `${number.format(offer.price)} ${offer.currency || 'PLN'}`));
     anchor.append(body); return anchor;
