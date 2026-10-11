@@ -15,6 +15,7 @@ on:
       - 'wyniki-wyszukiwania/script.js'
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
+      - 'scripts/test-importer-recovery.php'
       - '.github/workflows/description-checks.yml'
   pull_request:
     paths:
@@ -30,6 +31,7 @@ on:
       - 'wyniki-wyszukiwania/script.js'
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
+      - 'scripts/test-importer-recovery.php'
       - '.github/workflows/description-checks.yml'
 permissions:
   contents: read
@@ -54,6 +56,7 @@ jobs:
           php scripts/test-description-formatter.php --require-dom
           php -l server/mls/private/bin/import.php
           php scripts/test-importer-regions.php
+          php scripts/test-importer-recovery.php
       - name: JavaScript syntax and description regression checks
         run: |
           node --check oferta/script.js
