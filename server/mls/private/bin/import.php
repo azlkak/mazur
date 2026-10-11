@@ -79,6 +79,165 @@ function reportSkipped(string $source, string $sha, string $file, array $skipped
         if (!$sent) event('WARNING: skipped-offer email could not be sent for ' . $sha);
     }
 }
+// An older failed batch must not replay deletes or a full snapshot over newer data.
+class StaleImportPackage extends RuntimeException {}
+function assertPackageOrder(string $path, string $latestCommitted): void {
+    if (batchTimestamp($path) < $latestCommitted) throw new StaleImportPackage('Older failed package requires reconciliation after a newer import');
+}
+function safeImportError(Throwable $e): string {
+    if ($e instanceof PDOException) return 'Database failure; SQLSTATE ' . preg_replace('/[^A-Z0-9]/', '', (string)$e->getCode()) . '; driver ' . (int)($e->errorInfo[1] ?? 0);
+    if ($e instanceof JsonException) return 'Invalid JSON data in package';
+    return $e instanceof RuntimeException ? substr($e->getMessage(), 0, 200) : 'Unexpected importer error';
+}
+function recoveryLog(string $message): void {
+    // A log or mail failure must not stop the remaining package queue.
+    try { event($message); } catch (Throwable $ignored) { fwrite(STDERR, $message . "\n"); }
+}
+/** @return resource|null A busy shared lock is an ordinary skipped run. */
+function acquireImportLock(string $path, ?callable $acquire = null) {
+    $lock = fopen($path, 'c');
+    if ($lock === false) fail('Cannot open import lock');
+    $wouldBlock = 0;
+    $acquire ??= static function($lock, int &$wouldBlock): bool {
+        return flock($lock, LOCK_EX | LOCK_NB, $wouldBlock);
+    };
+    try { $acquired = $acquire($lock, $wouldBlock); }
+    catch (Throwable $error) { fclose($lock); throw $error; }
+    if ($acquired) return $lock;
+    fclose($lock);
+    if ($wouldBlock) return null;
+    fail('Cannot acquire import lock');
+}
+function saveFailureReport(string $path, array $report): void {
+    if (!is_dir(dirname($path)) || !is_writable(dirname($path))) fail('Cannot write failure report directory');
+    $tmp = tempnam(dirname($path), '.failure-');
+    if ($tmp === false) fail('Cannot create failure report');
+    try {
+        $json = json_encode($report, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        if (file_put_contents($tmp, $json, LOCK_EX) !== strlen($json) || !rename($tmp, $path)) fail('Cannot save failure report');
+    } finally { if (is_file($tmp)) unlink($tmp); }
+}
+function reportPackageFailure(string $source, array $report, array $config): void {
+    $label = $source === 'esticrm' ? 'EstiCRM' : 'MLS';
+    $recovered = $report['result'] === 'recovered';
+    $lines = [
+        'Źródło: ' . $label,
+        'Paczka: ' . $report['file'],
+        'Pierwszy błąd: ' . $report['first_error'],
+        'Ostatni błąd: ' . $report['last_error'],
+        'Liczba prób: ' . $report['attempts'],
+        $recovered ? 'Importer ponownie działa poprawnie.' : (($report['file'] === '(uruchomienie importera)')
+            ? 'Nie udało się uruchomić importera. Kolejna próba nastąpi zgodnie z harmonogramem.'
+            : 'Paczka pozostaje w katalogu errors; pozostałe paczki są przetwarzane.'),
+    ];
+    if ($report['manual_reconciliation'] ?? false) $lines[] = 'Zaimportowano już nowsze dane. Ta paczka wymaga ręcznego uzgodnienia albo nowego pełnego eksportu.';
+    $recipients = $config['notification_emails'] ?? [];
+    if (!is_array($recipients) || $recipients === []) fail('No import notification recipients configured');
+    foreach ($recipients as $to) {
+        if (!is_string($to) || !filter_var($to, FILTER_VALIDATE_EMAIL) || preg_match('/[\r\n]/', $to)) fail('Invalid notification email configuration');
+        $subject = 'MazurEstate - ' . ($recovered ? 'import ponowiony poprawnie - ' : 'błąd importu - ') . $label;
+        if (!mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', implode("\n", $lines), [
+            'From' => 'powiadomienia@mazurestate.pl', 'Content-Type' => 'text/plain; charset=UTF-8',
+        ])) fail('Could not send import failure notification');
+    }
+}
+function flushFailureNotifications(string $logs, string $source, callable $notify, array &$attempted = []): void {
+    foreach (glob($logs . '/batch-failure-' . $source . '-*.json') as $path) {
+        $report = json_decode((string)file_get_contents($path), true);
+        if (!is_array($report) || !isset($report['result'], $report['last_error'])) continue;
+        $signature = $report['result'] . ':' . $report['last_error'];
+        if (($report['notified'] ?? '') === $signature) continue;
+        if (isset($attempted[$path][$signature])) continue;
+        $attempted[$path][$signature] = true;
+        try {
+            $notify($report);
+            $report['notified'] = $signature;
+            saveFailureReport($path, $report);
+        } catch (Throwable $ignored) {
+            recoveryLog($source . ': failure notification was not sent; will retry on next run');
+        }
+    }
+}
+/** Each package is isolated; one failure can never abort later queue items. */
+function processImportQueue(string $feedRoot, array $c, string $source, callable $import, callable $notify): array {
+    $logs = $source === 'esticrm' ? dirname($feedRoot) . '/logs' : $feedRoot . '/logs';
+    $files = array_merge(glob($feedRoot . '/processing/*.zip'), glob($feedRoot . '/incoming/*.zip'), glob($feedRoot . '/errors/*.zip'));
+    $stamp = function(string $path): string {
+        try { return batchTimestamp($path); } catch (RuntimeException $ignored) { return ''; }
+    };
+    usort($files, fn($a, $b) => [$stamp($a), basename($a)] <=> [$stamp($b), basename($b)]);
+    $summary = ['imported' => 0, 'failed' => 0, 'last_error' => ''];
+    $notificationAttempts = [];
+    $limit = max(1, min(3, (int)($c['import_retry_attempts'] ?? 2)));
+    foreach ($files as $src) {
+        if (!is_link($src) && time() - filemtime($src) < $c['min_age_seconds']) continue;
+        $key = !is_link($src) ? hash_file('sha256', $src) : false;
+        $key = $key ?: hash('sha256', basename($src));
+        $reportPath = $logs . '/batch-failure-' . $source . '-' . $key . '.json';
+        $previous = is_file($reportPath) ? json_decode((string)file_get_contents($reportPath), true) : [];
+        $report = is_array($previous) ? $previous : [];
+        $report += ['source' => $source, 'file' => basename($src), 'attempts' => 0, 'first_error' => '', 'last_error' => '', 'first_error_at' => 0];
+        $path = $src;
+        $ok = false;
+        if (!empty($report['manual_reconciliation'])) {
+            $summary['failed']++;
+            $summary['last_error'] = $report['last_error'];
+            continue;
+        }
+        for ($attempt = 0; $attempt < $limit; $attempt++) {
+            $report['attempts']++;
+            try {
+                if (is_link($path)) fail('Symlink package rejected');
+                batchTimestamp($path);
+                $claim = $feedRoot . '/processing/' . basename($path);
+                if ($path !== $claim) {
+                    if (file_exists($claim) || !rename($path, $claim)) fail('Cannot claim package');
+                    $path = $claim;
+                }
+                $import($path);
+                $ok = true;
+                $summary['imported']++;
+                if ($report['first_error'] !== '') $report['result'] = 'recovered';
+                break;
+            } catch (Throwable $e) {
+                $message = safeImportError($e);
+                if ($report['first_error'] === '') {
+                    $report['first_error'] = $message;
+                    $report['first_error_at'] = time();
+                }
+                $report['last_error'] = $message;
+                $report['last_error_at'] = time();
+                $report['result'] = 'failed';
+                recoveryLog($source . ': package ' . basename($src) . ' attempt ' . $report['attempts'] . ' failed: ' . $message);
+                if ($e instanceof StaleImportPackage) { $report['manual_reconciliation'] = true; break; }
+                // Retry right away once; repeated cron runs are the backoff for persistent faults.
+            }
+        }
+        if (!$ok) {
+            $summary['failed']++;
+            $summary['last_error'] = $report['last_error'];
+            $target = $feedRoot . '/errors/' . basename($path);
+            if (dirname($path) !== $feedRoot . '/errors' && (is_file($path) || is_link($path))) {
+                if (file_exists($target)) $target = $feedRoot . '/errors/' . bin2hex(random_bytes(8)) . '-' . basename($path);
+                if (!rename($path, $target)) recoveryLog($source . ': cannot quarantine ' . basename($path));
+            }
+        }
+        if ($report['first_error'] === '') continue;
+        // Keep the original failure independently of the latest cron status.
+        try { saveFailureReport($reportPath, $report); }
+        catch (Throwable $ignored) {
+            recoveryLog($source . ': cannot persist failure report');
+            // A full disk must not also suppress the only failure alert.
+            try { $notify($report); }
+            catch (Throwable $ignoredMail) { recoveryLog($source . ': cannot send failure notification'); }
+        }
+        flushFailureNotifications($logs, $source, $notify, $notificationAttempts);
+    }
+    // Retry undelivered notifications even if the ZIP was already archived.
+    flushFailureNotifications($logs, $source, $notify, $notificationAttempts);
+    return $summary;
+}
+
 function batchTimestamp(string $path): string {
     // MLS sends YYYYMMDDHHMMSS; older example packages include a separator.
     if (!preg_match('/_([0-9]{8})_?([0-9]{6})\.zip\z/', basename($path), $match)) fail('Unrecognized batch timestamp');
@@ -160,7 +319,7 @@ function inspect(string $path, array $c, string $source): array {
             if ($stamp !== '') {
                 $date = DateTimeImmutable::createFromFormat('!Y-m-d H:i:s', $stamp);
                 if (!$date || $date->format('Y-m-d H:i:s') !== $stamp) fail('Invalid export timestamp');
-            } elseif ($action !== 'delete') {
+            } else {
                 $packageDate = DateTimeImmutable::createFromFormat('!YmdHis', batchTimestamp($path));
                 if (!$packageDate) fail('Invalid package timestamp');
                 $stamp = $packageDate->format('Y-m-d H:i:s');
@@ -200,12 +359,113 @@ function inspect(string $path, array $c, string $source): array {
         return [$rows, $images, $total, $exportType, $skipped];
     } finally { $z->close(); }
 }
+
+function importPackage(string $path, array $c, string $source, string $feedRoot, string &$latestCommitted): void {
+    $db = null;
+    $exportType = null;
+    try {
+        $sha = hash_file('sha256', $path);
+        $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
+        $q = $db->prepare('SELECT sha256 FROM mls_batches WHERE source=? AND sha256=?'); $q->execute([$source,$sha]);
+        $skipped = [];
+        if (!$q->fetchColumn()) {
+            assertPackageOrder($path, $latestCommitted);
+            [$rows, $images, $total, $exportType, $skipped] = inspect($path, $c, $source);
+            if (disk_free_space(ROOT) < $total + 512 * 1024 ** 2) fail('Insufficient staging space');
+            $z = new ZipArchive(); if ($z->open($path) !== true) fail('Cannot reopen ZIP');
+            try {
+                foreach ($images as $name=>$target) {
+                    $dest = ROOT . '/images/' . $target;
+                    if (file_exists($dest)) {
+                        if (hash_file('sha256', $dest) !== substr($target,0,64)) fail('Stored image corrupted');
+                        continue;
+                    }
+                    $bytes = $z->getFromName($name);
+                    if ($bytes === false || hash('sha256',$bytes) !== substr($target,0,64)) fail('Package changed during import');
+                    $tmp = tempnam(ROOT . '/images', '.tmp-');
+                    if ($tmp === false || file_put_contents($tmp,$bytes) !== strlen($bytes) || !rename($tmp,$dest)) fail('Cannot store image');
+                }
+            } finally { $z->close(); }
+            if (hash_file('sha256', $path) !== $sha) fail('Package changed during import');
+            $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
+            $db->beginTransaction();
+            $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source=? AND source_id=? FOR UPDATE');
+            $put = $db->prepare('INSERT INTO mls_offers (source,source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
+            $hideOutsideRegion = $db->prepare('UPDATE mls_offers SET source_export_at=?, batch_sha256=?, publishable=0, fields_json=? WHERE source=? AND source_id=?');
+            $delete = $db->prepare('DELETE FROM mls_offers WHERE source=? AND source_id=?');
+            if ($exportType === 'full') {
+                $db->exec('DROP TEMPORARY TABLE IF EXISTS mls_full_ids');
+                $db->exec('CREATE TEMPORARY TABLE mls_full_ids (source_id VARCHAR(40) CHARACTER SET ascii PRIMARY KEY) ENGINE=MEMORY');
+                $seen = $db->prepare('INSERT INTO mls_full_ids (source_id) VALUES (?)');
+            }
+            foreach ($rows as $id=>$r) {
+                if ($exportType === 'full') $seen->execute([$id]);
+                $get->execute([$source,$id]); $old = $get->fetch(PDO::FETCH_ASSOC);
+                if ($r['action'] === 'delete') {
+                    if (!$old || $r['stamp'] === '' || $old['source_export_at'] <= $r['stamp']) $delete->execute([$source,$id]);
+                    continue;
+                }
+                if ($old && $old['source_export_at'] > $r['stamp']) continue;
+                if (!empty($r['out_of_region'])) {
+                    if ($old) $hideOutsideRegion->execute([$r['stamp'],$sha,json_encode($r['fields'],JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),$source,$id]);
+                    continue;
+                }
+                $gallery = $r['gallery'] ?? ($old ? json_decode($old['images_json'],true,512,JSON_THROW_ON_ERROR) : []);
+                $f = $r['fields'];
+                // Conservative candidate flag. Public API remains disabled separately.
+                $visible = ($f['status'] ?? '') === '3' && isSupportedRegion($f, $source) && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
+                $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
+                $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
+                $put->execute([$source,$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
+            }
+            if ($exportType === 'full') {
+                $remove = $db->prepare('DELETE o FROM mls_offers o LEFT JOIN mls_full_ids f ON f.source_id=o.source_id WHERE o.source=? AND f.source_id IS NULL');
+                $remove->execute([$source]);
+            }
+            // The location API reads these columns, so the same transaction
+            // adds, updates and removes suggestions with the offers.
+            $locationCheck = $db->prepare("SELECT COUNT(*) AS total, SUM(location_city = '') AS missing_city FROM mls_offers WHERE source=? AND publishable = 1");
+            $locationCheck->execute([$source]); $locationCheck = $locationCheck->fetch(PDO::FETCH_ASSOC);
+            $q = $db->prepare('INSERT INTO mls_batches (source,sha256,file_name,export_type,offer_count) VALUES (?,?,?,?,?)');
+            $q->execute([$source,$sha,basename($path),$exportType,count($rows)]); $db->commit();
+            $latestCommitted = max($latestCommitted, batchTimestamp($path));
+            recoveryLog($source . ': ' . ((int)$locationCheck['missing_city'] > 0 ? 'WARNING ' : '') . 'Location search checked: ' . (int)$locationCheck['total'] . ' publishable offers, ' . (int)$locationCheck['missing_city'] . ' without city');
+        }
+        $archivePath = $feedRoot . '/archive/' . $sha . '.zip';
+        if (is_file($archivePath)) {
+            if (!unlink($path)) fail('Cannot remove duplicate package');
+        } elseif (!rename($path, $archivePath)) fail('Cannot archive committed package');
+        recoveryLog($source . ': imported batch ' . $sha);
+        try { reportSkipped($source, $sha, basename($path), $skipped, $c); }
+        catch (Throwable $notificationError) { recoveryLog('WARNING: could not send skipped-offer report for ' . $sha); }
+        try {
+            $keepDays = max(1, (int)($c['archive_retention_days'] ?? 7));
+            foreach (glob($feedRoot . '/archive/*.zip') as $oldArchive) {
+                if (filemtime($oldArchive) < time() - $keepDays * 86400) @unlink($oldArchive);
+            }
+            if (($exportType ?? null) === 'full') {
+                $used = [];
+                foreach ($db->query('SELECT images_json FROM mls_offers') as $record) {
+                    foreach (json_decode($record['images_json'], true, 512, JSON_THROW_ON_ERROR) as $image) $used[$image] = true;
+                }
+                foreach (glob(ROOT . '/images/*') as $stored) if (is_file($stored) && !isset($used[basename($stored)])) @unlink($stored);
+            }
+        } catch (Throwable $cleanupError) {
+            // The batch is committed and archived; housekeeping cannot undo it.
+            recoveryLog($source . ': WARNING archive/image cleanup failed: ' . safeImportError($cleanupError));
+        }
+    } catch (Throwable $e) {
+        if ($db instanceof PDO && $db->inTransaction()) $db->rollBack();
+        throw $e;
+    }
+}
+
 $source = 'mls';
 try {
-    foreach (['zip', 'SimpleXML', 'pdo_mysql'] as $ext) if (!extension_loaded($ext)) fail('Missing extension: ' . $ext);
     $args = array_slice($argv, 1);
     $source = in_array('--source=esticrm', $args, true) ? 'esticrm' : 'mls';
     $dry = in_array('--check', $args, true);
+    foreach (['zip', 'SimpleXML', 'pdo_mysql'] as $ext) if (!extension_loaded($ext)) fail('Missing extension: ' . $ext);
     $checkPath = null;
     foreach ($args as $arg) {
         if ($arg === '--check' || $arg === '--source=esticrm') continue;
@@ -227,114 +487,60 @@ try {
         if (!is_dir($feedRoot . '/' . $directory)) fail('Missing feed directory: ' . $directory);
     }
     // Both feeds share an image store; serialize imports and orphan cleanup.
-    $lock = fopen(ROOT . '/import.lock', 'c');
-    if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) fail('Another import is running');
+    $lock = acquireImportLock(ROOT . '/import.lock');
+    if ($lock === null) {
+        recoveryLog($source . ': another import is running; skipped until the next scheduled run');
+        exit(0);
+    }
     recordRun($source, 'running');
-    if (glob($feedRoot . '/errors/*.zip')) fail('Resolve failed packages before continuing');
+    $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION]);
+    $latestCommitted = '';
+    foreach ($db->query('SELECT file_name FROM mls_batches WHERE source=' . $db->quote($source)) as $batch) {
+        try { $latestCommitted = max($latestCommitted, batchTimestamp($batch['file_name'])); }
+        catch (RuntimeException $ignored) { /* Legacy unrecognised names are not a watermark. */ }
+    }
     $db = null;
-    $files = array_merge(glob($feedRoot . '/processing/*.zip'), glob($feedRoot . '/incoming/*.zip'));
-    foreach ($files as $f) batchTimestamp($f);
-    usort($files, fn($a,$b)=>strcmp(batchTimestamp($a), batchTimestamp($b)));
-    foreach ($files as $src) {
-        if (is_link($src)) fail('Symlink package rejected');
-        if (time() - filemtime($src) < $c['min_age_seconds']) break;
-        $path = $feedRoot . '/processing/' . basename($src);
-        if ($src !== $path && (file_exists($path) || !rename($src, $path))) fail('Cannot claim package');
-        try {
-            $sha = hash_file('sha256', $path);
-            $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
-            $q = $db->prepare('SELECT sha256 FROM mls_batches WHERE source=? AND sha256=?'); $q->execute([$source,$sha]);
-            $skipped = [];
-            if (!$q->fetchColumn()) {
-                [$rows, $images, $total, $exportType, $skipped] = inspect($path, $c, $source);
-                if (disk_free_space(ROOT) < $total + 512 * 1024 ** 2) fail('Insufficient staging space');
-                $z = new ZipArchive(); if ($z->open($path) !== true) fail('Cannot reopen ZIP');
-                try {
-                    foreach ($images as $name=>$target) {
-                        $dest = ROOT . '/images/' . $target;
-                        if (file_exists($dest)) {
-                            if (hash_file('sha256', $dest) !== substr($target,0,64)) fail('Stored image corrupted');
-                            continue;
-                        }
-                        $bytes = $z->getFromName($name);
-                        if ($bytes === false || hash('sha256',$bytes) !== substr($target,0,64)) fail('Package changed during import');
-                        $tmp = tempnam(ROOT . '/images', '.tmp-');
-                        if ($tmp === false || file_put_contents($tmp,$bytes) !== strlen($bytes) || !rename($tmp,$dest)) fail('Cannot store image');
-                    }
-                } finally { $z->close(); }
-                if (hash_file('sha256', $path) !== $sha) fail('Package changed during import');
-                $db = new PDO($c['dsn'], $c['user'], $c['password'], [PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION, PDO::ATTR_EMULATE_PREPARES=>false]);
-                $db->beginTransaction();
-                $get = $db->prepare('SELECT source_export_at, images_json FROM mls_offers WHERE source=? AND source_id=? FOR UPDATE');
-                $put = $db->prepare('INSERT INTO mls_offers (source,source_id,source_export_at,batch_sha256,publishable,location_city,location_district,fields_json,images_json) VALUES (?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE source_export_at=VALUES(source_export_at),batch_sha256=VALUES(batch_sha256),publishable=VALUES(publishable),location_city=VALUES(location_city),location_district=VALUES(location_district),fields_json=VALUES(fields_json),images_json=VALUES(images_json)');
-                $hideOutsideRegion = $db->prepare('UPDATE mls_offers SET source_export_at=?, batch_sha256=?, publishable=0, fields_json=? WHERE source=? AND source_id=?');
-                $delete = $db->prepare('DELETE FROM mls_offers WHERE source=? AND source_id=?');
-                if ($exportType === 'full') {
-                    $db->exec('DROP TEMPORARY TABLE IF EXISTS mls_full_ids');
-                    $db->exec('CREATE TEMPORARY TABLE mls_full_ids (source_id VARCHAR(40) CHARACTER SET ascii PRIMARY KEY) ENGINE=MEMORY');
-                    $seen = $db->prepare('INSERT INTO mls_full_ids (source_id) VALUES (?)');
-                }
-                foreach ($rows as $id=>$r) {
-                    if ($exportType === 'full') $seen->execute([$id]);
-                    $get->execute([$source,$id]); $old = $get->fetch(PDO::FETCH_ASSOC);
-                    if ($r['action'] === 'delete') {
-                        if (!$old || $r['stamp'] === '' || $old['source_export_at'] <= $r['stamp']) $delete->execute([$source,$id]);
-                        continue;
-                    }
-                    if ($old && $old['source_export_at'] > $r['stamp']) continue;
-                    if (!empty($r['out_of_region'])) {
-                        if ($old) $hideOutsideRegion->execute([$r['stamp'],$sha,json_encode($r['fields'],JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),$source,$id]);
-                        continue;
-                    }
-                    $gallery = $r['gallery'] ?? ($old ? json_decode($old['images_json'],true,512,JSON_THROW_ON_ERROR) : []);
-                    $f = $r['fields'];
-                    // Conservative candidate flag. Public API remains disabled separately.
-                    $visible = ($f['status'] ?? '') === '3' && isSupportedRegion($f, $source) && ($source === 'esticrm' || ($f['offerExport'] ?? '') === '1');
-                    $city = trim((string)(($f['locationExportCityName'] ?? '') ?: ($f['locationCityName'] ?? '')));
-                    $district = trim((string)(($f['locationExportPrecinctName'] ?? '') ?: ($f['locationPrecinctName'] ?? '')));
-                    $put->execute([$source,$id,$r['stamp'],$sha,(int)$visible,$city,$district,json_encode($f,JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE),json_encode($gallery,JSON_THROW_ON_ERROR)]);
-                }
-                if ($exportType === 'full') {
-                    $remove = $db->prepare('DELETE o FROM mls_offers o LEFT JOIN mls_full_ids f ON f.source_id=o.source_id WHERE o.source=? AND f.source_id IS NULL');
-                    $remove->execute([$source]);
-                }
-                // The location API reads these columns, so the same transaction
-                // adds, updates and removes suggestions with the offers.
-                $locationCheck = $db->prepare("SELECT COUNT(*) AS total, SUM(location_city = '') AS missing_city FROM mls_offers WHERE source=? AND publishable = 1");
-                $locationCheck->execute([$source]); $locationCheck = $locationCheck->fetch(PDO::FETCH_ASSOC);
-                $q = $db->prepare('INSERT INTO mls_batches (source,sha256,file_name,export_type,offer_count) VALUES (?,?,?,?,?)');
-                $q->execute([$source,$sha,basename($path),$exportType,count($rows)]); $db->commit();
-                event($source . ': ' . ((int)$locationCheck['missing_city'] > 0 ? 'WARNING ' : '') . 'Location search checked: ' . (int)$locationCheck['total'] . ' publishable offers, ' . (int)$locationCheck['missing_city'] . ' without city');
-            }
-            $archivePath = $feedRoot . '/archive/' . $sha . '.zip';
-            if (is_file($archivePath)) {
-                if (!unlink($path)) fail('Cannot remove duplicate package');
-            } elseif (!rename($path, $archivePath)) fail('Cannot archive committed package');
-            event($source . ': imported batch ' . $sha);
-            try { reportSkipped($source, $sha, basename($path), $skipped, $c); }
-            catch (Throwable $notificationError) { event('WARNING: could not send skipped-offer report for ' . $sha); }
-            $keepDays = max(1, (int)($c['archive_retention_days'] ?? 7));
-            foreach (glob($feedRoot . '/archive/*.zip') as $oldArchive) {
-                if (filemtime($oldArchive) < time() - $keepDays * 86400) @unlink($oldArchive);
-            }
-            if (($exportType ?? null) === 'full') {
-                $used = [];
-                foreach ($db->query('SELECT images_json FROM mls_offers') as $record) {
-                    foreach (json_decode($record['images_json'], true, 512, JSON_THROW_ON_ERROR) as $image) $used[$image] = true;
-                }
-                foreach (glob(ROOT . '/images/*') as $stored) if (is_file($stored) && !isset($used[basename($stored)])) @unlink($stored);
-            }
-        } catch (Throwable $e) {
-            if ($db instanceof PDO && $db->inTransaction()) $db->rollBack();
-            if (is_file($path)) rename($path,$feedRoot . '/errors/' . bin2hex(random_bytes(8)) . '-' . basename($path));
-            throw $e;
+    $runReportPath = ROOT . '/logs/batch-failure-' . $source . '-run.json';
+    if (is_file($runReportPath)) {
+        $runReport = json_decode((string)file_get_contents($runReportPath), true);
+        if (is_array($runReport) && ($runReport['result'] ?? '') === 'failed') {
+            $runReport['result'] = 'recovered';
+            try { saveFailureReport($runReportPath, $runReport); } catch (Throwable $ignored) {}
         }
+    }
+    $summary = processImportQueue($feedRoot, $c, $source,
+        function(string $path) use ($c, $source, $feedRoot, &$latestCommitted): void {
+            importPackage($path, $c, $source, $feedRoot, $latestCommitted);
+        },
+        function(array $report) use ($c, $source): void { reportPackageFailure($source, $report, $c); }
+    );
+    $unresolved = count(glob($feedRoot . '/errors/*.zip'));
+    if ($summary['failed'] > 0 || $unresolved > 0) {
+        $message = $summary['last_error'] ?: 'Unresolved packages remain; later packages continue to import';
+        recordRun($source, 'error', $message);
+        exit(1);
     }
     recordRun($source, 'success');
 } catch (Throwable $e) {
     // Avoid logging PDO errors containing connection details.
-    $message = $e instanceof PDOException ? 'Database failure; SQLSTATE ' . preg_replace('/[^A-Z0-9]/', '', (string)$e->getCode()) . '; driver ' . (int)($e->errorInfo[1] ?? 0) : $e->getMessage();
-    recordRun($source, 'error', $e instanceof RuntimeException ? $message : 'Unexpected importer error');
+    $message = safeImportError($e);
+    if ($dry ?? false) { fwrite(STDERR, $message . "\n"); exit(1); }
+    recoveryLog($source . ': importer stopped: ' . $message);
+    recordRun($source, 'error', $message);
+    if (isset($c) && is_array($c) && is_dir(ROOT . '/logs')) {
+        $path = ROOT . '/logs/batch-failure-' . $source . '-run.json';
+        $previous = is_file($path) ? json_decode((string)file_get_contents($path), true) : [];
+        $report = is_array($previous) ? $previous : [];
+        $report += ['source' => $source, 'file' => '(uruchomienie importera)', 'attempts' => 0, 'first_error' => $message, 'first_error_at' => time()];
+        $report['attempts']++;
+        $report['result'] = 'failed';
+        $report['last_error'] = $message;
+        $report['last_error_at'] = time();
+        try {
+            saveFailureReport($path, $report);
+            flushFailureNotifications(ROOT . '/logs', $source, fn($report) => reportPackageFailure($source, $report, $c));
+        } catch (Throwable $ignored) { recoveryLog($source . ': cannot report importer failure'); }
+    }
     fwrite(STDERR, $message . "\n");
     exit(1);
 }

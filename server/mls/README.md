@@ -283,6 +283,24 @@ nieruchomości i typ transakcji na podstawie już zaimportowanych danych MLS.
   odrzuca ścieżki, dowiązania, DTD i encje.
 - Deduplikuje paczki i zdjęcia przez SHA-256. Przetworzone ZIP-y trafiają do
   `archive`, błędne do `errors`. Archiwum ZIP ma retencję 7 dni.
+- Błąd pojedynczej paczki nie blokuje kolejki. Domyślnie importer wykonuje
+  próbę oraz jedno natychmiastowe ponowienie (`import_retry_attempts=2`),
+  następnie izoluje błąd i przetwarza dalsze paczki. Kolejny cron obejmuje
+  również `errors/`. Młody plik lub błędna nazwa nie blokuje gotowych paczek.
+- Błędy i odzyskanie zapisuje trwale w prywatnych
+  `logs/batch-failure-{source}-*.json`. Powiadomienia trafiają na istniejące
+  `notification_emails`; identyczny nierozwiązany błąd nie generuje maila przy
+  każdym cronie. Nieudana wysyłka jest ponawiana przy kolejnym uruchomieniu.
+  Raport nie zawiera danych połączenia z bazą. `--check` nie wysyła maili.
+- Gdy zaimportowano już nowszą paczkę tego samego źródła, starsza
+  niezatwierdzona paczka pozostaje w `errors/` do ręcznego uzgodnienia lub
+  nowego pełnego eksportu. Nie wolno odtworzyć starszego pełnego stanu ani
+  starszych usunięć nad nowszymi danymi. Panel pozostaje ostrzegawczy aż do
+  usunięcia przyczyny, mimo że poprawne paczki dalej są importowane.
+- Testy kolejki: `php scripts/test-importer-recovery.php`. Sprawdzają
+  ponowienie, dalszy import, deduplikację maili, ponowienie niedostarczonego
+  powiadomienia, izolację źródeł i zabezpieczenie starszych paczek. Testy
+  nie łączą się z produkcyjną bazą i nie wysyłają prawdziwych maili.
 - Pomija błędne identyfikatory i powtarzające się rekordy, zapisuje raport
   oraz wysyła powiadomienie o pominięciach bez zatrzymywania poprawnych ofert.
 - Po pełnym eksporcie usuwa nieużywane zdjęcia.

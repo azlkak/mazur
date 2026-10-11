@@ -19,7 +19,9 @@ return [
     'min_age_seconds' => 600,
     'min_full_offers' => 1,
     'archive_retention_days' => 7,
-    // One summary email per imported package when offer records are skipped.
+    // Two attempts per package per cron run: initial attempt + immediate retry.
+    'import_retry_attempts' => 2,
+    // Failure/recovery alerts and one summary email per imported package when offer records are skipped.
     'notification_emails' => [],
     // One-time admin codes are sent only to these trusted addresses.
     'featured_admin_emails' => [],
