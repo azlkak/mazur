@@ -248,7 +248,7 @@ try {
     if (!is_file($formatter)) throw new RuntimeException('Description formatter missing: set translation_formatter_path');
     require_once $formatter;
     $db = trDb($config);
-    if ((int)$db->query("SELECT GET_LOCK('mazur_offer_translations',0)")->fetchColumn() !== 1) throw new RuntimeException('Another translator is running');
+    if ((int)$db->query("SELECT GET_LOCK('mazur_offer_translations'," . (in_array('--sync', $commands, true) ? 600 : 0) . ")")->fetchColumn() !== 1) throw new RuntimeException('Another translator is running');
     $syncErrors = 0;
     try {
         if (in_array('--retry-failed', $commands, true)) {
