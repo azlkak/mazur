@@ -368,10 +368,11 @@ try {
         if (in_array('--work', $commands, true)) {
             if (trim((string)($config['openai_api_key'] ?? '')) === '') throw new RuntimeException('Set openai_api_key in private config.php before --work');
             $limit = max(1, min(30, (int)($config['translation_max_jobs_per_run'] ?? 30)));
-            [$done, $failed, $stale] = trWork($db, $config, $limit, $only);
-            echo "Completed $done jobs; $failed failed/retrying; $stale stale.\n";
-            [$parameterDone, $parameterFailed] = trWorkParameters($db, $config, $limit - $done - $failed - $stale, $only);
+            // Short shared labels unblock many offers; keep the combined API budget at 30.
+            [$parameterDone, $parameterFailed] = trWorkParameters($db, $config, $limit, $only);
             echo "Completed $parameterDone parameter translations; $parameterFailed failed/retrying.\n";
+            [$done, $failed, $stale] = trWork($db, $config, $limit - $parameterDone - $parameterFailed, $only);
+            echo "Completed $done jobs; $failed failed/retrying; $stale stale.\n";
         }
     } finally { $db->query("SELECT RELEASE_LOCK('mazur_offer_translations')")->closeCursor(); }
     if ($syncErrors > 0) throw new RuntimeException("Translation sync failed for $syncErrors offers; see server error log");
