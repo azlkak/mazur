@@ -13,11 +13,11 @@ const offerUi={
   ru:{home:'Главная',categories:{mieszkania:'Квартиры',domy:'Дома',dzialki:'Участки',lokale:'Коммерческие помещения'},rent:'в аренду',sale:'на продажу',monthly:'в месяц',priceOnRequest:'Цена по запросу',meta:'Цена и подробности предложения MazurEstate.',photo:'фото',allPhotos:'Посмотреть все фото',labels:['Площадь','Количество комнат','Площадь участка','Этаж','Тип недвижимости','Год постройки','Номер предложения'],room:['комната','комнаты','комнат'],description:'О НЕДВИЖИМОСТИ',descriptionEmpty:'Свяжитесь с нами, чтобы узнать подробности об этой недвижимости.',features:'ОСОБЕННОСТИ',highlights:'Главные преимущества',featureEmpty:'Подробности у консультанта',enquiry:'ВОПРОС ПО ПРЕДЛОЖЕНИЮ',viewing:'Записаться на просмотр',enquiryIntro:'Оставьте контактные данные. Номер предложения мы автоматически добавим к сообщению.',orCall:'Или позвоните: +48 503 937 749',reviews:'ОТЗЫВЫ КЛИЕНТОВ',reviewsTitle:'Что говорят о нас клиенты',moreReviews:'Больше отзывов в Google Maps',previousReview:'Предыдущий отзыв',nextReview:'Следующий отзыв',unavailable:'Предложение недоступно',unavailableHeading:'Не удалось показать предложение',missingId:'В адресе страницы нет номера предложения.',tryAgain:'Попробуйте ещё раз позже.',typeNames:{'Mieszkanie':'Квартира','Apartament':'Апартаменты','Dom':'Дом','Dom wolnostojący':'Отдельный дом','Działka':'Участок','Lokal użytkowy':'Коммерческое помещение','Lokal komercyjny':'Коммерческое помещение','Biuro':'Офис','Magazyn':'Склад','Hala':'Производственное помещение'}}
 };
 const offerLanguage=()=>['pl','en','uk','ru'].includes(window.MAZUR_LANG||new URLSearchParams(location.search).get('lang'))?(window.MAZUR_LANG||new URLSearchParams(location.search).get('lang')):'pl';
-const localizedType=(value,lang,category)=>offerUi[lang].typeNames[String(value||'').trim()]||(lang==='pl'?value:offerUi[lang].categories[category]);
+const localizedType=(value,lang,category,translations={})=>translations.type||offerUi[lang].typeNames[String(value||'').trim()]||value||offerUi[lang].categories[category];
 const provinceNames={en:{'MAZOWIECKIE':'Masovian Voivodeship'},uk:{'MAZOWIECKIE':'Мазовецьке воєводство'},ru:{'MAZOWIECKIE':'Мазовецкое воеводство'}};
-const localizedProvince=(value,lang)=>provinceNames[lang]?.[String(value||'').toLocaleUpperCase('pl')]||value;
-// Only translate the closed set of feature labels produced by the importer.
-// Free-text tags supplied with an offer remain source content.
+const localizedProvince=(value,lang,translations={})=>provinceNames[lang]?.[String(value||'').toLocaleUpperCase('pl')]||translations.province||value;
+// Common importer labels work immediately; free-text tags come from the API's
+// incremental parameter translations, with the original Polish as fallback.
 const featureNames={
   en:{Balkon:'Balcony',Taras:'Terrace','Ogród':'Garden','Miejsce parkingowe':'Parking space','Parking podziemny':'Underground parking','Garaż':'Garage',Winda:'Lift',Internet:'Internet','Teren zamknięty':'Gated property'},
   uk:{Balkon:'Балкон',Taras:'Тераса','Ogród':'Сад','Miejsce parkingowe':'Паркомісце','Parking podziemny':'Підземний паркінг','Garaż':'Гараж',Winda:'Ліфт',Internet:'Інтернет','Teren zamknięty':'Закрита територія'},
@@ -120,8 +120,8 @@ function renderParameters(offer,category,lang){
   const values=[
     [copy.labels[0],offer.area?`${formatNumber(offer.area,lang)} m²`:'—'],
     [category==='dzialki'?copy.labels[2]:copy.labels[1],category==='dzialki'?(offer.plotArea?`${formatNumber(offer.plotArea,lang)} m²`:'—'):(offer.rooms?`${offer.rooms} ${localizedRoom(offer.rooms,lang)}`:'—')],
-    [copy.labels[3],offer.floor!==''?(offer.buildingFloors?`${offer.floor} / ${offer.buildingFloors}`:offer.floor):'—'],
-    [copy.labels[4],localizedType(offer.type,lang,category)||'—'],
+    [copy.labels[3],offer.floor!==''?(offer.buildingFloors?`${offer.parameterTranslations?.floor||offer.floor} / ${offer.buildingFloors}`:(offer.parameterTranslations?.floor||offer.floor)):'—'],
+    [copy.labels[4],localizedType(offer.type,lang,category,offer.parameterTranslations)||'—'],
     [copy.labels[5],offer.buildingYear||'—'],
     [copy.labels[6],offer.number||offer.id]
   ];
@@ -147,11 +147,11 @@ function renderDescription(offer,lang){
   });
 }
 
-function renderFeatures(features,lang){
+function renderFeatures(features,lang,translations={}){
   const section=document.querySelector('.features'),container=section?.querySelector('div');if(!section||!container)return;
   container.innerHTML='';
   const list=features.length?features:[offerUi[lang].featureEmpty];
-  list.slice(0,12).forEach(feature=>{const item=document.createElement('span');item.textContent=`✓ ${featureNames[lang]?.[feature]||feature}`;container.appendChild(item)});
+  list.slice(0,12).forEach(feature=>{const item=document.createElement('span');const translated=translations.features?.[feature]||featureNames[lang]?.[feature];item.textContent=`✓ ${translated||feature}`;if(lang!=='pl'&&!translated&&features.length)item.lang='pl';container.appendChild(item)});
 }
 
 function showUnavailable(message,lang=offerLanguage()){
@@ -170,24 +170,26 @@ async function loadOffer(){
   try{
     const serverSeed=document.getElementById('server-offer');
     let payload;
-    if(serverSeed){
+    if(serverSeed&&lang==='pl'){
       payload=JSON.parse(serverSeed.textContent);
     }else{
-      const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}&lang=${encodeURIComponent(lang)}`,{headers:{Accept:'application/json'}});
-      payload=await response.json();
-      if(!response.ok)throw new Error(offerUi[lang].unavailable);
+      try{
+        const response=await fetch(`${MLS_DETAIL_API}?id=${encodeURIComponent(id)}&lang=${encodeURIComponent(lang)}`,{headers:{Accept:'application/json'}});
+        payload=await response.json();
+        if(!response.ok)throw new Error(offerUi[lang].unavailable);
+      }catch(error){if(!serverSeed)throw error;payload=JSON.parse(serverSeed.textContent)}
     }
     if(!payload.offer||String(payload.offer.id)!==id)throw new Error(offerUi[lang].unavailable);
     const offer=payload.offer,category=categoryFor(offer.type),isRent=offer.transaction==='wynajem';
-    const copy=offerUi[lang],locationName=[offer.city,offer.district].filter(Boolean).join(', '),locationFull=[locationName,localizedProvince(offer.province,lang)].filter(Boolean).join(' · ');
-    const transactionText=isRent?copy.rent:copy.sale,eyebrow=`${localizedType(offer.type,lang,category)} ${transactionText}`.toLocaleUpperCase(lang);
+    const copy=offerUi[lang],locationName=[offer.city,offer.district].filter(Boolean).join(', '),locationFull=[locationName,localizedProvince(offer.province,lang,offer.parameterTranslations)].filter(Boolean).join(' · ');
+    const transactionText=isRent?copy.rent:copy.sale,eyebrow=`${localizedType(offer.type,lang,category,offer.parameterTranslations)} ${transactionText}`.toLocaleUpperCase(lang);
     const currency=offer.currency||'PLN',price=offer.price?`${formatNumber(offer.price,lang)} ${currency}`:copy.priceOnRequest;
     const unit=offer.price&&offer.area?`${formatNumber(Math.round(offer.price/offer.area),lang)} ${currency}/m²`:'';
     document.title=`${offer.title} | MazurEstate`;document.querySelector('meta[name="description"]')?.setAttribute('content',`${offer.title}. ${locationName}. ${copy.meta}`);
     text('.property-head .eyebrow',eyebrow);text('.property-head h1',offer.title);document.querySelector('.property-head h1')?.setAttribute('lang',offer.descriptionLanguage||'pl');text('.property-head .location',locationFull);text('.head-price strong',price);text('.head-price span',[isRent?copy.monthly:'',unit].filter(Boolean).join(' · '));
     const crumbs=document.querySelectorAll('.breadcrumbs a');if(crumbs[0])crumbs[0].href=`../index.html?lang=${lang}`;if(crumbs[1]){crumbs[1].textContent=`${copy.categories[category]} ${transactionText}`;crumbs[1].href=`../wyniki-wyszukiwania/?type=${category}&transaction=${isRent?'wynajem':'sprzedaz'}&lang=${lang}`};text('.breadcrumbs strong',locationName||offer.title);
     document.querySelector('.head-price').hidden=false;document.getElementById('gallery').hidden=false;document.querySelector('.property-layout').hidden=false;
-    renderParameters(offer,category,lang);renderDescription(offer,lang);renderFeatures(offer.features||[],lang);setupGallery(offer.images||[],offer.title,lang);window.MazurContactForm?.setOffer({id:offer.id,number:offer.number||offer.id,title:offer.title});
+    renderParameters(offer,category,lang);renderDescription(offer,lang);renderFeatures(offer.features||[],lang,offer.parameterTranslations);setupGallery(offer.images||[],offer.title,lang);window.MazurContactForm?.setOffer({id:offer.id,number:offer.number||offer.id,title:offer.title});
   }catch(error){
     showUnavailable(error.message===offerUi[lang].unavailable?error.message:offerUi[lang].tryAgain,lang);
   }
