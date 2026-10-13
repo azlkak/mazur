@@ -41,6 +41,9 @@
     anchors.forEach(anchor => {
       const raw = anchor.getAttribute('href');
       if (!raw || /^(?:mailto:|tel:|javascript:)/i.test(raw)) return;
+      // Leave template expressions intact until the runtime renders them.
+      // The observer will normalize the resulting links after rendering.
+      if (raw.includes('{{')) return;
       if (raw.startsWith('#')) {
         const next = location.pathname + location.search + raw;
         if (raw !== next) anchor.setAttribute('href', next);
