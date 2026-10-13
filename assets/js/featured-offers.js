@@ -28,6 +28,20 @@
   }
   const api = 'https://api.mazurestate.pl/api/';
   const make = (tag, className, value) => { const el = document.createElement(tag); if (className) el.className = className; if (value !== undefined) el.textContent = value; return el; };
+  const thumbnailSrcset = src => {
+    try {
+      const url = new URL(src);
+      if (url.origin !== 'https://api.mazurestate.pl' || url.pathname !== '/api/mls-image.php' || !/^[a-f0-9]{64}\.(?:jpg|png)$/.test(url.searchParams.get('name') || '')) return '';
+      url.searchParams.set('w', '800'); const small = url.href;
+      url.searchParams.set('w', '1200'); return `${small} 800w, ${url.href} 1200w`;
+    } catch { return ''; }
+  };
+  const setCardPhoto = (img, src) => {
+    const srcset = thumbnailSrcset(src);
+    if (srcset) { img.srcset = srcset; img.sizes = '(max-width: 768px) calc(100vw - 32px), (max-width: 1200px) 45vw, 33vw'; }
+    else { img.removeAttribute('srcset'); img.removeAttribute('sizes'); }
+    img.src = src;
+  };
   const number = new Intl.NumberFormat({pl:'pl-PL',en:'en-GB',uk:'uk-UA',ru:'ru-RU'}[lang]);
   function card(offer) {
     const anchor = make('a', 'featured-card');
@@ -35,12 +49,12 @@
     const photos = Array.isArray(offer.images) ? offer.images.filter(src => typeof src === 'string' && src.trim()) : [];
     if (photos.length) {
       const media = make('div', 'featured-card-media');
-      const img = make('img'); img.src = photos[0]; img.alt = offer.title || ''; img.loading = 'lazy'; img.decoding = 'async'; media.append(img);
+      const img = make('img'); setCardPhoto(img, photos[0]); img.alt = offer.title || ''; img.loading = 'lazy'; img.decoding = 'async'; media.append(img);
       const count = make('span', 'featured-photo-count', `1 / ${photos.length}`); count.setAttribute('aria-live', 'polite'); media.append(count);
       if (photos.length > 1) {
         let index = 0, start = null, suppressClickUntil = 0;
         media.addEventListener('touchstart', event => { start = event.touches.length === 1 ? {x:event.touches[0].clientX,y:event.touches[0].clientY} : null; }, {passive:true});
-        media.addEventListener('touchend', event => { if (!start || !event.changedTouches.length) return; const dx = event.changedTouches[0].clientX - start.x, dy = event.changedTouches[0].clientY - start.y; start = null; if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.25) return; index = (index + (dx < 0 ? 1 : -1) + photos.length) % photos.length; img.src = photos[index]; count.textContent = `${index + 1} / ${photos.length}`; suppressClickUntil = Date.now() + 500; }, {passive:true});
+        media.addEventListener('touchend', event => { if (!start || !event.changedTouches.length) return; const dx = event.changedTouches[0].clientX - start.x, dy = event.changedTouches[0].clientY - start.y; start = null; if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.25) return; index = (index + (dx < 0 ? 1 : -1) + photos.length) % photos.length; setCardPhoto(img, photos[index]); count.textContent = `${index + 1} / ${photos.length}`; suppressClickUntil = Date.now() + 500; }, {passive:true});
         media.addEventListener('touchcancel', () => { start = null; }, {passive:true});
         anchor.addEventListener('click', event => { if (Date.now() < suppressClickUntil) event.preventDefault(); });
       }
