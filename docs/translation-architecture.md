@@ -1,6 +1,6 @@
 # Tłumaczenia treści ofert z polskiego przez OpenAI
 
-Status: logika przygotowana lokalnie, 6 października 2026. Bez klucza API, migracji bazy i crona nie wykonuje jeszcze tłumaczeń. Nie została wdrożona na produkcję.
+Status: mechanizm działa na produkcji. Synchronizacja odbywa się po imporcie, a worker kolejki uruchamia się co minutę, z limitem 30 zadań na przebieg.
 
 ## Cel
 
@@ -58,10 +58,22 @@ Prywatny worker (poza ruchem WWW) używa **OpenAI Responses API** z **Structured
 
 Klucz OpenAI jest tylko w prywatnej konfiguracji serwera. Worker ma limit prób i liczbę zadań na uruchomienie, a otwarcie karty oferty **nie wykonuje wywołania OpenAI**. Zwykła aktualizacja oferty nie rozpoczyna ponownego tłumaczenia wszystkich jednostek. Ewentualne odświeżenie przekładów po zmianie reguł jest osobną, świadomą operacją.
 
+### Liczby i aktualizacje doradcy
+
+Źródłem danych jest aktualna wersja oferty po imporcie. Cena zmieniona przez doradcę w osobnym polu aktualizuje się przez importer; nie wymaga ponownego tłumaczenia niezmienionego opisu. Gdy doradca zmieni kwotę również w treści opisu, nowy fragment otrzymuje nowy skrót i tłumaczenie z aktualną wartością. Poprzedni opis służy wyłącznie jako kontekst.
+
+Wartości zapisane cyframi, telefony, adresy e-mail i URL są chronione tokenami i przywracane z bieżącego fragmentu. Naturalne formy cyfrowe dla rozpoznanych liczebników pokoi, pięter oraz całodobowej obsługi są dozwolone tylko przy zgodnej wartości i kontekście. „Dwupokojowe” może więc stać się „2-room”, „III piętro” — „3rd floor”, a „całodobowa ochrona” — „24-hour security”. Takie słowa nie uzasadniają dopisania nowej ceny, telefonu lub innego metrażu. Nierozpoznane liczebniki model powinien pozostawić w formie słownej.
+
+Token musi wystąpić dokładnie raz, w całości w jednym `run`. Zachowujemy kontrolę struktury i długości wyniku. Dla fragmentu wyróżnionego w całości kod może zachować ten sam styl; przy mieszanych wyróżnieniach model nadal musi poprawnie zachować ich znaczenie. Samodzielne oznaczenia języka, np. „ENG”, pozostają bez zmian i nie wymagają wywołania modelu.
+
+### Ponowienie po poprawce
+
+Przed jednorazowym ponowieniem należy zachować listę wybranych błędnych zadań. Ponawiamy tylko `failed` należące do aktywnych ofert, ze zgodną paczką i aktualnymi `segment_id` oraz `pl_hash`, bez już zapisanej jednostki tłumaczenia. Gotowe, przetwarzane i nieaktualne jednostki pozostają bez zmian. Zadania wracają do istniejącej kolejki, a obecny cron przetwarza je w dotychczasowym limicie; nie tłumaczymy ponownie całego katalogu ofert.
+
 ## Pokazywanie na stronie i kolejność wdrożenia
 
 API przyjmuje `lang=en|uk|ru` i zwraca przekład tytułu/opisu tylko wtedy, gdy jest kompletny i dotyczy bieżącej paczki. Lista i karta korzystają z tego samego zapisanego zestawu tłumaczeń. **Wersja językowa oferty jest gotowa dopiero wtedy, gdy wszystkie bieżące jednostki jej tytułu i opisu mają aktualny przekład.** Do tego czasu treść oferty pozostaje w całości po polsku. Nie tworzymy indeksowalnych kart językowych bez gotowych tłumaczeń.
 
-Do uruchomienia pozostają: migracja istniejącej bazy, wdrożenie prywatnego workera i publicznego API, dodanie klucza w prywatnym `config.php`, ustawienie crona po imporcie oraz pilotaż na kilku ofertach MLS i EstiCRM. Potem można tłumaczyć resztę **aktualnych** ofert stopniowo, limitem zadań na przebieg. Własne adresy kanoniczne i `hreflang` dla kart ofert wymagają osobnego etapu SEO. Backend API na Hostingerze wymaga osobnego wdrożenia od publicznej części witryny.
+Backend API i prywatny worker na Hostingerze wymagają osobnego wdrożenia od publicznej części witryny. Stan kolejek, gotowość tekstów EN/UK/RU i ostatnie błędy można sprawdzić po zalogowaniu do `featured-admin.php` w zakładce „Status tłumaczeń”.
 
 Warunek odbioru: na zmodyfikowanej ofercie można pokazać, które identyfikatory fragmentów trafiły do OpenAI, a które tłumaczenia zostały użyte ponownie; przy zmianie jednej jednostki liczba wywołań nie rośnie wraz z długością całego opisu ani liczbą ofert.

@@ -73,3 +73,121 @@ try {
 } catch (RuntimeException $error) {
     ensure(str_contains($error->getMessage(), 'Unexpected number'), 'invented number rejects translation');
 }
+
+function translated(string $text, bool $strong = false, bool $em = false): array
+{
+    return [['text' => $text, 'strong' => $strong, 'em' => $em]];
+}
+
+function validateTranslation(string $source, string $target): array
+{
+    $sourceRuns = [['text' => $source]];
+    [, $tokens] = trProtectRuns($sourceRuns);
+    return trValidateRuns(translated($target), $tokens, strlen($source), $sourceRuns);
+}
+
+function rejectsTranslation(string $source, string $target, string $message): void
+{
+    $rejected = false;
+    try { validateTranslation($source, $target); }
+    catch (RuntimeException $error) { $rejected = str_contains($error->getMessage(), $message); }
+    ensure($rejected, $source . ' rejects ' . $target);
+}
+
+foreach ([
+    ['Dwupokojowe mieszkanie', '2-room apartment'],
+    ['Dwa pokoje z balkonem', '2 rooms with a balcony'],
+    ['Dwupokojowe mieszkanie', '2-кімнатна квартира'],
+    ['Dwupokojowe mieszkanie', '2-комнатная квартира'],
+    ['Na trzecim piętrze', 'On the 3rd floor'],
+    ['Na trzecim piętrze', 'На 3-му поверсі'],
+    ['Na trzecim piętrze', 'На 3-м этаже'],
+    ['III piętro | winda,', '3rd floor | elevator,'],
+    ['III piętro | winda,', '3-й этаж | лифт,'],
+    ['Piętro III', 'Floor 3'],
+    ['Na jedenastym piętrze', '11th floor'],
+    ['Obsługa ochrony przez całą dobę', '24-hour security'],
+    ['Całodobowo monitorowany', 'Monitored 24 hours a day'],
+    ['Całodobowa ochrona', '24h security'],
+    ['Całodobowa ochrona', '24-годинна охорона'],
+    ['Całodobowa ochrona', '24-часовая охрана'],
+    ['Całodobowa ochrona', 'Охорона 24 години на добу'],
+    ['Całodobowa ochrona', 'Охрана 24 часа в сутки'],
+] as [$source, $target]) {
+    ensure(validateTranslation($source, $target)[0]['text'] === $target, 'semantically equivalent numeric form: ' . $target);
+}
+
+rejectsTranslation('Dwupokojowe mieszkanie', '3-room apartment', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '2-bedroom apartment', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '2 спальни', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', 'Price 2 PLN', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '2 rooms, 2 bedrooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '2.5 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '-2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '+2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '€2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '€ 2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '２ rooms', 'Unexpected number');
+rejectsTranslation('Na trzecim piętrze', '2nd floor', 'Unexpected number');
+rejectsTranslation('Na trzecim piętrze', '3 rooms', 'Unexpected number');
+rejectsTranslation('III piętro', '3 floors', 'Unexpected number');
+rejectsTranslation('III piętro', '3 storeys', 'Unexpected number');
+rejectsTranslation('III piętro', '3 поверхів', 'Unexpected number');
+rejectsTranslation('III piętro', '3 этажей', 'Unexpected number');
+rejectsTranslation('III piętro', '3 этажа', 'Unexpected number');
+rejectsTranslation('Na dwudziestym trzecim piętrze', 'On the 3rd floor', 'Unexpected number');
+rejectsTranslation('Na sto dwudziestym piętrze', 'On the 20th floor', 'Unexpected number');
+rejectsTranslation('Piętro dwudzieste trzecie', 'Floor 20', 'Unexpected number');
+rejectsTranslation('Dwadzieścia dwa pokoje', '2 rooms', 'Unexpected number');
+rejectsTranslation('III piętro', '3rd floor, phone 3', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24/7 security', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24-hour security, 7 days a week', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', 'Price 24 PLN', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '$24-hour security', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24 годинників', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24 частини', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24 части', 'Unexpected number');
+rejectsTranslation('Sto dwadzieścia cztery godziny', '24 hours', 'Unexpected number');
+rejectsTranslation('Całodobowa ochrona', '24-hour security, 24-hour reception', 'Unexpected number');
+rejectsTranslation('Ochrona i monitoring', '24-hour security', 'Unexpected number');
+rejectsTranslation('Salon z balkonem', '2 rooms with balcony', 'Unexpected number');
+rejectsTranslation('ENG', 'English text from floor 3', 'Unexpected number');
+
+$currentSource = [['text' => 'Cena 1 100 000 PLN, telefon +48 503 937 749, powierzchnia 55 m².']];
+[, $currentTokens] = trProtectRuns($currentSource);
+$currentTranslation = trValidateRuns(translated('Price [[ME0]] PLN, phone [[ME1]], area [[ME2]] m².'), $currentTokens, strlen($currentSource[0]['text']), $currentSource);
+ensure(str_contains($currentTranslation[0]['text'], '1 100 000') && str_contains($currentTranslation[0]['text'], '+48 503 937 749') && str_contains($currentTranslation[0]['text'], '55 m²'), 'current CRM price, phone and area restored exactly');
+rejectsTranslation($currentSource[0]['text'], 'Old price 1 200 000 PLN, current [[ME0]], phone [[ME1]], area [[ME2]].', 'Unexpected number');
+rejectsTranslation('Trzy pokoje, cena 900 000 PLN', '3 rooms, price [[ME0]] PLN, previous price 950000 PLN', 'Unexpected number');
+ensure(validateTranslation('Metraż 55 m². III piętro.', 'Area [[ME0]] m². 3rd floor.')[0]['text'] === 'Area 55 m². 3rd floor.', 'protected digits and derived floor coexist');
+ensure(validateTranslation('Odległości: 250m, 800m i 1km.', 'Distances: [[ME0]]m, [[ME1]]m and [[ME2]]km.')[0]['text'] === 'Distances: 250m, 800m and 1km.', 'all current distance values survive translation');
+rejectsTranslation('Odległości: 250m, 800m i 1km.', 'Distances: [[ME0]]m and [[ME2]]km.', 'Protected value');
+rejectsTranslation('Cena 900000 PLN', 'Price [[ME 0]] PLN', 'Protected value');
+rejectsTranslation('Cena 900000 PLN', 'Price [[ME0]] and [[ME0]] PLN', 'Protected value');
+rejectsTranslation('Cena 900000 PLN', 'Price [[ME0]] PLN and [[ME9]]', 'Unknown protected');
+rejectsTranslation('Salon', 'Living room [[ME9]]', 'Unknown protected');
+rejectsTranslation('Salon', 'Living room [[MEbogus]]', 'Unknown protected');
+$splitRejected = false;
+try {
+    trValidateRuns(array_merge(translated('Price [[M'), translated('E0]] PLN, phone [[ME1]], area [[ME2]] m².')), $currentTokens, 100, $currentSource);
+} catch (RuntimeException $error) { $splitRejected = str_contains($error->getMessage(), 'split'); }
+ensure($splitRejected, 'protected token cannot be split between translation runs');
+
+$uniform = trValidateRuns(translated('Living room'), [], 20, [['text' => 'Salon', 'strong' => true, 'em' => true]]);
+ensure(!empty($uniform[0]['strong']) && !empty($uniform[0]['em']), 'uniform fragment emphasis restored deterministically');
+$partialStyle = trValidateRuns(array_merge(translated('Living ', true), translated('room')), [], 20, [['text' => 'Salon', 'strong' => true]]);
+ensure(!empty($partialStyle[0]['strong']) && !empty($partialStyle[1]['strong']), 'uniform source emphasis applies to every output run despite partial model marking');
+$mixedRejected = false;
+try {
+    trValidateRuns(translated('Living room with balcony'), [], 30, [['text' => 'Salon', 'strong' => true], ['text' => ' z balkonem']]);
+} catch (RuntimeException $error) { $mixedRejected = str_contains($error->getMessage(), 'emphasis'); }
+ensure($mixedRejected, 'mixed source emphasis still must survive model translation');
+$longRejected = false;
+try { trValidateRuns(translated(str_repeat('Repeated context ', 60)), [], 3, [['text' => 'ENG']]); }
+catch (RuntimeException $error) { $longRejected = str_contains($error->getMessage(), 'length'); }
+ensure($longRejected, 'translation length guard remains in place');
+foreach (['ENG', 'EN', 'PL', 'RU', 'UK', 'UA'] as $marker) {
+    $markerRuns = [['text' => $marker, 'strong' => true]];
+    ensure(trOpenAi([], 'en', ['runs' => $markerRuns], null) === $markerRuns, 'stand-alone language marker is preserved without model request: ' . $marker);
+}
+ensure(trLiteralLanguageMarker([['text' => 'ENG - mieszkanie']]) === null, 'marker inside real offer text is not treated as a literal-only fragment');
