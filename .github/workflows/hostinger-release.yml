@@ -25,6 +25,8 @@ jobs:
           node --check oferta/script.js
           node --check wyniki-wyszukiwania/script.js
           node --check assets/js/seo.js
+          node --check assets/js/language-routing.js
+          node --test scripts/test-polish-offer-routing.mjs
           python3 scripts/check-language-routes.py
       - name: Build public files
         run: |
