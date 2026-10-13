@@ -307,6 +307,64 @@ nieruchomości i typ transakcji na podstawie już zaimportowanych danych MLS.
 - Oferta jest kandydatem do publikacji tylko przy `offerExport=1` i `status=3`.
   To nie wystawia jej jeszcze publicznie.
 
+## Powiadomienia o statusie integracji
+
+Panel i `private/bin/check-integrations.php` korzystają z tej samej logiki
+`private/integration-health.php`. Odbiorców ustaw wyłącznie w prywatnym
+`mls/config.php`, w tablicy `integration_notification_emails`. Domyślnie jest
+pusta; nie umieszczaj prawdziwych adresów w repozytorium.
+
+Alternatywnie skopiuj `private/integration-notifications.example.php` do
+prywatnego `mls/integration-notifications.php` i ustaw w nim tablicę `emails`.
+Ten plik ma pierwszeństwo przed `integration_notification_emails` z
+`config.php`, także jeśli `emails` jest puste. Pozwala dodać odbiorców bez
+edytowania konfiguracji bazy ani poczty. Plik musi zwracać tablicę z kluczem
+`emails`, mieć najwyżej 4096 bajtów i zawierać poprawne adresy bez znaków końca
+wiersza. Przechowuj go poza `public_html` i ogranicz dostęp do właściciela.
+
+Monitor uruchamiaj osobnym zadaniem Hostinger **co 5 minut** (`*/5 * * * *`):
+
+```text
+/usr/bin/php /home/u101822986/domains/mazurestate.pl/mls/bin/check-integrations.php
+```
+
+Runner może dodatkowo wywołać monitor zaraz po zakończeniu importera, przed
+synchronizacją tłumaczeń. Niezależny cron jest wymagany: sam importer nie może
+zgłosić, że jego harmonogram przestał się uruchamiać. Błąd monitora nie powinien
+zatrzymywać importu ani zmieniać jego kodu wyjścia.
+
+Mail jest wysyłany przy ostrzeżeniu lub błędzie włączonego MLS/EstiCRM: błąd
+importera/paczki, brak telemetrii, brak uruchomienia lub zaległa paczka ponad
+135 minut, przetwarzanie ponad 90 minut, a dla MLS brak nowej paczki ponad
+3 godziny. Stan „Import trwa” nie powoduje maila ani nie zamyka istniejącego
+incydentu. VixCRM jest źródłem jednorazowym: wiek eksportu i planowe wyłączenie
+nie powodują alarmu; błąd włączonego importu może go spowodować.
+
+Dedup jest niezależny dla źródła, statusu/przyczyny i każdego adresata.
+Prawdziwy powrót do stanu poprawnego zamyka incydent. Kolejne kontrole tego
+samego problemu nie wysyłają ponownie; nieudana wysyłka jest ponawiana po
+5 minutach tylko dla adresata, któremu nie została przyjęta. Stan jest zapisany
+atomowo w prywatnym `mls/runtime/integration-alerts.json`, a oddzielna blokada
+zapobiega równoległym powiadomieniom. Nie kasuj tego pliku podczas trwającej
+awarii. Awaria odczytu/bazy powoduje osobny bezpieczny alert monitora bez
+szczegółów połączenia. PHP `mail()` potwierdza przyjęcie przez serwer pocztowy,
+nie dostarczenie do skrzynki.
+
+Dotychczasowe szczegółowe raporty paczek na `notification_emails` pozostają
+aktywne. Alert statusu opisuje całą integrację. Testy bez prawdziwej bazy i
+wysyłania maili: `php scripts/test-integration-alerts.php`.
+
+Jednorazowy test rzeczywistej wysyłki do skonfigurowanych odbiorców:
+
+```text
+/usr/bin/php /home/u101822986/domains/mazurestate.pl/mls/bin/check-integrations.php --test-mail
+```
+
+Ten tryb wysyła wyraźnie oznaczony TEST i nie odczytuje bazy ani nie zmienia
+ofert, telemetrii lub stanu deduplikacji. Nie dodawaj go do cyklicznego crona.
+Wynik zawiera liczbę przyjętych/nieudanych wysyłek, bez adresów. Częściowe
+niepowodzenie kończy się kodem 1; nieznany argument jest odrzucany kodem 2.
+
 ## Weryfikacja wykonana na serwerze
 
 - PHP 8.3.33; dostępne ZipArchive, SimpleXML i PDO MySQL.
