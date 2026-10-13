@@ -123,3 +123,11 @@ main{padding:24px 12px 60px}
 .admin-tabs{gap:3px;padding:4px;margin-bottom:20px;border-radius:14px}
 .admin-tabs button{min-height:56px;padding:8px 3px;font-size:12px;border-radius:9px;overflow-wrap:anywhere}
 }
+
+#translation-action-message:empty{display:none}
+#translation-action-message{padding:12px 14px;background:#e8f3fb;border-radius:12px;color:#164a70;font-size:14px}
+#translation-action-message.error{background:#fff0ed;color:#a6291c}
+.translation-retry-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:14px 0;padding:12px;background:#f4f8fc;border:1px solid #dbe5ee;border-radius:12px}
+.translation-retry-controls p{flex-basis:100%;margin:0 0 4px;font-size:14px}
+.translation-retry-controls button{min-height:44px;padding:10px 14px;font-size:13px}
+.translation-retry-controls button:focus-visible{outline:3px solid #1a77bd;outline-offset:2px}

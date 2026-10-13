@@ -9,12 +9,17 @@
   let catalog = [];
   let hidden = [];
   let inactive = new Set();
-  let integrationTimer = null;
   let integrationPending = false;
   let translationPending = false;
   let monitoringGeneration = 0;
   let integrationController = null;
   let translationController = null;
+  let translationRequestVersion = 0;
+  let integrationRequestVersion = 0;
+  let translationRetryPending = false;
+  let translationRetryNeedsRefresh = false;
+  let translationRetryConfirmation = null;
+  let latestTranslationStatus = null;
   const languages = [['en', 'Angielski'], ['uk', 'Ukraiński'], ['ru', 'Rosyjski']];
   const queueStates = [['pending', 'Oczekujące'], ['processing', 'W trakcie'], ['retry', 'Do ponowienia'], ['failed', 'Z błędem'], ['done', 'Zakończone']];
   const count = value => Math.max(0, Math.floor(Number(value) || 0));
@@ -27,6 +32,7 @@
     if (!response.ok) {
       const error = new Error(data.error || 'Wystąpił błąd');
       error.retryAfter = Number(data.retry_after) || 0;
+      error.status = response.status;
       throw error;
     }
     return data;
@@ -102,7 +108,7 @@
     }
   }
   function renderIntegration(data) {
-    $('integration-intro').textContent = `Stan z ${dateTime(data.checked_at)} · paczki w archiwum są przechowywane ${data.retention_days} dni. Odświeżanie co minutę.`;
+    $('integration-intro').textContent = `Stan z ${dateTime(data.checked_at)} · paczki w archiwum są przechowywane ${data.retention_days} dni. Dane odświeżają się przy wejściu w zakładkę lub kliknięciu „Odśwież”.`;
     const cards = $('integration-cards'); cards.replaceChildren();
     const labels = {ok: 'Importer działa', running: 'Import trwa', quiet: 'Brak nowych paczek', stale: 'Sprawdź harmonogram', error: 'Wymaga uwagi', unknown: 'Brak telemetrii', disabled: 'Niewłączone'};
     for (const [source, name] of [['mls', 'MLS'], ['esticrm', 'EstiCRM'], ['vixcrm', 'VixCRM']]) {
@@ -148,7 +154,88 @@
       item.append(info); batches.append(item);
     }
   }
-  function renderTranslationQueue(parent, queue, name, description) {
+  function translationActionNotice(message, error = false) {
+    $('translation-action-message').textContent = message;
+    $('translation-action-message').classList.toggle('error', error);
+  }
+  function updateTranslationControls() {
+    $('translation-refresh').disabled = translationRetryPending || translationPending;
+    $('integration-refresh').disabled = translationRetryPending || integrationPending;
+    for (const button of $('translation-cards').querySelectorAll('[data-translation-retry]')) button.disabled = translationRetryPending || translationRetryNeedsRefresh;
+  }
+  function clearTranslationConfirmation() {
+    if (!translationRetryConfirmation) return;
+    translationRetryConfirmation = null;
+    if (latestTranslationStatus) renderTranslationStatus(latestTranslationStatus);
+  }
+  function renderTranslationRetryControls(card, queue, queueKey, name) {
+    const failed = count(queue.counts?.failed);
+    if (!failed) return;
+    const controls = document.createElement('div'); controls.className = 'translation-retry-controls';
+    const confirming = translationRetryConfirmation?.queue === queueKey && translationRetryConfirmation.failed === failed;
+    const button = (label, handler, className = '') => {
+      const node = text(controls, 'button', label); node.type = 'button'; node.className = className;
+      node.setAttribute('data-translation-retry', ''); node.setAttribute('aria-label', `${label}: ${name}`);
+      node.disabled = translationRetryPending || translationRetryNeedsRefresh; node.onclick = handler; return node;
+    };
+    if (confirming) {
+      const limit = count(latestTranslationStatus?.max_jobs_per_run) || 30;
+      const explanation = text(controls, 'p', `Ponowimy dokładnie ${formatCount(failed)} zadań ze statusem „Z błędem” w kolejce „${name}”. Ponowne tłumaczenie korzysta z płatnego API OpenAI. Limit pozostaje ${formatCount(limit)} zadań na przebieg.`);
+      explanation.id = 'translation-retry-confirmation-' + queueKey;
+      const confirm = button('Potwierdź ponowienie', () => retryTranslations(queueKey, failed));
+      confirm.setAttribute('aria-describedby', explanation.id);
+      button('Anuluj', clearTranslationConfirmation, 'quiet');
+    } else {
+      button('Ponów błędne', () => {
+        if (translationRetryPending || translationRetryNeedsRefresh || $('editor').hidden || activeTab !== 'translations' || document.hidden) return;
+        translationRetryConfirmation = {queue: queueKey, failed};
+        translationActionNotice('');
+        renderTranslationStatus(latestTranslationStatus);
+        $('translation-retry-confirmation-' + queueKey)?.nextElementSibling?.focus();
+      }, 'quiet');
+    }
+    card.append(controls);
+  }
+  async function retryTranslations(queue, expectedFailed) {
+    if (translationRetryPending || translationRetryNeedsRefresh || $('editor').hidden || activeTab !== 'translations' || document.hidden) return;
+    const current = latestTranslationStatus?.queues?.[queue];
+    if (!current?.available || count(current.counts?.failed) !== expectedFailed || translationRetryConfirmation?.queue !== queue || translationRetryConfirmation.failed !== expectedFailed) {
+      clearTranslationConfirmation();
+      translationActionNotice('Stan kolejki się zmienił. Odśwież dane i potwierdź ponowienie jeszcze raz.', true);
+      loadTranslationStatus(); return;
+    }
+    const generation = monitoringGeneration;
+    translationRetryPending = true;
+    translationRetryNeedsRefresh = true;
+    translationRetryConfirmation = null;
+    abortMonitoringRequests();
+    renderTranslationStatus(latestTranslationStatus);
+    updateTranslationControls();
+    translationActionNotice('Dodaję błędne zadania ponownie do kolejki…');
+    try {
+      const result = await post('retry-translations', {queue, expected_failed: expectedFailed, confirmed: true});
+      if (generation !== monitoringGeneration || $('editor').hidden) return;
+      translationActionNotice(`Dodano ponownie ${formatCount(result.requeued)} zadań do kolejki. Translator wykona je automatycznie w dotychczasowym limicie.`);
+    } catch (error) {
+      if (generation !== monitoringGeneration || $('editor').hidden) return;
+      if (error.status === 401 || error.message === 'login_required') { monitoringSessionExpired(); return; }
+      if (error.message === 'invalid_csrf') {
+        monitoringSessionExpired(); notice('Dane sesji są nieaktualne. Zaloguj się ponownie przed ponowieniem tłumaczeń.', true); return;
+      }
+      const messages = {
+        translation_busy: 'Translator właśnie pracuje. Spróbuj ponowić błędne zadania za chwilę.',
+        queue_changed: 'Liczba błędnych zadań zmieniła się. Sprawdź odświeżone dane i potwierdź ponowienie jeszcze raz.',
+        unavailable: 'Kolejka jest chwilowo niedostępna. Spróbuj odświeżyć dane za chwilę.'
+      };
+      translationActionNotice(messages[error.message] || (error.status === 503 ? messages.unavailable : 'Nie udało się potwierdzić wyniku ponowienia. Sprawdź odświeżoną kolejkę przed kolejną próbą.'), true);
+    } finally {
+      if (generation === monitoringGeneration) {
+        translationRetryPending = false; updateTranslationControls();
+        if (!$('editor').hidden && !document.hidden) loadTranslationStatus();
+      }
+    }
+  }
+  function renderTranslationQueue(parent, queue, queueKey, name, description) {
     const card = document.createElement('article'); card.className = 'integration-card translation-card';
     const heading = document.createElement('div'); heading.className = 'integration-card-header';
     text(heading, 'h3', name);
@@ -170,6 +257,7 @@
     }
     card.append(metrics);
     if (count(queue.stale_done)) text(card, 'p', `W tym ${formatCount(queue.stale_done)} pominiętych, nieaktualnych zadań.`).className = 'translation-note';
+    renderTranslationRetryControls(card, queue, queueKey, name);
     const table = document.createElement('table'); table.className = 'translation-language-table';
     text(table, 'caption', 'Zadania według języka');
     const thead = document.createElement('thead'); const headings = document.createElement('tr');
@@ -193,11 +281,20 @@
     card.append(activity); parent.append(card);
   }
   function renderTranslationStatus(data) {
+    const retryFocusLabel = $('translation-cards').contains(document.activeElement) ? document.activeElement?.getAttribute('aria-label') : null;
+    latestTranslationStatus = data;
+    if (translationRetryConfirmation) {
+      const queue = data.queues?.[translationRetryConfirmation.queue];
+      if (!queue?.available || count(queue.counts?.failed) !== translationRetryConfirmation.failed) {
+        translationRetryConfirmation = null;
+        translationActionNotice('Stan kolejki się zmienił. Sprawdź aktualną liczbę błędów i potwierdź ponowienie jeszcze raz.');
+      }
+    }
     $('translation-intro').classList.remove('error');
-    $('translation-intro').textContent = `Stan z ${dateTime(data.checked_at)} · automatyczne odświeżanie co minutę. Limit: ${formatCount(data.max_jobs_per_run)} zadań na przebieg.`;
+    $('translation-intro').textContent = `Stan z ${dateTime(data.checked_at)} · odświeżanie przy wejściu w zakładkę lub kliknięciu „Odśwież”. Limit: ${formatCount(data.max_jobs_per_run)} zadań na przebieg.`;
     const cards = $('translation-cards'); cards.replaceChildren();
-    renderTranslationQueue(cards, data.queues?.offers, 'Tytuły i opisy ofert', 'Nowe i zmienione fragmenty ofert tłumaczymy na trzy języki. Gotowe tłumaczenia niezmienionych fragmentów wykorzystujemy ponownie.');
-    renderTranslationQueue(cards, data.queues?.parameters, 'Wspólne parametry i atuty', 'Jedno tłumaczenie parametru wykorzystujemy we wszystkich ofertach, które go zawierają.');
+    renderTranslationQueue(cards, data.queues?.offers, 'offers', 'Tytuły i opisy ofert', 'Nowe i zmienione fragmenty ofert tłumaczymy na trzy języki. Gotowe tłumaczenia niezmienionych fragmentów wykorzystujemy ponownie.');
+    renderTranslationQueue(cards, data.queues?.parameters, 'parameters', 'Wspólne parametry i atuty', 'Jedno tłumaczenie parametru wykorzystujemy we wszystkich ofertach, które go zawierają.');
     const publication = $('translation-publication'); publication.replaceChildren();
     if (!data.publication?.available) {
       text(publication, 'p', 'Nie udało się ustalić liczby gotowych tekstów. Spróbuj odświeżyć.');
@@ -237,26 +334,34 @@
         text(item, 'p', error.message || 'Zadanie wymaga sprawdzenia.'); errors.append(item);
       }
     }
+    if (retryFocusLabel) {
+      const matching = [...cards.querySelectorAll('[data-translation-retry]')].find(button => button.getAttribute('aria-label') === retryFocusLabel);
+      matching?.focus({preventScroll: true});
+    }
   }
   async function loadTranslationStatus() {
-    if (translationPending || $('editor').hidden) return;
+    if (translationRetryPending || translationPending || $('editor').hidden || document.hidden) return;
     const generation = monitoringGeneration;
+    const requestVersion = ++translationRequestVersion;
     translationPending = true;
     translationController = new AbortController();
     const button = $('translation-refresh'); button.disabled = true;
     try {
       const response = await fetch(endpoint + '?action=translation-status', {credentials: 'same-origin', cache: 'no-store', signal: translationController.signal});
-      if (response.status === 401) { if (generation === monitoringGeneration) monitoringSessionExpired(); return; }
+      if (response.status === 401) { if (generation === monitoringGeneration && requestVersion === translationRequestVersion) monitoringSessionExpired(); return; }
       if (!response.ok) throw new Error('unavailable');
       const data = await response.json();
-      if (generation === monitoringGeneration && !$('editor').hidden) renderTranslationStatus(data);
+      if (generation === monitoringGeneration && requestVersion === translationRequestVersion && !translationRetryPending && !$('editor').hidden) {
+        translationRetryNeedsRefresh = false;
+        renderTranslationStatus(data);
+      }
     } catch (error) {
-      if (error.name !== 'AbortError' && generation === monitoringGeneration) {
+      if (error.name !== 'AbortError' && generation === monitoringGeneration && requestVersion === translationRequestVersion) {
         $('translation-intro').textContent = 'Nie udało się pobrać kolejki tłumaczeń. Widoczne dane mogą być nieaktualne. Spróbuj odświeżyć.';
         $('translation-intro').classList.add('error');
       }
     } finally {
-      if (generation === monitoringGeneration) { translationPending = false; translationController = null; button.disabled = false; }
+      if (generation === monitoringGeneration && requestVersion === translationRequestVersion) { translationPending = false; translationController = null; updateTranslationControls(); }
     }
   }
   function refreshMonitoring() {
@@ -265,6 +370,8 @@
   }
   function selectTab(name, {navigate = false, focus = false} = {}) {
     if (!tabs.includes(name)) return;
+    if (name !== activeTab) abortMonitoringRequests();
+    if (name !== 'translations') clearTranslationConfirmation();
     activeTab = name;
     for (const tab of tabs) {
       const selected = tab === name;
@@ -280,12 +387,19 @@
     if (focus) $('tab-' + name).focus({preventScroll: true});
     if (!$('editor').hidden) refreshMonitoring();
   }
-  function stopMonitoring() {
-    monitoringGeneration++;
-    if (integrationTimer !== null) { clearInterval(integrationTimer); integrationTimer = null; }
+  function abortMonitoringRequests() {
+    integrationRequestVersion++; translationRequestVersion++;
     integrationController?.abort(); translationController?.abort();
     integrationController = null; translationController = null;
     integrationPending = false; translationPending = false;
+    updateTranslationControls();
+  }
+  function stopMonitoring() {
+    monitoringGeneration++;
+    abortMonitoringRequests();
+    translationRetryConfirmation = null; translationRetryPending = false; translationRetryNeedsRefresh = false; latestTranslationStatus = null;
+    $('translation-action-message').textContent = '';
+    $('translation-cards').replaceChildren();
     $('integration-refresh').disabled = false; $('translation-refresh').disabled = false;
   }
   function monitoringSessionExpired() {
@@ -294,21 +408,22 @@
     notice('Sesja wygasła. Zaloguj się ponownie, aby zobaczyć aktualne dane.', true);
   }
   async function loadIntegrationStatus() {
-    if (integrationPending || $('editor').hidden) return;
+    if (translationRetryPending || integrationPending || $('editor').hidden || document.hidden) return;
     const generation = monitoringGeneration;
+    const requestVersion = ++integrationRequestVersion;
     integrationPending = true;
     integrationController = new AbortController();
     const button = $('integration-refresh'); button.disabled = true;
     try {
       const response = await fetch(endpoint + '?action=integration-status', {credentials: 'same-origin', cache: 'no-store', signal: integrationController.signal});
-      if (response.status === 401) { if (generation === monitoringGeneration) monitoringSessionExpired(); return; }
+      if (response.status === 401) { if (generation === monitoringGeneration && requestVersion === integrationRequestVersion) monitoringSessionExpired(); return; }
       if (!response.ok) throw new Error('unavailable');
       const data = await response.json();
-      if (generation === monitoringGeneration && !$('editor').hidden) renderIntegration(data);
+      if (generation === monitoringGeneration && requestVersion === integrationRequestVersion && !$('editor').hidden) renderIntegration(data);
     } catch (error) {
-      if (error.name !== 'AbortError' && generation === monitoringGeneration) $('integration-intro').textContent = 'Nie udało się pobrać stanu integracji. Spróbuj odświeżyć.';
+      if (error.name !== 'AbortError' && generation === monitoringGeneration && requestVersion === integrationRequestVersion) $('integration-intro').textContent = 'Nie udało się pobrać stanu integracji. Spróbuj odświeżyć.';
     } finally {
-      if (generation === monitoringGeneration) { integrationPending = false; integrationController = null; button.disabled = false; }
+      if (generation === monitoringGeneration && requestVersion === integrationRequestVersion) { integrationPending = false; integrationController = null; updateTranslationControls(); }
     }
   }
   async function initialize() {
@@ -318,9 +433,6 @@
     if (!state.authorized) { stopMonitoring(); return; }
     csrf = state.csrf; $('account').textContent = state.email;
     refreshMonitoring();
-    if (integrationTimer === null) integrationTimer = setInterval(() => {
-      if (!document.hidden && !$('editor').hidden) refreshMonitoring();
-    }, 60000);
     selected = state.selected.map(row => String(row.source_id));
     hidden = state.hidden || [];
     inactive = new Set(state.selected.filter(row => Number(row.publishable) !== 1).map(row => String(row.source_id)));
@@ -364,6 +476,9 @@
     event.preventDefault();
     selectTab(tabs[next], {navigate: true, focus: true});
   };
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { abortMonitoringRequests(); clearTranslationConfirmation(); }
+  });
   window.addEventListener('hashchange', () => {
     const focused = document.activeElement;
     const focus = $('admin-tabs').contains(focused) || $('panel-' + activeTab).contains(focused);
