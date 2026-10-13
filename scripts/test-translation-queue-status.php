@@ -90,7 +90,7 @@ try {
 
     // Exercise the real endpoint without HTTP/network or a production config.
     mkdir($root . '/public_html/api', 0700, true); mkdir($root . '/mls', 0700); mkdir($root . '/sessions', 0700);
-    foreach (['featured-admin.php','portal-visibility.php','offer-source.php','translation-queue-status.php'] as $file) {
+    foreach (['featured-admin.php','portal-visibility.php','offer-source.php','translation-queue-status.php','translation-queue-retry.php'] as $file) {
         copy(__DIR__ . '/../server/mls/public/api/' . $file, $root . '/public_html/api/' . $file);
     }
     copy(__DIR__ . '/../server/mls/private/integration-health.php', $root . '/mls/integration-health.php');

@@ -5,14 +5,18 @@ on:
     paths:
       - 'server/mls/public/api/featured-admin.*'
       - 'server/mls/public/api/translation-queue-status.php'
+      - 'server/mls/public/api/translation-queue-retry.php'
       - 'scripts/test-translation-queue-status.php'
+      - 'scripts/test-translation-queue-retry.php'
       - '.github/workflows/translation-panel-checks.yml'
   push:
     branches: [main]
     paths:
       - 'server/mls/public/api/featured-admin.*'
       - 'server/mls/public/api/translation-queue-status.php'
+      - 'server/mls/public/api/translation-queue-retry.php'
       - 'scripts/test-translation-queue-status.php'
+      - 'scripts/test-translation-queue-retry.php'
       - '.github/workflows/translation-panel-checks.yml'
 
 permissions:
@@ -41,9 +45,17 @@ jobs:
           node --check server/mls/public/api/featured-admin.js
           php -l server/mls/public/api/featured-admin.php
           php -l server/mls/public/api/translation-queue-status.php
+          php -l server/mls/public/api/translation-queue-retry.php
+          php -l scripts/test-translation-queue-retry.php
       - name: Test read-only queue metrics and authenticated access
         env:
           MAZUR_TEST_DSN: mysql:host=127.0.0.1;port=3306;dbname=mazur_translation_panel_test;charset=utf8mb4
           MAZUR_TEST_DB_USER: root
           MAZUR_TEST_DB_PASSWORD: fixture-only-password
         run: php scripts/test-translation-queue-status.php
+      - name: Test confirmed retry and authenticated mutation boundaries
+        env:
+          MAZUR_TEST_DSN: mysql:host=127.0.0.1;port=3306;dbname=mazur_translation_panel_test;charset=utf8mb4
+          MAZUR_TEST_DB_USER: root
+          MAZUR_TEST_DB_PASSWORD: fixture-only-password
+        run: php scripts/test-translation-queue-retry.php

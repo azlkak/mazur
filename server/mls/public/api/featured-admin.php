@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
 require_once __DIR__ . '/translation-queue-status.php';
+require_once __DIR__ . '/translation-queue-retry.php';
 require_once dirname(__DIR__, 2) . '/mls/integration-health.php';
 
 header('Cache-Control: no-store');
@@ -144,7 +145,18 @@ try {
         respond(200, ['ok' => true]);
     }
     if (!$authorized) respond(401, ['error' => 'login_required']);
-    if (!hash_equals((string)($_SESSION['csrf'] ?? ''), (string)($input['csrf'] ?? ''))) respond(403, ['error' => 'invalid_csrf']);
+    $sessionCsrf = (string)($_SESSION['csrf'] ?? '');
+    if ($sessionCsrf === '' || !hash_equals($sessionCsrf, (string)($input['csrf'] ?? ''))) respond(403, ['error' => 'invalid_csrf']);
+    if ($action === 'retry-translations') {
+        $queue = $input['queue'] ?? null;
+        $expectedFailed = $input['expected_failed'] ?? null;
+        if (!is_string($queue) || !in_array($queue, ['offers','parameters'], true)
+            || !is_int($expectedFailed) || $expectedFailed < 0 || ($input['confirmed'] ?? null) !== true) {
+            respond(422, ['error' => 'invalid_retry_request']);
+        }
+        $result = mazurRetryFailedTranslations(db($config), $queue, $expectedFailed);
+        respond($result['ok'] ? 200 : 409, $result);
+    }
     if ($action === 'logout') {
         $_SESSION = [];
         session_destroy();
