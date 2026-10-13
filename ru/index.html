@@ -3,9 +3,20 @@
 <head><base href="/">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preload" as="script" href="assets/vendor/react-18.3.1.production.min.js">
+<link rel="preload" as="script" href="assets/vendor/react-dom-18.3.1.production.min.js">
+<script>window.__resources = {
+  'https://unpkg.com/react@18.3.1/umd/react.production.min.js': 'assets/vendor/react-18.3.1.production.min.js',
+  'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js': 'assets/vendor/react-dom-18.3.1.production.min.js'
+};</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap">
+<link rel="preload" as="image" href="assets/images/hero-home-mobile.webp" media="(max-width: 768px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/images/hero-home-desktop.webp" media="(min-width: 769px)" fetchpriority="high">
 
-<link rel="icon" type="image/png" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
-<link rel="apple-touch-icon" href="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png">
+<link rel="icon" type="image/png" href="assets/images/mazur-icon-48.png">
+<link rel="apple-touch-icon" href="assets/images/mazur-icon-180.png">
 <script src="assets/js/support.js?v=20261003-mobile-layout"></script>
   <link rel="stylesheet" href="assets/css/cookie-consent.css">
   <link rel="stylesheet" href="assets/css/contact-form.css?v=5">
@@ -46,10 +57,8 @@
 <body id="top">
 <x-dc>
 <helmet>
-  <script src="assets/js/image-slot.js"></script>
   <style id="__om-edit-overrides"></style>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
     html { scroll-behavior: smooth; }
     body { margin: 0; font-family: 'Manrope', sans-serif; background: oklch(0.98 0.005 250); }
     #categories, #why-us, #faq, #testimonials { scroll-margin-top: 112px; }
@@ -141,7 +150,7 @@
 
       <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0; background: transparent; border-radius: 12px; padding: 0px 4px;">
         <a href="#top" aria-label="MazurEstate — strona główna" style="display: flex; align-items: center; color: inherit; text-decoration: none;">
-          <img src="assets/images/mazur-estate-logo-transparent.png" alt="MazurEstate" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: normal;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" decoding="async">
+          <img src="assets/images/mazur-estate-logo-288.webp" alt="MazurEstate" width="72" height="72" style="height: 72px; width: auto; object-fit: contain; background: transparent; mix-blend-mode: normal;" onerror="this.style.display='none'; this.nextSibling.style.display='flex';" decoding="async">
           <div style="display: none; align-items: center; gap: 8px;">
             <div style="width: 34px; height: 34px; border-radius: 10px; background: oklch(0.5 0.14 250); display: flex; align-items: center; justify-content: center;">
               <div style="width: 14px; height: 14px; border-radius: 3px; background: white;"></div>
@@ -215,7 +224,7 @@
     <div id="hero-inner" style="width: 100%; max-width: 1360px; position: relative; border-radius: 32px; overflow: hidden; min-height: 620px; display: flex; align-items: center;">
 
       <div style="position: absolute; inset: 0;">
-        <img id="hero-bg" src="assets/images/hf_20260726_144517_90fd2149-4cca-4eef-974e-74aa570050e6.webp" alt="" fetchpriority="high" style="display: block; width: 100%; height: 100%; object-fit: cover; border: 0;" decoding="async">
+        <picture style="display: block; width: 100%; height: 100%;"><source media="(max-width: 768px)" srcset="assets/images/hero-home-mobile.webp"><img id="hero-bg" src="assets/images/hero-home-desktop.webp" alt="" width="1600" height="893" fetchpriority="high" style="display: block; width: 100%; height: 100%; object-fit: cover; border: 0;" decoding="async"></picture>
         <div style="position: absolute; inset: 0; background: linear-gradient(100deg, rgba(15,30,55,0.72) 0%, rgba(15,30,55,0.5) 45%, rgba(15,30,55,0.18) 75%);"></div>
       </div>
 
@@ -337,7 +346,7 @@
         <sc-for list="{{ categories }}" as="cat" hint-placeholder-count="4">
           <a href="{{ cat.href }}" aria-label="{{ cat.title }} — zobacz oferty" style="display: flex; flex-direction: column; color: inherit; transition: transform .2s ease;" style-hover="transform: translateY(-4px);">
             <div style="position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4/3;">
-              <img src="{{ cat.src }}" alt="{{ cat.title }}" style="display: block; width: 100%; height: 100%; object-fit: cover;" decoding="async">
+              <img src="{{ cat.src }}" alt="{{ cat.title }}" loading="lazy" style="display: block; width: 100%; height: 100%; object-fit: cover;" decoding="async">
             </div>
             <div style="padding: 24px 4px 0; display: flex; flex-direction: column; flex: 1;">
               <h3 style="min-height: 28px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 19px; line-height: 1.35; font-weight: 800; color: oklch(0.26 0.03 250); margin: 0 0 6px; letter-spacing: -0.01em;">{{ cat.title }}</h3>
@@ -369,7 +378,7 @@
 
       <div id="why-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, minmax(200px, auto)); gap: 20px;">
         <div id="why-tile-big" style="position: relative; grid-column: span 2; grid-row: span 2; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; padding: 36px;">
-          <image-slot id="why-us-photo-v2" src="assets/images/individual-approach-v2.webp" placeholder="Zdjęcie: indywidualne podejście / spotkanie z klientem" shape="rect" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></image-slot>
+          <img id="why-us-photo-v2" src="assets/images/individual-approach-v2.webp" alt="Doradca MazurEstate rozmawia z klientem" loading="lazy" decoding="async" width="1536" height="1024" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
           <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,25,50,0.35) 0%, rgba(15,25,50,0.82) 100%); z-index: 1; pointer-events: none;"></div>
           <div style="position: relative; z-index: 2;">
             <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 24px; font-weight: 800; color: white; margin: 0 0 12px; letter-spacing: -0.01em; text-wrap: pretty;">{{ why1.title }}</h3>
@@ -503,7 +512,7 @@
       <div id="footer-grid" style="display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
         <div>
           <div style="display: flex; align-items: center; gap: 10px; background: white; border-radius: 12px; padding: 8px 10px; width: fit-content; margin-bottom: 20px;">
-            <img src="assets/images/hf_20260726_144142_ac3b284c-3072-4dfc-aeb0-5e7625c91362.png" alt="MazurEstate" style="height: 40px; width: auto; object-fit: contain;" loading="lazy" decoding="async">
+            <img src="assets/images/mazur-logo-footer-160.webp" alt="MazurEstate" width="40" height="40" style="height: 40px; width: auto; object-fit: contain;" loading="lazy" decoding="async">
           </div>
           <p style="font-size: 14px; line-height: 1.65; color: rgba(255,255,255,0.6); margin: 0 0 20px; max-width: 300px; text-wrap: pretty;">Agencja nieruchomości w Warszawie. Sprzedaż, wynajem i zarządzanie nieruchomościami dla klientów lokalnych i zagranicznych.</p>
           <div class="footer-social" style="display: flex; flex-wrap: wrap; gap: 10px;">
