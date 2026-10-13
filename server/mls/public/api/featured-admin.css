@@ -131,3 +131,34 @@ main{padding:24px 12px 60px}
 .translation-retry-controls p{flex-basis:100%;margin:0 0 4px;font-size:14px}
 .translation-retry-controls button{min-height:44px;padding:10px 14px;font-size:13px}
 .translation-retry-controls button:focus-visible{outline:3px solid #1a77bd;outline-offset:2px}
+
+#translation-cards{align-items:stretch}
+#translation-cards .translation-card{display:flex;flex-direction:column;gap:14px}
+#translation-cards .translation-card-header{flex-direction:column;align-items:flex-start;gap:10px}
+#translation-cards .translation-card-header h3{line-height:1.2;min-height:2.4em}
+#translation-cards .translation-card-description{margin:0;min-height:6.2em}
+#translation-cards .translation-metrics,#translation-cards .translation-language-table,#translation-cards .translation-language-note,#translation-cards .translation-activity,#translation-cards .translation-unavailable-message{margin:0}
+#translation-cards .translation-card-footer{display:grid;gap:10px;margin-top:auto}
+#translation-cards .translation-card-footer:empty{display:none}
+#translation-cards .translation-card-footer .translation-note,#translation-cards .translation-retry-controls{margin:0}
+@supports(grid-template-rows:subgrid){
+@media(min-width:761px){
+#translation-cards{grid-template-rows:repeat(8,auto);column-gap:14px;row-gap:14px}
+#translation-cards .translation-card{display:grid;grid-row:span 8;grid-template-rows:subgrid;align-items:start;row-gap:14px}
+#translation-cards .translation-card-header{display:grid;grid-row:1/span 2;grid-template-rows:subgrid;row-gap:14px}
+#translation-cards .translation-card-header h3{grid-row:1;min-height:0}
+#translation-cards .translation-card-header .integration-badge{grid-row:2;justify-self:start}
+#translation-cards .translation-card-description{grid-row:3;min-height:0}
+#translation-cards .translation-metrics{grid-row:4}
+#translation-cards .translation-language-table{grid-row:5}
+#translation-cards .translation-language-note{grid-row:6}
+#translation-cards .translation-activity{grid-row:7}
+#translation-cards .translation-card-footer{grid-row:8;align-content:start;margin-top:0}
+#translation-cards .translation-unavailable-message{grid-row:4/9}
+}
+}
+@media(max-width:760px){
+#translation-cards{grid-template-columns:1fr}
+#translation-cards .translation-card-header h3,#translation-cards .translation-card-description{min-height:0}
+#translation-cards .translation-card-footer{margin-top:0}
+}
