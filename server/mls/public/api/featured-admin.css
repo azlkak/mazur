@@ -70,7 +70,6 @@ li{align-items:flex-start;flex-direction:column}
 .integration-cards{grid-template-columns:1fr}
 }
 
-.translation-panel{margin-top:20px}
 #translation-intro.error{color:#a6291c}
 .translation-card{min-width:0}
 .translation-card .translation-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:16px 0}
@@ -111,4 +110,16 @@ main{padding:24px 12px 60px}
 .translation-language-table{font-size:11px}
 .translation-language-table th,.translation-language-table td{padding:7px 2px}
 .translation-progress-heading{font-size:13px}
+}
+
+.admin-tabs{position:sticky;top:8px;z-index:10;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding:5px;margin:0 0 24px;background:#eef4fa;border:1px solid #dbe5ee;border-radius:16px;box-shadow:0 6px 18px #1724360b}
+.admin-tabs button{min-width:0;min-height:52px;padding:10px 8px;border-radius:11px;background:transparent;color:#536276;font-size:14px;line-height:1.35;text-wrap:balance;white-space:normal}
+.admin-tabs button:hover{background:#e0edf7;color:#0769ad}
+.admin-tabs button[aria-selected="true"]{background:#0769ad;color:#fff;box-shadow:0 3px 8px #0769ad26}
+.admin-tabs button:focus-visible{outline:3px solid #1a77bd;outline-offset:2px}
+.admin-tab-panel{min-width:0;scroll-margin-top:92px}
+.admin-tab-panel:focus-visible{outline:2px solid #1a77bd;outline-offset:4px;border-radius:16px}
+@media(max-width:600px){
+.admin-tabs{gap:3px;padding:4px;margin-bottom:20px;border-radius:14px}
+.admin-tabs button{min-height:56px;padding:8px 3px;font-size:12px;border-radius:9px;overflow-wrap:anywhere}
 }
