@@ -3,12 +3,24 @@ declare(strict_types=1);
 require_once __DIR__ . '/../server/mls/public/api/description-formatter.php';
 require_once __DIR__ . '/../server/mls/private/offer-translations.php';
 require_once __DIR__ . '/../server/mls/private/bin/translate-offers.php';
+require_once __DIR__ . '/../server/mls/public/api/offer-parameters.php';
 
 function ensure(bool $okay, string $name): void
 {
     if (!$okay) throw new RuntimeException('FAIL: ' . $name);
     echo 'PASS: ' . $name . PHP_EOL;
 }
+
+$parameterFields = [
+    'tagList' => 'Dla studenta, Dla rodziny z dziećmi, Dla studenta',
+    'additionalBalcony' => '1', 'typeName' => 'Mieszkanie',
+    'apartmentFloor' => 'Parter', 'locationExportProvinceName' => 'MAZOWIECKIE',
+];
+ensure(mazurOfferFeatures($parameterFields) === ['Dla studenta', 'Dla rodziny z dziećmi', 'Balkon'], 'feature list is deduplicated before translation');
+$phrases = mazurOfferParameterPhrases($parameterFields);
+ensure(count($phrases) === 6 && in_array(['floor', 'Parter'], $phrases, true), 'visible parameter phrases include free-text features and floor');
+ensure(mazurOfferParameterHash('feature', 'Balkon') === mazurOfferParameterHash('feature', 'Balkon') && mazurOfferParameterHash('feature', 'Balkon') !== mazurOfferParameterHash('type', 'Balkon'), 'shared phrase cache is stable and scoped to kind');
+ensure(mazurTrParameterPhrases($parameterFields) === $phrases && mazurTrParameterHash('feature', 'Balkon') === mazurOfferParameterHash('feature', 'Balkon'), 'private worker and public API agree on phrases and cache keys');
 
 $fields = ['portalTitle' => 'Mieszkanie na Mokotowie', 'descriptionWebsite' => "Salon z balkonem.\nBlisko metra.\nMożliwość parkowania."];
 [$title, $document] = mazurTrSource($fields);

@@ -22,6 +22,8 @@ jobs:
       - name: Validate PHP and JavaScript
         run: |
           find server/mls/public -name '*.php' -print0 | xargs -0 -n1 php -l
+          find server/mls/private -name '*.php' -print0 | xargs -0 -n1 php -l
+          php scripts/test-offer-translation-core.php
           node --check oferta/script.js
           node --check wyniki-wyszukiwania/script.js
           node --check assets/js/seo.js

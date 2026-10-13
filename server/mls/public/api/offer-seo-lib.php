@@ -5,6 +5,7 @@ declare(strict_types=1);
 // This file has no public output when requested directly.
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/offer-parameters.php';
 if (is_file(__DIR__ . '/description-formatter.php')) {
     require_once __DIR__ . '/description-formatter.php';
 }
@@ -73,18 +74,7 @@ function mazurSeoPublicOffer(array $row, array $fields): array
     $city = mazurSeoText($fields, 'locationExportCityName', 'locationCityName');
     $title = mazurSeoText($fields, 'portalTitle') ?: $type . ($city !== '' ? ' — ' . $city : '');
     $rawDescription = mazurSeoText($fields, 'descriptionWebsite', 'description');
-    $featureMap = [
-        'additionalBalcony' => 'Balkon', 'additionalTerrace' => 'Taras',
-        'additionalGarden' => 'Ogród', 'additionalParking' => 'Miejsce parkingowe',
-        'additionalParkingunderground' => 'Parking podziemny',
-        'additionalGarage' => 'Garaż', 'buildingElevatornumber' => 'Winda',
-        'mediaInternet' => 'Internet', 'securityGated' => 'Teren zamknięty',
-    ];
-    $features = array_values(array_filter(array_map('trim', explode(',', mazurSeoText($fields, 'tagList')))));
-    foreach ($featureMap as $field => $label) {
-        $value = strtolower(trim((string)($fields[$field] ?? '')));
-        if ($value !== '' && !in_array($value, ['0', 'false', 'nie', 'no'], true)) $features[] = $label;
-    }
+    $features = mazurOfferFeatures($fields);
     $images = array_values(array_filter($images, static fn($name): bool => is_string($name)));
     return [
         'id' => portalPublicOfferId((string)$row['source'], (string)$row['source_id']),
@@ -111,7 +101,7 @@ function mazurSeoPublicOffer(array $row, array $fields): array
         'descriptionDocument' => function_exists('mazurDescriptionDocument')
             ? mazurDescriptionDocument($rawDescription) : null,
         'descriptionLanguage' => 'pl',
-        'features' => array_slice(array_values(array_unique($features)), 0, 20),
+        'features' => $features,
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
             static fn(string $name): string => portalImageUrl($name),
