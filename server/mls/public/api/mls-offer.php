@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
 require_once __DIR__ . '/offer-translation-read.php';
+require_once __DIR__ . '/offer-parameters.php';
 // Optional during a rolling deployment: missing formatter keeps the plain API.
 if (is_file(__DIR__ . '/description-formatter.php')) require_once __DIR__ . '/description-formatter.php';
 
@@ -86,23 +87,7 @@ try {
     $title = firstText($fields, 'portalTitle');
     if ($title === '') $title = $type . ($city !== '' ? ' — ' . $city : '');
 
-    $featureMap = [
-        'additionalBalcony' => 'Balkon',
-        'additionalTerrace' => 'Taras',
-        'additionalGarden' => 'Ogród',
-        'additionalParking' => 'Miejsce parkingowe',
-        'additionalParkingunderground' => 'Parking podziemny',
-        'additionalGarage' => 'Garaż',
-        'buildingElevatornumber' => 'Winda',
-        'mediaInternet' => 'Internet',
-        'securityGated' => 'Teren zamknięty',
-    ];
-    $features = array_values(array_filter(array_map('trim', explode(',', firstText($fields, 'tagList')))));
-    foreach ($featureMap as $field => $label) {
-        $value = strtolower(trim((string)($fields[$field] ?? '')));
-        if ($value !== '' && !in_array($value, ['0', 'false', 'nie', 'no'], true)) $features[] = $label;
-    }
-    $features = array_values(array_unique($features));
+    $features = mazurOfferFeatures($fields);
 
     $offer = [
         'id' => portalPublicOfferId($source, (string)$row['source_id']),
@@ -131,7 +116,8 @@ try {
         'descriptionDocument' => function_exists('mazurDescriptionDocument')
             ? mazurDescriptionDocument(firstText($fields, 'descriptionWebsite', 'description')) : null,
         'descriptionLanguage' => 'pl',
-        'features' => array_slice($features, 0, 20),
+        'features' => $features,
+        'parameterTranslations' => mazurOfferParameterTranslations($db, $fields, $requestedLanguage),
         'exportedAt' => (string)$row['source_export_at'],
         'images' => array_map(
             static fn(string $name): string => portalImageUrl($name),
