@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/translation-queue-status.php';
 require_once dirname(__DIR__, 2) . '/mls/integration-health.php';
 
 header('Cache-Control: no-store');
@@ -91,6 +92,10 @@ try {
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && ($_GET['action'] ?? '') === 'integration-status') {
         if (!$authorized) respond(401, ['error' => 'login_required']);
         respond(200, integrationStatus(db($config), $config));
+    }
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && ($_GET['action'] ?? '') === 'translation-status') {
+        if (!$authorized) respond(401, ['error' => 'login_required']);
+        respond(200, mazurTranslationQueueStatus(db($config), $config));
     }
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') respond(405, ['error' => 'method_not_allowed']);
     $origin = (string)($_SERVER['HTTP_ORIGIN'] ?? '');

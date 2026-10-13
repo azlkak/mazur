@@ -1,0 +1,49 @@
+name: Translation panel checks
+
+on:
+  pull_request:
+    paths:
+      - 'server/mls/public/api/featured-admin.*'
+      - 'server/mls/public/api/translation-queue-status.php'
+      - 'scripts/test-translation-queue-status.php'
+      - '.github/workflows/translation-panel-checks.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'server/mls/public/api/featured-admin.*'
+      - 'server/mls/public/api/translation-queue-status.php'
+      - 'scripts/test-translation-queue-status.php'
+      - '.github/workflows/translation-panel-checks.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  queue-status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: fixture-only-password
+          MYSQL_DATABASE: mazur_translation_panel_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate admin JavaScript and PHP
+        run: |
+          node --check server/mls/public/api/featured-admin.js
+          php -l server/mls/public/api/featured-admin.php
+          php -l server/mls/public/api/translation-queue-status.php
+      - name: Test read-only queue metrics and authenticated access
+        env:
+          MAZUR_TEST_DSN: mysql:host=127.0.0.1;port=3306;dbname=mazur_translation_panel_test;charset=utf8mb4
+          MAZUR_TEST_DB_USER: root
+          MAZUR_TEST_DB_PASSWORD: fixture-only-password
+        run: php scripts/test-translation-queue-status.php

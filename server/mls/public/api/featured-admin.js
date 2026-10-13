@@ -8,6 +8,14 @@
   let inactive = new Set();
   let integrationTimer = null;
   let integrationPending = false;
+  let translationPending = false;
+  let monitoringGeneration = 0;
+  let integrationController = null;
+  let translationController = null;
+  const languages = [['en', 'Angielski'], ['uk', 'Ukraiński'], ['ru', 'Rosyjski']];
+  const queueStates = [['pending', 'Oczekujące'], ['processing', 'W trakcie'], ['retry', 'Do ponowienia'], ['failed', 'Z błędem'], ['done', 'Zakończone']];
+  const count = value => Math.max(0, Math.floor(Number(value) || 0));
+  const formatCount = value => count(value).toLocaleString('pl-PL');
   const notice = (message, error = false) => { $('message').textContent = message; $('message').classList.toggle('error', error); };
   const dateTime = value => value ? new Intl.DateTimeFormat('pl-PL', {dateStyle: 'short', timeStyle: 'short', timeZone: 'Europe/Warsaw'}).format(Number(value) * 1000) : 'Brak danych';
   async function post(action, details = {}) {
@@ -137,27 +145,158 @@
       item.append(info); batches.append(item);
     }
   }
+  function renderTranslationQueue(parent, queue, name, description) {
+    const card = document.createElement('article'); card.className = 'integration-card translation-card';
+    const heading = document.createElement('div'); heading.className = 'integration-card-header';
+    text(heading, 'h3', name);
+    const totals = queue?.counts || {};
+    const waiting = count(totals.pending) + count(totals.processing) + count(totals.retry);
+    const status = !queue?.available ? 'unknown' : count(totals.failed) ? 'error' : waiting ? 'running' : 'ok';
+    const badge = text(heading, 'span', !queue?.available ? 'Brak danych' : count(totals.failed) ? 'Wymaga uwagi' : waiting ? 'W kolejce' : 'Kolejka pusta');
+    badge.className = `integration-badge ${status}`;
+    card.append(heading);
+    text(card, 'p', description);
+    if (!queue?.available) {
+      text(card, 'p', 'Dane tej kolejki są chwilowo niedostępne. Odśwież, aby sprawdzić ponownie.');
+      parent.append(card); return;
+    }
+    const metrics = document.createElement('dl'); metrics.className = 'translation-metrics';
+    for (const [state, label] of queueStates) {
+      const metric = document.createElement('div'); metric.className = `translation-metric ${state}`;
+      text(metric, 'dt', label); text(metric, 'dd', formatCount(totals[state])); metrics.append(metric);
+    }
+    card.append(metrics);
+    if (count(queue.stale_done)) text(card, 'p', `W tym ${formatCount(queue.stale_done)} pominiętych, nieaktualnych zadań.`).className = 'translation-note';
+    const table = document.createElement('table'); table.className = 'translation-language-table';
+    text(table, 'caption', 'Zadania według języka');
+    const thead = document.createElement('thead'); const headings = document.createElement('tr');
+    for (const label of ['Język', 'Do zrobienia', 'Z błędem', 'Zakończone']) {
+      const th = text(headings, 'th', label); th.scope = 'col';
+    }
+    thead.append(headings); table.append(thead);
+    const tbody = document.createElement('tbody');
+    for (const [language, label] of languages) {
+      const counts = queue.languages?.[language] || {};
+      const row = document.createElement('tr'); const th = text(row, 'th', label); th.scope = 'row';
+      text(row, 'td', formatCount(count(counts.pending) + count(counts.processing) + count(counts.retry)));
+      text(row, 'td', formatCount(counts.failed)); text(row, 'td', formatCount(counts.done)); tbody.append(row);
+    }
+    table.append(tbody); card.append(table);
+    text(card, 'p', '„Do zrobienia” łączy oczekujące, wykonywane i przeznaczone do ponowienia.').className = 'translation-note';
+    const activity = document.createElement('dl'); activity.className = 'translation-activity';
+    for (const [label, value] of [['Ostatnia aktywność', queue.last_activity_at], ['Ostatnie zakończenie', queue.last_completed_at]]) {
+      text(activity, 'dt', label); text(activity, 'dd', dateTime(value));
+    }
+    card.append(activity); parent.append(card);
+  }
+  function renderTranslationStatus(data) {
+    $('translation-intro').classList.remove('error');
+    $('translation-intro').textContent = `Stan z ${dateTime(data.checked_at)} · automatyczne odświeżanie co minutę. Limit: ${formatCount(data.max_jobs_per_run)} zadań na przebieg.`;
+    const cards = $('translation-cards'); cards.replaceChildren();
+    renderTranslationQueue(cards, data.queues?.offers, 'Tytuły i opisy ofert', 'Nowe i zmienione fragmenty ofert tłumaczymy na trzy języki. Gotowe tłumaczenia niezmienionych fragmentów wykorzystujemy ponownie.');
+    renderTranslationQueue(cards, data.queues?.parameters, 'Wspólne parametry i atuty', 'Jedno tłumaczenie parametru wykorzystujemy we wszystkich ofertach, które go zawierają.');
+    const publication = $('translation-publication'); publication.replaceChildren();
+    if (!data.publication?.available) {
+      text(publication, 'p', 'Nie udało się ustalić liczby gotowych tekstów. Spróbuj odświeżyć.');
+    } else {
+      const active = count(data.publication.active_offers);
+      for (const [language, label] of languages) {
+        const ready = count(data.publication.languages?.[language]);
+        const row = document.createElement('div'); row.className = 'translation-progress';
+        const heading = document.createElement('div'); heading.className = 'translation-progress-heading';
+        text(heading, 'strong', label); text(heading, 'span', `${formatCount(ready)} / ${formatCount(active)} ofert`);
+        const bar = document.createElement('progress'); bar.max = Math.max(active, 1); bar.value = Math.min(ready, active);
+        bar.setAttribute('aria-label', `${label}: gotowe teksty ${formatCount(ready)} z ${formatCount(active)} aktywnych ofert w imporcie`);
+        row.append(heading, bar); publication.append(row);
+      }
+      if (!active) text(publication, 'p', 'Brak aktywnych ofert w imporcie.');
+    }
+    const errors = $('translation-errors'); errors.replaceChildren();
+    if (data.errors_available === false) text(errors, 'li', 'Lista problemów jest niepełna — nie udało się odczytać wszystkich danych.').className = 'translation-empty';
+    if (!Array.isArray(data.errors) || !data.errors.length) {
+      if (data.errors_available !== false) text(errors, 'li', 'Brak ostatnich problemów wymagających pokazania.').className = 'translation-empty';
+    } else {
+      for (const error of data.errors.slice(0, 10)) {
+        const item = document.createElement('li');
+        const heading = document.createElement('div'); heading.className = 'translation-error-heading';
+        const language = languages.find(([key]) => key === error.language)?.[1] || 'Nieznany język';
+        const label = error.queue === 'parameters' ? 'Parametry i atuty' : 'Tytuły i opisy';
+        text(heading, 'strong', `${label} · ${language}`);
+        const state = text(heading, 'span', error.state === 'retry' ? 'Do ponowienia' : 'Wymaga uwagi');
+        state.className = `integration-badge ${error.state === 'retry' ? 'stale' : 'error'}`;
+        item.append(heading);
+        const details = [];
+        if (error.offer_number || error.offer_id) details.push(`Oferta nr ${error.offer_number || error.offer_id}`);
+        if (error.source) details.push(error.source === 'esticrm' ? 'EstiCRM' : error.source === 'vixcrm' ? 'VixCRM' : 'MLS');
+        if (error.phrase) details.push(`Parametr: ${String(error.phrase).slice(0, 180)}`);
+        details.push(`Próby: ${formatCount(error.attempts)}`, dateTime(error.updated_at));
+        text(item, 'span', details.join(' · ')).className = 'translation-error-details';
+        text(item, 'p', error.message || 'Zadanie wymaga sprawdzenia.'); errors.append(item);
+      }
+    }
+  }
+  async function loadTranslationStatus() {
+    if (translationPending || $('editor').hidden) return;
+    const generation = monitoringGeneration;
+    translationPending = true;
+    translationController = new AbortController();
+    const button = $('translation-refresh'); button.disabled = true;
+    try {
+      const response = await fetch(endpoint + '?action=translation-status', {credentials: 'same-origin', cache: 'no-store', signal: translationController.signal});
+      if (response.status === 401) { if (generation === monitoringGeneration) monitoringSessionExpired(); return; }
+      if (!response.ok) throw new Error('unavailable');
+      const data = await response.json();
+      if (generation === monitoringGeneration && !$('editor').hidden) renderTranslationStatus(data);
+    } catch (error) {
+      if (error.name !== 'AbortError' && generation === monitoringGeneration) {
+        $('translation-intro').textContent = 'Nie udało się pobrać kolejki tłumaczeń. Widoczne dane mogą być nieaktualne. Spróbuj odświeżyć.';
+        $('translation-intro').classList.add('error');
+      }
+    } finally {
+      if (generation === monitoringGeneration) { translationPending = false; translationController = null; button.disabled = false; }
+    }
+  }
+  function refreshMonitoring() { loadIntegrationStatus(); loadTranslationStatus(); }
+  function stopMonitoring() {
+    monitoringGeneration++;
+    if (integrationTimer !== null) { clearInterval(integrationTimer); integrationTimer = null; }
+    integrationController?.abort(); translationController?.abort();
+    integrationController = null; translationController = null;
+    integrationPending = false; translationPending = false;
+    $('integration-refresh').disabled = false; $('translation-refresh').disabled = false;
+  }
+  function monitoringSessionExpired() {
+    stopMonitoring(); csrf = '';
+    $('editor').hidden = true; $('login').hidden = false; $('code-form').hidden = true;
+    notice('Sesja wygasła. Zaloguj się ponownie, aby zobaczyć aktualne dane.', true);
+  }
   async function loadIntegrationStatus() {
-    if (integrationPending) return;
+    if (integrationPending || $('editor').hidden) return;
+    const generation = monitoringGeneration;
     integrationPending = true;
+    integrationController = new AbortController();
     const button = $('integration-refresh'); button.disabled = true;
     try {
-      const response = await fetch(endpoint + '?action=integration-status', {credentials: 'same-origin', cache: 'no-store'});
+      const response = await fetch(endpoint + '?action=integration-status', {credentials: 'same-origin', cache: 'no-store', signal: integrationController.signal});
+      if (response.status === 401) { if (generation === monitoringGeneration) monitoringSessionExpired(); return; }
       if (!response.ok) throw new Error('unavailable');
-      renderIntegration(await response.json());
-    } catch {
-      $('integration-intro').textContent = 'Nie udało się pobrać stanu integracji. Spróbuj odświeżyć.';
-    } finally { integrationPending = false; button.disabled = false; }
+      const data = await response.json();
+      if (generation === monitoringGeneration && !$('editor').hidden) renderIntegration(data);
+    } catch (error) {
+      if (error.name !== 'AbortError' && generation === monitoringGeneration) $('integration-intro').textContent = 'Nie udało się pobrać stanu integracji. Spróbuj odświeżyć.';
+    } finally {
+      if (generation === monitoringGeneration) { integrationPending = false; integrationController = null; button.disabled = false; }
+    }
   }
   async function initialize() {
     const response = await fetch(endpoint + '?action=status', {credentials: 'same-origin', cache: 'no-store'});
     const state = await response.json();
     $('login').hidden = state.authorized; $('editor').hidden = !state.authorized;
-    if (!state.authorized) return;
+    if (!state.authorized) { stopMonitoring(); return; }
     csrf = state.csrf; $('account').textContent = state.email;
-    loadIntegrationStatus();
+    refreshMonitoring();
     if (integrationTimer === null) integrationTimer = setInterval(() => {
-      if (!document.hidden && !$('editor').hidden) loadIntegrationStatus();
+      if (!document.hidden && !$('editor').hidden) refreshMonitoring();
     }, 60000);
     selected = state.selected.map(row => String(row.source_id));
     hidden = state.hidden || [];
@@ -187,14 +326,15 @@
     catch { notice('Kod jest nieprawidłowy lub wygasł.', true); }
   };
   $('search').oninput = renderResults;
-  $('integration-refresh').onclick = loadIntegrationStatus;
+  $('integration-refresh').onclick = refreshMonitoring;
+  $('translation-refresh').onclick = loadTranslationStatus;
   $('save').onclick = async () => {
     $('save').disabled = true;
     try { await post('save', {ids: selected}); notice('Zapisano. Zmiana pojawi się na stronie w ciągu kilku minut.'); await initialize(); }
     catch (error) { notice(error.message === 'offer_unavailable' ? 'Jedna z ofert nie jest już dostępna. Usuń ją z listy.' : 'Nie udało się zapisać zmian.', true); }
     finally { $('save').disabled = false; }
   };
-  $('logout').onclick = async () => { try { await post('logout'); location.reload(); } catch { notice('Nie udało się wylogować.', true); } };
+  $('logout').onclick = async () => { try { await post('logout'); stopMonitoring(); location.reload(); } catch { notice('Nie udało się wylogować.', true); } };
   if (location.protocol === 'file:') {
     const message = $('message');
     message.classList.add('error');

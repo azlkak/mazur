@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Panel ofert — MazurEstate</title>
-  <link rel="stylesheet" href="featured-admin.css?v=4">
-  <script src="featured-admin.js?v=6" defer></script>
+  <link rel="stylesheet" href="featured-admin.css?v=5">
+  <script src="featured-admin.js?v=7" defer></script>
 </head>
 <body>
   <main>
-    <header><p class="eyebrow">MazurEstate</p><h1>Panel ofert</h1><p>Wybieraj oferty, ukrywaj je na portalu i sprawdzaj stan importów.</p></header>
+    <header><p class="eyebrow">MazurEstate</p><h1>Panel ofert</h1><p>Wybieraj oferty, ukrywaj je na portalu i sprawdzaj stan importów oraz tłumaczeń.</p></header>
     <p id="message" role="status" aria-live="polite"></p>
     <section id="login" hidden>
       <h2>Dostęp do panelu</h2>
@@ -25,6 +25,19 @@
         <div id="integration-cards" class="integration-cards" aria-live="polite"></div>
         <h3>Ostatnio zaimportowane paczki</h3>
         <ul id="integration-batches" class="batch-list"></ul>
+      </div>
+      <div class="integration-panel translation-panel" aria-labelledby="translation-title">
+        <div class="integration-heading"><div><p class="eyebrow">Tłumaczenia</p><h2 id="translation-title">Kolejka tłumaczeń</h2></div><button id="translation-refresh" type="button" class="quiet">Odśwież tłumaczenia</button></div>
+        <p id="translation-intro" role="status" aria-live="polite">Sprawdzam tłumaczenia…</p>
+        <div id="translation-cards" class="integration-cards"></div>
+        <div class="translation-publication" aria-labelledby="translation-publication-title">
+          <h3 id="translation-publication-title">Gotowe teksty aktywnych ofert w imporcie</h3>
+          <p>Cały aktualny tytuł i opis muszą być gotowe, aby udostępnić tłumaczenie oferty w danym języku. Liczby mogą obejmować także oferty ręcznie ukryte na portalu.</p>
+          <div id="translation-publication"></div>
+        </div>
+        <h3>Ostatnie problemy z tłumaczeniem</h3>
+        <ul id="translation-errors" class="translation-errors"></ul>
+        <p class="translation-note">Liczymy zadania tłumaczenia fragmentów i wspólnych parametrów, a nie całe oferty. „Zakończone” obejmuje także zadania pominięte po zmianie tekstu. Błędy przejściowe są ponawiane automatycznie.</p>
       </div>
       <hr>
       <h2>Oferty na stronie głównej <small id="count"></small></h2>
