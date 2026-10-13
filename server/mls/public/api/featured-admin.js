@@ -237,7 +237,7 @@
   }
   function renderTranslationQueue(parent, queue, queueKey, name, description) {
     const card = document.createElement('article'); card.className = 'integration-card translation-card';
-    const heading = document.createElement('div'); heading.className = 'integration-card-header';
+    const heading = document.createElement('div'); heading.className = 'integration-card-header translation-card-header';
     text(heading, 'h3', name);
     const totals = queue?.counts || {};
     const waiting = count(totals.pending) + count(totals.processing) + count(totals.retry);
@@ -245,9 +245,10 @@
     const badge = text(heading, 'span', !queue?.available ? 'Brak danych' : count(totals.failed) ? 'Wymaga uwagi' : waiting ? 'W kolejce' : 'Kolejka pusta');
     badge.className = `integration-badge ${status}`;
     card.append(heading);
-    text(card, 'p', description);
+    text(card, 'p', description).className = 'translation-card-description';
     if (!queue?.available) {
-      text(card, 'p', 'Dane tej kolejki są chwilowo niedostępne. Odśwież, aby sprawdzić ponownie.');
+      card.classList.add('translation-card-unavailable');
+      text(card, 'p', 'Dane tej kolejki są chwilowo niedostępne. Odśwież, aby sprawdzić ponownie.').className = 'translation-unavailable-message';
       parent.append(card); return;
     }
     const metrics = document.createElement('dl'); metrics.className = 'translation-metrics';
@@ -256,8 +257,6 @@
       text(metric, 'dt', label); text(metric, 'dd', formatCount(totals[state])); metrics.append(metric);
     }
     card.append(metrics);
-    if (count(queue.stale_done)) text(card, 'p', `W tym ${formatCount(queue.stale_done)} pominiętych, nieaktualnych zadań.`).className = 'translation-note';
-    renderTranslationRetryControls(card, queue, queueKey, name);
     const table = document.createElement('table'); table.className = 'translation-language-table';
     text(table, 'caption', 'Zadania według języka');
     const thead = document.createElement('thead'); const headings = document.createElement('tr');
@@ -273,12 +272,16 @@
       text(row, 'td', formatCount(counts.failed)); text(row, 'td', formatCount(counts.done)); tbody.append(row);
     }
     table.append(tbody); card.append(table);
-    text(card, 'p', '„Do zrobienia” łączy oczekujące, wykonywane i przeznaczone do ponowienia.').className = 'translation-note';
+    text(card, 'p', '„Do zrobienia” łączy oczekujące, wykonywane i przeznaczone do ponowienia.').className = 'translation-note translation-language-note';
     const activity = document.createElement('dl'); activity.className = 'translation-activity';
     for (const [label, value] of [['Ostatnia aktywność', queue.last_activity_at], ['Ostatnie zakończenie', queue.last_completed_at]]) {
       text(activity, 'dt', label); text(activity, 'dd', dateTime(value));
     }
-    card.append(activity); parent.append(card);
+    card.append(activity);
+    const footer = document.createElement('div'); footer.className = 'translation-card-footer';
+    if (count(queue.stale_done)) text(footer, 'p', `W tym ${formatCount(queue.stale_done)} pominiętych, nieaktualnych zadań.`).className = 'translation-note';
+    renderTranslationRetryControls(footer, queue, queueKey, name);
+    card.append(footer); parent.append(card);
   }
   function renderTranslationStatus(data) {
     const retryFocusLabel = $('translation-cards').contains(document.activeElement) ? document.activeElement?.getAttribute('aria-label') : null;
