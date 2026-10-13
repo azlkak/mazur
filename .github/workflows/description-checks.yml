@@ -16,6 +16,14 @@ on:
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
       - 'scripts/test-importer-recovery.php'
+      - 'server/mls/private/integration-health.php'
+      - 'server/mls/private/integration-alerts.php'
+      - 'server/mls/private/integration-notifications.example.php'
+      - 'server/mls/private/bin/check-integrations.php'
+      - 'server/mls/public/api/featured-admin.php'
+      - 'scripts/test-integration-alerts.php'
+      - 'server/mls/private/bin/run-import.sh'
+      - 'scripts/test-import-runner.py'
       - '.github/workflows/description-checks.yml'
   pull_request:
     paths:
@@ -32,6 +40,14 @@ on:
       - 'server/mls/private/bin/import.php'
       - 'scripts/test-importer-regions.php'
       - 'scripts/test-importer-recovery.php'
+      - 'server/mls/private/integration-health.php'
+      - 'server/mls/private/integration-alerts.php'
+      - 'server/mls/private/integration-notifications.example.php'
+      - 'server/mls/private/bin/check-integrations.php'
+      - 'server/mls/public/api/featured-admin.php'
+      - 'scripts/test-integration-alerts.php'
+      - 'server/mls/private/bin/run-import.sh'
+      - 'scripts/test-import-runner.py'
       - '.github/workflows/description-checks.yml'
 permissions:
   contents: read
@@ -57,6 +73,13 @@ jobs:
           php -l server/mls/private/bin/import.php
           php scripts/test-importer-regions.php
           php scripts/test-importer-recovery.php
+          php -l server/mls/private/integration-health.php
+          php -l server/mls/private/integration-alerts.php
+          php -l server/mls/private/bin/check-integrations.php
+          php -l server/mls/public/api/featured-admin.php
+          php scripts/test-integration-alerts.php
+          /bin/sh -n server/mls/private/bin/run-import.sh
+          python3 scripts/test-import-runner.py
       - name: JavaScript syntax and description regression checks
         run: |
           node --check oferta/script.js

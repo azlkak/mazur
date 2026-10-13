@@ -23,6 +23,9 @@ return [
     'import_retry_attempts' => 2,
     // Failure/recovery alerts and one summary email per imported package when offer records are skipped.
     'notification_emails' => [],
+    // Independent panel-status alerts; sent once per incident and recipient.
+    // Keep real addresses in private config.php or integration-notifications.php only.
+    'integration_notification_emails' => [],
     // One-time admin codes are sent only to these trusted addresses.
     'featured_admin_emails' => [],
     // EstiCRM: Ustawienia -> Dane firmowe. Never expose these values publicly.
