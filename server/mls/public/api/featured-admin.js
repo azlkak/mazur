@@ -1,6 +1,9 @@
 (() => {
   const $ = id => document.getElementById(id);
   const endpoint = 'featured-admin.php';
+  const tabs = ['integration', 'translations', 'offers'];
+  const tabFromHash = () => tabs.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'integration';
+  let activeTab = tabFromHash();
   let csrf = '';
   let selected = [];
   let catalog = [];
@@ -256,7 +259,27 @@
       if (generation === monitoringGeneration) { translationPending = false; translationController = null; button.disabled = false; }
     }
   }
-  function refreshMonitoring() { loadIntegrationStatus(); loadTranslationStatus(); }
+  function refreshMonitoring() {
+    if (activeTab === 'integration') loadIntegrationStatus();
+    if (activeTab === 'translations') loadTranslationStatus();
+  }
+  function selectTab(name, {navigate = false, focus = false} = {}) {
+    if (!tabs.includes(name)) return;
+    activeTab = name;
+    for (const tab of tabs) {
+      const selected = tab === name;
+      $('tab-' + tab).setAttribute('aria-selected', String(selected));
+      $('tab-' + tab).tabIndex = selected ? 0 : -1;
+      $('panel-' + tab).hidden = !selected;
+    }
+    if (navigate) {
+      const url = new URL(location.href); url.hash = name;
+      history.replaceState(history.state, '', url);
+      $('admin-tabs').scrollIntoView({block: 'start'});
+    }
+    if (focus) $('tab-' + name).focus({preventScroll: true});
+    if (!$('editor').hidden) refreshMonitoring();
+  }
   function stopMonitoring() {
     monitoringGeneration++;
     if (integrationTimer !== null) { clearInterval(integrationTimer); integrationTimer = null; }
@@ -326,8 +349,27 @@
     catch { notice('Kod jest nieprawidłowy lub wygasł.', true); }
   };
   $('search').oninput = renderResults;
-  $('integration-refresh').onclick = refreshMonitoring;
+  $('integration-refresh').onclick = loadIntegrationStatus;
   $('translation-refresh').onclick = loadTranslationStatus;
+  for (const name of tabs) $('tab-' + name).onclick = () => selectTab(name, {navigate: true});
+  $('admin-tabs').onkeydown = event => {
+    const position = tabs.findIndex(name => event.target === $('tab-' + name));
+    if (position < 0) return;
+    let next;
+    if (event.key === 'ArrowRight') next = (position + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') next = (position + tabs.length - 1) % tabs.length;
+    else if (event.key === 'Home') next = 0;
+    else if (event.key === 'End') next = tabs.length - 1;
+    else return;
+    event.preventDefault();
+    selectTab(tabs[next], {navigate: true, focus: true});
+  };
+  window.addEventListener('hashchange', () => {
+    const focused = document.activeElement;
+    const focus = $('admin-tabs').contains(focused) || $('panel-' + activeTab).contains(focused);
+    selectTab(tabFromHash(), {focus});
+  });
+  selectTab(activeTab);
   $('save').onclick = async () => {
     $('save').disabled = true;
     try { await post('save', {ids: selected}); notice('Zapisano. Zmiana pojawi się na stronie w ciągu kilku minut.'); await initialize(); }

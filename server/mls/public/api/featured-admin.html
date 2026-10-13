@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Panel ofert — MazurEstate</title>
-  <link rel="stylesheet" href="featured-admin.css?v=5">
-  <script src="featured-admin.js?v=7" defer></script>
+  <link rel="stylesheet" href="featured-admin.css?v=6">
+  <script src="featured-admin.js?v=8" defer></script>
 </head>
 <body>
   <main>
@@ -19,6 +19,12 @@
     </section>
     <section id="editor" hidden>
       <div class="toolbar"><p>Zalogowano: <strong id="account"></strong></p><button id="logout" type="button" class="quiet">Wyloguj</button></div>
+      <div id="admin-tabs" class="admin-tabs" role="tablist" aria-label="Części panelu ofert">
+        <button id="tab-integration" type="button" role="tab" aria-controls="panel-integration" aria-selected="true" tabindex="0">Status integracji</button>
+        <button id="tab-translations" type="button" role="tab" aria-controls="panel-translations" aria-selected="false" tabindex="-1">Status tłumaczeń</button>
+        <button id="tab-offers" type="button" role="tab" aria-controls="panel-offers" aria-selected="false" tabindex="-1">Wyświetlanie ofert</button>
+      </div>
+      <div id="panel-integration" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-integration" tabindex="0">
       <div class="integration-panel" aria-labelledby="integration-title">
         <div class="integration-heading"><div><p class="eyebrow">Monitoring</p><h2 id="integration-title">Status integracji</h2></div><button id="integration-refresh" type="button" class="quiet">Odśwież</button></div>
         <p id="integration-intro">Sprawdzam importy…</p>
@@ -26,6 +32,8 @@
         <h3>Ostatnio zaimportowane paczki</h3>
         <ul id="integration-batches" class="batch-list"></ul>
       </div>
+      </div>
+      <div id="panel-translations" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-translations" tabindex="0" hidden>
       <div class="integration-panel translation-panel" aria-labelledby="translation-title">
         <div class="integration-heading"><div><p class="eyebrow">Tłumaczenia</p><h2 id="translation-title">Kolejka tłumaczeń</h2></div><button id="translation-refresh" type="button" class="quiet">Odśwież tłumaczenia</button></div>
         <p id="translation-intro" role="status" aria-live="polite">Sprawdzam tłumaczenia…</p>
@@ -39,7 +47,8 @@
         <ul id="translation-errors" class="translation-errors"></ul>
         <p class="translation-note">Liczymy zadania tłumaczenia fragmentów i wspólnych parametrów, a nie całe oferty. „Zakończone” obejmuje także zadania pominięte po zmianie tekstu. Błędy przejściowe są ponawiane automatycznie.</p>
       </div>
-      <hr>
+      </div>
+      <div id="panel-offers" class="admin-tab-panel" role="tabpanel" aria-labelledby="tab-offers" tabindex="0" hidden>
       <h2>Oferty na stronie głównej <small id="count"></small></h2>
       <p>Dodaj maksymalnie 10 ofert. Strzałkami ustaw kolejność. Na stronie głównej oferty można przewijać poziomo. Wycofane oferty znikają ze strony automatycznie.</p>
       <ol id="selected"></ol>
@@ -55,6 +64,7 @@
       <h2>Ukryte na portalu <small id="hidden-count"></small></h2>
       <p>Te oferty nie pojawiają się w wyszukiwarce ani na stronach szczegółów. Przywrócenie ponownie udostępni ofertę, jeśli nadal jest aktywna w źródle.</p>
       <ul id="hidden"></ul>
+      </div>
     </section>
   </main>
 </body>

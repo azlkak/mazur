@@ -3,6 +3,11 @@
 Panel `featured-admin.php` udostępnia po zalogowaniu odczytowy endpoint
 `?action=translation-status`. Podgląd odświeża się co minutę podczas oglądania
 panelu oraz przyciskiem. Nie uruchamia workera ani płatnych wywołań API.
+Panel jest podzielony na zakładki: status integracji, status tłumaczeń i
+wyświetlanie ofert. Odświeżana jest tylko aktualnie oglądana zakładka monitoringu.
+Adresy `#integration`, `#translations` i `#offers` pozwalają otworzyć ją
+bezpośrednio; wybór zostaje przy odświeżeniu strony. Zakładki obsługują klawisze
+strzałek w lewo/prawo, Home i End, a zmiana zakładki nie kasuje edycji ofert.
 
 - Tytuły/opisy i wspólny słownik parametrów mają niezależne liczniki stanów
   oraz podział EN/UK/RU. Są to zadania fragment × język, nie liczby ofert.
