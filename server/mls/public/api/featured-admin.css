@@ -162,3 +162,12 @@ main{padding:24px 12px 60px}
 #translation-cards .translation-card-header h3,#translation-cards .translation-card-description{min-height:0}
 #translation-cards .translation-card-footer{margin-top:0}
 }
+#translation-cards .translation-language-table th:last-child{width:31%}
+#translation-cards .translation-language-table thead th{font-size:11px;overflow-wrap:normal;word-break:normal}
+#translation-cards .translation-language-table thead th:last-child{white-space:nowrap}
+@media(max-width:420px){
+#translation-cards .translation-language-table{font-size:10px}
+#translation-cards .translation-language-table th,#translation-cards .translation-language-table td{padding-right:1px;padding-left:1px}
+#translation-cards .translation-language-table th:first-child{width:24%}
+#translation-cards .translation-language-table thead th{font-size:10px}
+}
