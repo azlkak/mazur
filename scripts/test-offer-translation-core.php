@@ -125,6 +125,8 @@ rejectsTranslation('Dwupokojowe mieszkanie', '2 rooms, 2 bedrooms', 'Unexpected 
 rejectsTranslation('Dwupokojowe mieszkanie', '2.5 rooms', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '-2 rooms', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '+2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '- 2 rooms', 'Unexpected number');
+rejectsTranslation('Dwupokojowe mieszkanie', '+ 2 rooms', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '€2 rooms', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '€ 2 rooms', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '２ rooms', 'Unexpected number');
@@ -132,6 +134,9 @@ rejectsTranslation('Na trzecim piętrze', '2nd floor', 'Unexpected number');
 rejectsTranslation('Na trzecim piętrze', '3 rooms', 'Unexpected number');
 rejectsTranslation('III piętro', '3 floors', 'Unexpected number');
 rejectsTranslation('III piętro', '3 storeys', 'Unexpected number');
+rejectsTranslation('III piętro', '3-storey building', 'Unexpected number');
+rejectsTranslation('III piętro', '3-story house', 'Unexpected number');
+rejectsTranslation('III piętro', '3-floor building', 'Unexpected number');
 rejectsTranslation('III piętro', '3 поверхів', 'Unexpected number');
 rejectsTranslation('III piętro', '3 этажей', 'Unexpected number');
 rejectsTranslation('III piętro', '3 этажа', 'Unexpected number');
@@ -139,6 +144,10 @@ rejectsTranslation('Na dwudziestym trzecim piętrze', 'On the 3rd floor', 'Unexp
 rejectsTranslation('Na sto dwudziestym piętrze', 'On the 20th floor', 'Unexpected number');
 rejectsTranslation('Piętro dwudzieste trzecie', 'Floor 20', 'Unexpected number');
 rejectsTranslation('Dwadzieścia dwa pokoje', '2 rooms', 'Unexpected number');
+foreach (['Pięćset', 'Sześćset', 'Siedemset', 'Osiemset', 'Dziewięćset'] as $hundred) {
+    rejectsTranslation($hundred . ' dwa pokoje', '2 rooms', 'Unexpected number');
+    rejectsTranslation('Na ' . $hundred . ' trzecim piętrze', '3rd floor', 'Unexpected number');
+}
 rejectsTranslation('III piętro', '3rd floor, phone 3', 'Unexpected number');
 rejectsTranslation('Całodobowa ochrona', '24/7 security', 'Unexpected number');
 rejectsTranslation('Całodobowa ochrona', '24-hour security, 7 days a week', 'Unexpected number');

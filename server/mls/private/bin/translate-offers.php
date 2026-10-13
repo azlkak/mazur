@@ -130,7 +130,7 @@ function trCountStandaloneNumericPhrases(string $source, string $pattern): int
         $before = substr($source, 0, $offset);
         // Do not interpret only the last word of a compound quantity, e.g.
         // "dwudziestym trzecim piętrze" as the third floor.
-        if (preg_match('~(?<![\pL\pN])(?:dwadzieś\pL*|trzydzieś\pL*|czterdzieś\pL*|pięćdzieś\pL*|sześćdzieś\pL*|siedemdzieś\pL*|osiemdzieś\pL*|dziewięćdzieś\pL*|dwudziest\pL*|trzydziest\pL*|czterdziest\pL*|pięćdziesiąt\pL*|sześćdziesiąt\pL*|siedemdziesiąt\pL*|osiemdziesiąt\pL*|dziewięćdziesiąt\pL*|sto|stu|dwieście|dwustu|trzysta|trzystu|czterysta|czterystu|pięciuset|sześciuset|siedmiuset|ośmiuset|dziewięciuset|tysiąc\pL*)[\s‐‑–—-]+\z~iu', $before)) continue;
+        if (preg_match('~(?<![\pL\pN])(?:dwadzieś\pL*|trzydzieś\pL*|czterdzieś\pL*|pięćdzieś\pL*|sześćdzieś\pL*|siedemdzieś\pL*|osiemdzieś\pL*|dziewięćdzieś\pL*|dwudziest\pL*|trzydziest\pL*|czterdziest\pL*|pięćdziesiąt\pL*|sześćdziesiąt\pL*|siedemdziesiąt\pL*|osiemdziesiąt\pL*|dziewięćdziesiąt\pL*|sto|stu|dwieście|dwustu|trzysta|trzystu|czterysta|czterystu|pięćset|sześćset|siedemset|osiemset|dziewięćset|pięciuset|sześciuset|siedmiuset|ośmiuset|dziewięciuset|tysiąc\pL*)[\s‐‑–—-]+\z~iu', $before)) continue;
         $after = substr($source, $offset + strlen($matched));
         if (preg_match('~\A[\s‐‑–—-]+(?:pierwsz|drug|trzeci|czwart|piąt|szóst|siódm|ósm|dziewiąt|dziesiąt|jedenast|dwunast|trzynast|czternast|piętnast|szesnast|siedemnast|osiemnast|dziewiętnast|dwudziest)\pL*(?![\pL\pN])~iu', $after)) continue;
         $count++;
@@ -180,7 +180,7 @@ function trNumericAllowances(array $runs): array
 
 function trRemoveAllowedNumbers(string $text, array $sourceRuns): string
 {
-    if (preg_match('~\p{Sc}\s*[0-9]~u', $text)) return $text;
+    if (preg_match('~(?:\p{Sc}\s*|[+\-−]\s+)[0-9]~u', $text)) return $text;
     $boundary = '(?<![\pL\pN\p{Sc}.,+\-−/])';
     $join = '(?:\s*[-‐‑–—]\s*|\s+)';
     foreach (trNumericAllowances($sourceRuns) as $kind => $values) {
@@ -189,9 +189,10 @@ function trRemoveAllowedNumbers(string $text, array $sourceRuns): string
                 $pattern = $boundary . $value . $join . '(?:rooms?|кімнат\pL*|комнат\pL*)(?![\pL\pN])';
             } elseif ($kind === 'floor') {
                 $suffix = ($value % 100 >= 11 && $value % 100 <= 13) ? 'th' : ([1 => 'st', 2 => 'nd', 3 => 'rd'][$value % 10] ?? 'th');
-                $number = $value . '(?:' . $suffix . '|[-‐‑–—]?(?:й|ий|ій|му|м|ому|ем|ім|го|ьому))?';
-                $floor = '(?:floor|storey|story|поверх|поверсі|этаж|этаже)';
-                $pattern = '(?:' . $boundary . $number . $join . $floor . '|(?<![\pL\pN\p{Sc}])' . $floor . '\s+' . $number . ')(?![\pL\pN])';
+                $number = $value . '(?:[-‐‑–—]?(?:й|ий|ій|му|м|ому|ем|ім|го|ьому))?';
+                $floor = '(?:поверх|поверсі|этаж|этаже)';
+                $pattern = '(?:' . $boundary . $value . $suffix . $join . 'floor|(?<![\pL\pN\p{Sc}])floor\s+' . $value
+                    . '|' . $boundary . $number . $join . $floor . '|(?<![\pL\pN\p{Sc}])' . $floor . '\s+' . $number . ')(?![\pL\pN])';
             } else {
                 $hour = '(?:hours?|годин(?:а|и|у|і|ою|ам|ами|ах|на|не|ний|ні|ну|ної|ного|ному|ним|ними|них|ній)?|час(?:а|ов|у|ом|е|ы|ам|ами|ах|овой|овая|овое|овые|овую|ового|овому|овым|овыми|овых|овою)?)';
                 $pattern = $boundary . $value . '(?:' . $join . $hour . '|\s*h)(?![\pL\pN])';
