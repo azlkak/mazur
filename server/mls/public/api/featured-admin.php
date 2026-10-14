@@ -185,6 +185,7 @@ try {
         if (portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, json_decode($fieldsJson, true, 512, JSON_THROW_ON_ERROR))) {
             respond(404, ['error' => 'offer_unavailable']);
         }
+        portalEnsurePriceTable($db);
         if ($price === null) {
             $db->prepare('DELETE FROM portal_offer_prices WHERE source = ? AND source_id = ?')->execute([$source, $sourceId]);
         } else {
