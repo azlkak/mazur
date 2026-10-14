@@ -163,10 +163,17 @@ try {
                 }
                 try {
                     $linkedNumber = mazurEstiLinkExternalOffer($db, $config, $source, $sourceId, $fields);
-                    if ($linkedNumber !== '') $request['offer_number'] = $linkedNumber;
+                    if ($linkedNumber !== '') {
+                        $request['offer_number'] = $linkedNumber;
+                    } elseif (($config['esticrm_offer_creation_enabled'] ?? false) === true) {
+                        $contentLines[] = 'Powiązanie oferty w EstiCRM wymaga sprawdzenia.';
+                    }
                 } catch (Throwable $error) {
                     // The lead must still arrive when creation or lookup fails.
                     error_log('Mazur EstiCRM offer link ' . $source . ':' . $sourceId . ': ' . $error->getMessage());
+                    if (($config['esticrm_offer_creation_enabled'] ?? false) === true) {
+                        $contentLines[] = 'Powiązanie oferty w EstiCRM wymaga sprawdzenia.';
+                    }
                 }
             }
             if ($transaction === '131') $request['transaction'] = 133;
