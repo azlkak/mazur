@@ -80,12 +80,16 @@ function mazurEstiOfferPayload(array $fields, string $source, string $sourceId, 
         'estate' => (int)($fields['mainTypeId'] ?? 0),
         'transaction' => (int)($fields['transaction'] ?? 0),
         'price' => (float)($fields['price'] ?? 0),
-        'price_currency' => (int)($fields['priceCurrency'] ?? 2),
         'area_total' => (float)($fields['areaTotal'] ?? 0),
-        'location_country_id' => 167,
         'description' => mb_substr(trim($title . "\n\n" . $description), 0, 15000),
         'notice' => mb_substr($note, 0, 2000),
     ];
+    $currency = (int)($fields['priceCurrency'] ?? 0);
+    if (in_array($currency, [1, 2, 3], true)) $payload['price_currency'] = $currency;
+    $countryId = (int)($fields['locationCountryId'] ?? 0);
+    if ($countryId > 0) $payload['location_country_id'] = $countryId;
+    // VixCRM's current import has a city but no country; never assert Poland
+    // for an offer whose source data does not establish its country.
     $optional = [
         'market' => 'market',
         'areaUsable' => 'area_usable',

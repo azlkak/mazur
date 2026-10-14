@@ -11,8 +11,11 @@ $fields = [
 $payload = mazurEstiOfferPayload($fields, 'vixcrm', 'O-1', 254);
 if ($payload['user_id'] !== 254 || $payload['estate'] !== 2
     || $payload['transaction'] !== 131 || $payload['price'] !== 690000.0
-    || $payload['area_total'] !== 51.5) {
+    || $payload['area_total'] !== 51.5 || $payload['price_currency'] !== 2) {
     throw new RuntimeException('Property mapping failed');
+}
+if (array_key_exists('location_country_id', $payload)) {
+    throw new RuntimeException('Unknown country was fabricated');
 }
 foreach (['firstname', 'lastname', 'phone', 'email'] as $ownerField) {
     if (array_key_exists($ownerField, $payload)) throw new RuntimeException('Enquirer assigned as property owner');
