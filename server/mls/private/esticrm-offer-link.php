@@ -62,8 +62,11 @@ function mazurEstiCaretakerId(array $config): int
 }
 
 /** The external listing is public data; no enquiry-person fields belong here. */
-function mazurEstiOfferPayload(array $fields, string $source, string $sourceId, int $caretakerId): array
+function mazurEstiOfferPayload(array $fields, string $source, string $sourceId, int $caretakerId, string $agencyContactEmail): array
 {
+    if (filter_var($agencyContactEmail, FILTER_VALIDATE_EMAIL) === false) {
+        throw new RuntimeException('EstiCRM agency contact email is missing');
+    }
     $publicId = $source === 'vixcrm' ? 'vix-' . $sourceId : $sourceId;
     $url = 'https://mazurestate.pl/oferta/?id=' . rawurlencode($publicId);
     $externalNumber = trim((string)(($fields['numberExport'] ?? '') ?: ($fields['number'] ?? '') ?: $publicId));
@@ -76,6 +79,7 @@ function mazurEstiOfferPayload(array $fields, string $source, string $sourceId, 
     if ($district !== '') $note .= '; dzielnica: ' . $district;
     $payload = [
         'user_id' => $caretakerId,
+        'email' => $agencyContactEmail,
         'marketing_agreement' => 0,
         'estate' => (int)($fields['mainTypeId'] ?? 0),
         'transaction' => (int)($fields['transaction'] ?? 0),
@@ -167,7 +171,9 @@ function mazurEstiLinkExternalOffer(PDO $db, array $config, string $source, stri
         }
 
         $caretakerId = mazurEstiCaretakerId($config);
-        $payload = mazurEstiOfferPayload($fields, $source, $sourceId, $caretakerId);
+        $agencyContactEmail = trim((string)($config['esticrm_offer_contact_email'] ?? ''));
+        if ($agencyContactEmail === '') $agencyContactEmail = trim((string)($config['esticrm_agent_email'] ?? ''));
+        $payload = mazurEstiOfferPayload($fields, $source, $sourceId, $caretakerId, $agencyContactEmail);
         if (!in_array($payload['estate'], [1, 2, 3, 4, 7, 8, 9], true)
             || !in_array($payload['transaction'], [131, 132], true)) {
             throw new RuntimeException('EstiCRM property fields incomplete');

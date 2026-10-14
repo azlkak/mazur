@@ -36,6 +36,10 @@ return [
     // Leave blank to resolve the user ID from /user/exported-list by agent email.
     'esticrm_offer_creation_enabled' => false,
     'esticrm_offer_user_id' => 0,
+    // EstiCRM requires a contact email or phone for offer/store. Use the
+    // agency's contact, never the enquiring person's or an invented owner.
+    // Empty means use esticrm_agent_email.
+    'esticrm_offer_contact_email' => '',
     // Offer translation runs separately after import. Keep the key server-side.
     'openai_api_key' => '',
     'openai_translation_model' => 'gpt-4o-mini',

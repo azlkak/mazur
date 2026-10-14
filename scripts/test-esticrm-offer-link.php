@@ -8,17 +8,24 @@ $fields = [
     'priceCurrency' => '2', 'areaTotal' => 51.5,
     'locationCityName' => 'Warszawa', 'descriptionWebsite' => 'Opis',
 ];
-$payload = mazurEstiOfferPayload($fields, 'vixcrm', 'O-1', 254);
+$payload = mazurEstiOfferPayload($fields, 'vixcrm', 'O-1', 254, 'inwest.warszawa@gmail.com');
 if ($payload['user_id'] !== 254 || $payload['estate'] !== 2
     || $payload['transaction'] !== 131 || $payload['price'] !== 690000.0
-    || $payload['area_total'] !== 51.5 || $payload['price_currency'] !== 2) {
+    || $payload['area_total'] !== 51.5 || $payload['price_currency'] !== 2
+    || $payload['email'] !== 'inwest.warszawa@gmail.com') {
     throw new RuntimeException('Property mapping failed');
 }
 if (array_key_exists('location_country_id', $payload)) {
     throw new RuntimeException('Unknown country was fabricated');
 }
-foreach (['firstname', 'lastname', 'phone', 'email'] as $ownerField) {
+foreach (['firstname', 'lastname', 'phone'] as $ownerField) {
     if (array_key_exists($ownerField, $payload)) throw new RuntimeException('Enquirer assigned as property owner');
+}
+try {
+    mazurEstiOfferPayload($fields, 'vixcrm', 'O-1', 254, '');
+    throw new RuntimeException('Missing agency contact was accepted');
+} catch (RuntimeException $error) {
+    if ($error->getMessage() !== 'EstiCRM agency contact email is missing') throw $error;
 }
 if (!str_contains($payload['notice'], 'vix-O-1') || !str_contains($payload['notice'], 'Warszawa')) {
     throw new RuntimeException('Source context missing');
