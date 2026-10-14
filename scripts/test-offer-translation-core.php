@@ -131,6 +131,40 @@ foreach ([
     ensure(validateTranslation($source, $target)[0]['text'] === $target, 'semantically equivalent numeric form: ' . $target);
 }
 
+foreach ([
+    ['-całodobowy monitoring i portiernia,', '- 24h monitoring and concierge service,'],
+    ['- Całodobowy dostęp do biura', '- 24h office access'],
+    ['- całodobowa ochrona,', '- 24h security,'],
+    ['+całodobowa portiernia', '+ 24h concierge service'],
+    ['- Całodobowa ochrona i portiernia, domofony', '- 24h security and concierge service, intercoms'],
+    ['Bezpieczeństwo i komfort - całodobowy monitoring, ochrona, wideodomofon oraz drzwi antywłamaniowe.', 'Security and comfort - 24h monitoring, security, video intercom and security doors.'],
+    ['- całodobowa ochrona i monitoring,', '- 24h security and monitoring,'],
+    ['• Całodobowa ochrona', '• 24h security'],
+    ['— Całodobowa ochrona', '— 24h security'],
+    ['- Całodobowa ochrona', '- 24-hour security'],
+    ['Całodobowa ochrona', 'Охорона 24h'],
+    ['Całodobowa ochrona', 'Охрана 24h'],
+    ["Udogodnienia:\n- całodobowa ochrona", "Features:\n- 24h security"],
+] as [$source, $target]) {
+    ensure(validateTranslation($source, $target)[0]['text'] === $target, 'round-the-clock list marker: ' . $target);
+}
+foreach (['-24h security', '- 24h security', '+ 24h security', '€ 24h security', '$24h security', '24h security, 24h reception', '23h security', '25h security'] as $target) {
+    rejectsTranslation('Całodobowa ochrona', $target, 'Unexpected number');
+}
+rejectsTranslation('- Całodobowa ochrona', '- 24h security, 7 days a week', 'Unexpected number');
+rejectsTranslation('- Całodobowa ochrona', '- 24h security, price 24 PLN', 'Unexpected number');
+rejectsTranslation('- Całodobowa ochrona', '€ - 24h security', 'Unexpected number');
+rejectsTranslation('- Całodobowa ochrona', '+ 24h security', 'Unexpected number');
+rejectsTranslation('- Całodobowa ochrona', '- 24h security, - 24h reception', 'Unexpected number');
+
+require_once __DIR__ . '/../server/mls/private/bin/repair-20261014-translations.php';
+foreach (repair24Translations() as [, , $polish, $english]) {
+    ensure(validateTranslation($polish, $english)[0]['text'] === $english, 'approved manual 24h repair passes validation');
+}
+ensure(vixCorrectDescription('O-5', 'Domy otoczon3 ogrodem') === 'Domy otoczone ogrodem', 'approved O-5 source typo corrected');
+ensure(vixCorrectDescription('O-50', 'Domy otoczon3 ogrodem') === 'Domy otoczon3 ogrodem', 'other listings untouched by O-5 correction');
+ensure(vixCorrectDescription('O-5', 'xotoczon3 otoczon30 otoczone') === 'xotoczon3 otoczon30 otoczone', 'only exact typo is replaced');
+
 rejectsTranslation('Dwupokojowe mieszkanie', '3-room apartment', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '2-bedroom apartment', 'Unexpected number');
 rejectsTranslation('Dwupokojowe mieszkanie', '2 спальни', 'Unexpected number');

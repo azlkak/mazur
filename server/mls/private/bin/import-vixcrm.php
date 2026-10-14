@@ -8,6 +8,13 @@ umask(0077);
 function failVix(string $message): never { throw new RuntimeException($message); }
 function vixText(SimpleXMLElement $node, string $name): string { return trim((string)$node->$name); }
 
+function vixCorrectDescription(string $id, string $description): string
+{
+    // Approved source correction; keep it scoped to this listing and exact typo.
+    if ($id !== 'O-5') return $description;
+    return preg_replace('~(?<![\pL\pN])otoczon3(?![\pL\pN])~u', 'otoczone', $description) ?? $description;
+}
+
 function vixStatus(string $result, string $error = ''): void
 {
     $folder = __DIR__ . '/../logs';
@@ -96,7 +103,7 @@ function readVix(string $path, int $maxBytes): array
         $deal = vixText($object, 'deal_type');
         $price = vixText($object, 'price');
         $area = vixText($object, 'area');
-        $description = trim((string)$object->description->pl);
+        $description = vixCorrectDescription($id, trim((string)$object->description->pl));
         if ($type === null || !in_array($deal, ['sale', 'long-rent'], true)
             || !is_numeric($price) || (float)$price <= 0 || !is_numeric($area) || (float)$area <= 0
             || $description === '') failVix('Incomplete offer ' . $id);
@@ -133,6 +140,8 @@ function readVix(string $path, int $maxBytes): array
     if (count($rows) < 200) failVix('Feed has fewer than 200 valid offers; refusing a partial snapshot');
     return [$rows, hash('sha256', $bytes)];
 }
+
+if (realpath((string)($_SERVER['SCRIPT_FILENAME'] ?? '')) !== __FILE__) return;
 
 $downloadedPath = null;
 try {
