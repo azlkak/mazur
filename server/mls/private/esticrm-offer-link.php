@@ -31,7 +31,7 @@ function mazurEstiApi(array $config, string $path, array $parameters = [], bool 
     $error = curl_errno($curl);
     curl_close($curl);
     if ($error !== 0 || $status < 200 || $status >= 300 || !is_string($body)) {
-        throw new RuntimeException('EstiCRM ' . $path . ' transport failed');
+        throw new RuntimeException('EstiCRM ' . $path . ' transport failed (HTTP ' . $status . ', cURL ' . $error . ')');
     }
     try {
         $response = json_decode($body, true, 32, JSON_THROW_ON_ERROR);
