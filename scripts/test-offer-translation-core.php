@@ -17,6 +17,20 @@ $parameterFields = [
     'apartmentFloor' => 'Parter', 'locationExportProvinceName' => 'MAZOWIECKIE',
 ];
 ensure(mazurOfferFeatures($parameterFields) === ['Dla studenta', 'Dla rodziny z dziećmi', 'Balkon'], 'feature list is deduplicated before translation');
+$estiFields = [
+    'additionalGarden' => '1', 'additionalAttic' => '1',
+    'apartmentFurnishings' => '150', 'brightKitchen' => '154',
+    'apartmentKitchen' => '422', 'apartmentBathroomType' => '563',
+    'buildingCondition' => '293', 'apartmentEquipment' => '584,585,586',
+    'apartmentBedroomNumber' => '3', 'apartmentBathroomNumber' => '2',
+    'apartmentToiletNumber' => '2', 'securityGated' => '27',
+];
+ensure(mazurOfferFeatures($estiFields) === [
+    'Ogród', 'Poddasze', 'Umeblowane', 'Jasna kuchnia', 'Aneks kuchenny',
+    'Wanna i prysznic', 'Wysoki standard', 'Wyposażenie',
+    '3 sypialnie', '2 łazienki', '2 toalety',
+], 'EstiCRM parameters become readable features without false flags or raw enum IDs');
+ensure(mazurTrOfferFeatures($estiFields) === mazurOfferFeatures($estiFields), 'private translator sees the same EstiCRM features as the public API');
 $phrases = mazurOfferParameterPhrases($parameterFields);
 ensure(count($phrases) === 6 && in_array(['floor', 'Parter'], $phrases, true), 'visible parameter phrases include free-text features and floor');
 ensure(mazurOfferParameterHash('feature', 'Balkon') === mazurOfferParameterHash('feature', 'Balkon') && mazurOfferParameterHash('feature', 'Balkon') !== mazurOfferParameterHash('type', 'Balkon'), 'shared phrase cache is stable and scoped to kind');
