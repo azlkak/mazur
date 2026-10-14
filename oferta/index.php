@@ -146,6 +146,26 @@ function offerRender(array $offer, string $template): string
 
 $template = __DIR__ . '/index.html';
 $id = (string)($_GET['id'] ?? '');
+if (($_GET['format'] ?? '') === 'features') {
+    header('Content-Type: application/json; charset=utf-8');
+    header('X-Content-Type-Options: nosniff');
+    header('Cache-Control: no-store');
+    try {
+        $offer = portalParseOfferId($id) !== null ? mazurSeoFindOffer(mazurSeoDb(), $id) : null;
+        if ($offer === null) {
+            http_response_code(404);
+            echo '{"error":"Offer not found"}';
+        } else {
+            echo json_encode(['id' => $id, 'features' => $offer['features']],
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+    } catch (Throwable $error) {
+        error_log('Mazur offer features unavailable: ' . get_class($error));
+        http_response_code(503);
+        echo '{"error":"Offer temporarily unavailable"}';
+    }
+    exit;
+}
 header('Content-Type: text/html; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-cache, must-revalidate');

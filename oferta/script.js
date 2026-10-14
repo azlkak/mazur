@@ -180,6 +180,15 @@ async function loadOffer(){
       }catch(error){if(!serverSeed)throw error;payload=JSON.parse(serverSeed.textContent)}
     }
     if(!payload.offer||String(payload.offer.id)!==id)throw new Error(offerUi[lang].unavailable);
+    if(lang!=='pl'){
+      try{
+        const featureResponse=await fetch(`/oferta/?id=${encodeURIComponent(id)}&format=features`,{headers:{Accept:'application/json'}});
+        if(featureResponse.ok){
+          const freshFeatures=await featureResponse.json();
+          if(freshFeatures.id===id&&Array.isArray(freshFeatures.features))payload.offer.features=freshFeatures.features;
+        }
+      }catch(error){/* Keep the offer available when feature enrichment is temporarily unavailable. */}
+    }
     const offer=payload.offer,category=categoryFor(offer.type),isRent=offer.transaction==='wynajem';
     const copy=offerUi[lang],locationName=[offer.city,offer.district].filter(Boolean).join(', '),locationFull=[locationName,localizedProvince(offer.province,lang,offer.parameterTranslations)].filter(Boolean).join(' · ');
     const transactionText=isRent?copy.rent:copy.sale,eyebrow=`${localizedType(offer.type,lang,category,offer.parameterTranslations)} ${transactionText}`.toLocaleUpperCase(lang);
