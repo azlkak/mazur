@@ -14,6 +14,32 @@ Hostingerze.
 - `public/api/` — jawne punkty API; tylko ten podkatalog trafia pod `public_html/api`.
 - `private/config.example.php` — wzór konfiguracji bez sekretów.
 
+### Zapytanie o ofertę zewnętrzną → EstiCRM
+
+Formularz bierze dane nieruchomości z lokalnej bazy, nie z pól przeglądarki.
+Dla oferty EstiCRM używa jej numeru bez tworzenia nowej. Dla MLS sprawdza
+najpierw identyczny numer w EstiCRM; dla MLS i VixCRM zapamiętuje powiązanie
+`(source, source_id) → (esticrm_id, esticrm_number)` w tabeli
+`esticrm_offer_links`. Przy pierwszym zapytaniu może utworzyć ofertę przez
+`/offer/store`, a potem przekazać jej numer do `/question/store`. Dane osoby
+pytającej trafiają wyłącznie do zapytania, nie do pól klienta przypisanego do
+tworzonej nieruchomości. W treści zapytania zawsze zostaje numer źródłowy,
+link, lokalizacja i podstawowe parametry, więc doradca ma kontekst także
+wtedy, gdy powiązanie się nie uda.
+
+Przed włączeniem na istniejącej instalacji uruchomić migrację
+`private/migrations/20261014_esticrm_offer_links.sql`, wdrożyć prywatny
+`esticrm-offer-link.php` i publiczny `api/enquiry.php`, a następnie ustawić w
+prywatnym `config.php` `esticrm_offer_creation_enabled => true`. Opcjonalne
+`esticrm_offer_user_id` wybiera opiekuna; przy wartości `0` skrypt szuka ID
+po adresie `esticrm_agent_email` przez `/user/exported-list`. Najpierw
+sprawdzić pojedynczą ofertę, jej właściciela i status publikacji w EstiCRM.
+Jeśli API odrzuci utworzenie lub połączenie się urwie, powiązanie otrzyma
+stan `review` i **nie będzie automatycznie ponawiane**, aby nie stworzyć
+duplikatu po niejednoznacznej odpowiedzi. Zapytanie klienta nadal zostanie
+wysłane. Przed ręcznym ponowieniem trzeba sprawdzić w EstiCRM, czy oferta
+nie powstała; potem zapisać jej ID/numer w tabeli albo usunąć wpis `review`.
+
 ### Tłumaczenia treści ofert — przygotowane lokalnie 06.10.2026
 
 Kod tłumaczy **polskie tytuły i opisy ofert** z MLS i EstiCRM na EN, UK i RU.
