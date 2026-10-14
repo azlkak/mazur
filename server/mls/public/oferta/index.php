@@ -131,7 +131,7 @@ function offerRender(array $offer, string $template): string
 
     $features = $offer['features'] ?: ['Szczegóły dostępne u doradcy'];
     $featureHtml = '';
-    foreach (array_slice($features, 0, 12) as $feature) $featureHtml .= '<span>✓ ' . offerHtml((string)$feature) . '</span>';
+    foreach (array_slice($features, 0, 20) as $feature) $featureHtml .= '<span>✓ ' . offerHtml((string)$feature) . '</span>';
     $template = offerReplace($template,
         '<section class="features"><p class="eyebrow">UDOGODNIENIA</p><h2>Najważniejsze atuty</h2><div></div></section>',
         '<section class="features"><p class="eyebrow">UDOGODNIENIA</p><h2>Najważniejsze atuty</h2><div>' . $featureHtml . '</div></section>');

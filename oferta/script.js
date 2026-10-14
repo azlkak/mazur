@@ -151,7 +151,7 @@ function renderFeatures(features,lang,translations={}){
   const section=document.querySelector('.features'),container=section?.querySelector('div');if(!section||!container)return;
   container.innerHTML='';
   const list=features.length?features:[offerUi[lang].featureEmpty];
-  list.slice(0,12).forEach(feature=>{const item=document.createElement('span');const translated=translations.features?.[feature]||featureNames[lang]?.[feature];item.textContent=`✓ ${translated||feature}`;if(lang!=='pl'&&!translated&&features.length)item.lang='pl';container.appendChild(item)});
+  list.slice(0,20).forEach(feature=>{const item=document.createElement('span');const translated=translations.features?.[feature]||featureNames[lang]?.[feature];item.textContent=`✓ ${translated||feature}`;if(lang!=='pl'&&!translated&&features.length)item.lang='pl';container.appendChild(item)});
 }
 
 function showUnavailable(message,lang=offerLanguage()){
