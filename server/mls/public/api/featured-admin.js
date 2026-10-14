@@ -40,7 +40,14 @@
   }
   function text(parent, tag, value) { const node = document.createElement(tag); node.textContent = value; parent.append(node); return node; }
   function offerLabel(offer, id) {
-    return offer ? `${offer.title || 'Oferta'} · ${offer.city || 'bez miejscowości'} · nr ${offer.number || id}` : `Oferta MLS ${id}`;
+    return offer ? `${offer.title || 'Oferta'} · ${offer.city || 'bez miejscowości'} · nr ${offer.number || id}` : `Oferta ${id}`;
+  }
+  function offerLink(actions, id) {
+    const link = text(actions, 'a', 'Otwórz ofertę');
+    link.className = 'offer-link';
+    link.href = `https://mazurestate.pl/oferta/?id=${encodeURIComponent(id)}`;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
   }
   function renderSelected() {
     const list = $('selected'); list.replaceChildren(); $('count').textContent = `(${selected.length}/10)`;
@@ -51,6 +58,7 @@
       const info = document.createElement('div'); text(info, 'strong', offerLabel(offer, id));
       text(info, 'span', inactive.has(id) ? 'Oferta wycofana — nie jest wyświetlana' : `Pozycja ${position + 1}`);
       const actions = document.createElement('div'); actions.className = 'actions';
+      if (!inactive.has(id)) offerLink(actions, id);
       for (const [label, delta] of [['↑', -1], ['↓', 1]]) {
         const button = text(actions, 'button', label); button.type = 'button'; button.setAttribute('aria-label', delta < 0 ? 'Przesuń w górę' : 'Przesuń w dół');
         button.disabled = position + delta < 0 || position + delta >= selected.length;
@@ -75,8 +83,8 @@
       const priceLabel = Number(offer.price) > 0 ? `${Number(offer.price).toLocaleString('pl-PL', {maximumFractionDigits: 2})} ${offer.currency || ''}`.trim() : 'Cena niepodana';
       text(info, 'span', `Cena: ${priceLabel}${Object.hasOwn(priceOverrides, sourceKey) ? ' · ustawiona ręcznie' : ''}`);
       const actions = document.createElement('div'); actions.className = 'actions';
-      const canFeature = /^\d+$/.test(id);
-      const add = text(actions, 'button', !canFeature ? 'Tylko MLS w wybranych' : selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = !canFeature || selected.includes(id) || selected.length >= 10;
+      offerLink(actions, id);
+      const add = text(actions, 'button', selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = selected.includes(id) || selected.length >= 10;
       add.onclick = () => { selected.push(id); renderSelected(); renderResults(); };
       const edit = text(actions, 'button', 'Edytuj cenę'); edit.type = 'button'; edit.className = 'quiet';
       edit.onclick = () => {
@@ -469,10 +477,10 @@
     if (!state.authorized) { stopMonitoring(); return; }
     csrf = state.csrf; $('account').textContent = state.email;
     refreshMonitoring();
-    selected = state.selected.map(row => String(row.source_id));
+    selected = state.selected.map(row => String(row.id));
     hidden = state.hidden || [];
     priceOverrides = state.prices || {};
-    inactive = new Set(state.selected.filter(row => Number(row.publishable) !== 1).map(row => String(row.source_id)));
+    inactive = new Set(state.selected.filter(row => Number(row.publishable) !== 1).map(row => String(row.id)));
     renderSelected(); renderHidden();
     try {
       const response = await fetch('mls-test.php', {cache: 'no-store'});

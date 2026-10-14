@@ -31,6 +31,8 @@ li strong{display:block}
 li span{color:#68788a;font-size:14px}
 li div.actions{display:flex;gap:6px;flex-shrink:0}
 li .actions button{border-radius:9px;padding:7px 11px}
+.offer-link{display:inline-flex;align-items:center;justify-content:center;border-radius:9px;padding:7px 11px;background:#e8f3fb;color:#0769ad;font:700 15px system-ui;text-decoration:none;white-space:nowrap}
+.offer-link:hover,.offer-link:focus-visible{background:#d7ebf9}
 .danger{background:#fff0ed;color:#a6291c}
 .danger:hover{background:#fbded8}
 #results li .actions{flex-wrap:wrap;justify-content:flex-end}
