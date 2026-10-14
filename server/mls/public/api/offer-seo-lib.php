@@ -6,6 +6,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
 require_once __DIR__ . '/offer-parameters.php';
+require_once __DIR__ . '/offer-price.php';
 if (is_file(__DIR__ . '/description-formatter.php')) {
     require_once __DIR__ . '/description-formatter.php';
 }
@@ -62,6 +63,7 @@ function mazurSeoFindOffer(PDO $db, string $id): ?array
     $statement->closeCursor();
     if (!$row) return null;
     $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+    $fields['price'] = portalOfferPrice($fields, portalPriceOverrides($db), $source, $sourceId);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
     if (portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, $fields)) return null;
     return mazurSeoPublicOffer($row, $fields);

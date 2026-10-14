@@ -4,6 +4,7 @@ require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
 require_once __DIR__ . '/offer-translation-read.php';
 require_once __DIR__ . '/offer-parameters.php';
+require_once __DIR__ . '/offer-price.php';
 // Optional during a rolling deployment: missing formatter keeps the plain API.
 if (is_file(__DIR__ . '/description-formatter.php')) require_once __DIR__ . '/description-formatter.php';
 
@@ -73,6 +74,7 @@ try {
     }
 
     $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+    $prices = portalPriceOverrides($db);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
     if (portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, $fields)) {
         http_response_code(404);
@@ -103,7 +105,7 @@ try {
         'city' => $city,
         'district' => $district,
         'province' => $province,
-        'price' => (float)($fields['price'] ?? 0),
+        'price' => portalOfferPrice($fields, $prices, $source, $sourceId),
         'currency' => firstText($fields, 'priceCurrency') === '2' ? 'PLN' : '',
         'area' => (float)($fields['areaTotal'] ?? 0),
         'usableArea' => (float)($fields['areaUsable'] ?? 0),

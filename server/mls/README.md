@@ -143,6 +143,16 @@ Prawdziwy `config.php`, paczki MLS, zdjęcia, archiwum, logi i zrzuty bazy
 nie trafiają do GitHub. Dane produkcyjne pozostają na Hostingerze; kopie
 bezpieczeństwa mogą być przechowywane lokalnie przez administratora.
 
+### Ręczna korekta ceny na portalu
+
+W zakładce „Wyświetlanie ofert” administrator może wyszukać aktywną ofertę
+MLS, EstiCRM lub VixCRM i zmienić tylko jej cenę. Kwota trafia do tabeli
+`portal_offer_prices`; import pozostaje źródłem pozostałych danych i nie
+nadpisuje ręcznej ceny. Katalog, szczegóły, strona serwerowa i treść zapytania
+korzystają z ceny portalowej. Przycisk „Przywróć cenę z importu” usuwa korektę.
+Przed wdrożeniem PHP należy uruchomić migrację
+`private/migrations/20261014_portal_offer_prices.sql`.
+
 ### Indeks lokalizacji — wdrożony i uzupełniony 29.09.2026
 
 Zrobiono kopię bazy `u101822986_mls` przed migracją, wykonano

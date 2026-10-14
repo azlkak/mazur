@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/offer-price.php';
 require_once dirname(__DIR__, 2) . '/mls/esticrm-offer-link.php';
 
 header('Content-Type: application/json; charset=utf-8');
@@ -136,6 +137,7 @@ try {
         $row = $statement->fetch();
         if ($row) {
             $fields = json_decode((string)$row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
+            $fields['price'] = portalOfferPrice($fields, portalPriceOverrides($db), $source, $sourceId);
             $offerNumber = trim((string)(($fields['numberExport'] ?? '') ?: ($fields['number'] ?? '') ?: $offerId));
             $transaction = (string)($fields['transaction'] ?? '');
             $market = (int)($fields['market'] ?? 0);
