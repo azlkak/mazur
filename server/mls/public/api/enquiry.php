@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/offer-source.php';
+require_once dirname(__DIR__, 2) . '/mls/esticrm-offer-link.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -140,9 +141,34 @@ try {
             $market = (int)($fields['market'] ?? 0);
             $typeId = (int)($fields['mainTypeId'] ?? 0);
 
-            $request['offer_number'] = $offerNumber;
             $contentLines[] = '';
             $contentLines[] = 'Numer oferty: ' . $offerNumber;
+            $contentLines[] = 'Adres oferty: https://mazurestate.pl/oferta/?id=' . rawurlencode($offerId);
+            $title = trim((string)($fields['portalTitle'] ?? ''));
+            if ($title !== '') $contentLines[] = 'Nieruchomość: ' . mb_substr($title, 0, 240);
+            $city = trim((string)(($fields['locationExportCityName'] ?? '') ?: ($fields['locationCityName'] ?? '')));
+            $district = trim((string)(($fields['locationExportPrecinctName'] ?? '') ?: ($fields['locationPrecinctName'] ?? '')));
+            if ($city !== '') $contentLines[] = 'Lokalizacja: ' . $city . ($district !== '' ? ', ' . $district : '');
+            $area = (float)($fields['areaTotal'] ?? 0);
+            if ($area > 0) $contentLines[] = 'Powierzchnia: ' . $area . ' m²';
+            $price = (float)($fields['price'] ?? 0);
+            if ($price > 0) $contentLines[] = 'Cena: ' . $price . ((string)($fields['priceCurrency'] ?? '') === '2' ? ' PLN' : '');
+            if ($source === 'esticrm') {
+                $request['offer_number'] = $offerNumber;
+            } else {
+                // Preserve the existing enquiry behavior until creation is
+                // explicitly enabled after the migration and pilot check.
+                if (($config['esticrm_offer_creation_enabled'] ?? false) !== true) {
+                    $request['offer_number'] = $offerNumber;
+                }
+                try {
+                    $linkedNumber = mazurEstiLinkExternalOffer($db, $config, $source, $sourceId, $fields);
+                    if ($linkedNumber !== '') $request['offer_number'] = $linkedNumber;
+                } catch (Throwable $error) {
+                    // The lead must still arrive when creation or lookup fails.
+                    error_log('Mazur EstiCRM offer link ' . $source . ':' . $sourceId . ': ' . $error->getMessage());
+                }
+            }
             if ($transaction === '131') $request['transaction'] = 133;
             if ($transaction === '132') $request['transaction'] = 134;
             if (in_array($market, [10, 11], true)) $request['market'] = $market;
