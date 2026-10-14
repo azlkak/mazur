@@ -76,12 +76,12 @@ try {
         if (!$authorized) respond(200, ['authorized' => false]);
         $db = db($config);
         [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-        $sourceCondition = portalOffersHaveSource($db) ? "o.source = 'mls' AND " : '';
-        $rows = $db->query("SELECT f.source_id, o.publishable, o.fields_json FROM featured_offers f LEFT JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id ORDER BY f.display_order")->fetchAll();
+        $rows = $db->query('SELECT f.source, f.source_id, o.publishable, o.fields_json FROM featured_offers f LEFT JOIN mls_offers o ON o.source = f.source AND o.source_id = f.source_id ORDER BY f.display_order')->fetchAll();
         foreach ($rows as &$row) {
+            $row['id'] = portalPublicOfferId((string)$row['source'], (string)$row['source_id']);
             if ($row['fields_json'] !== null) {
                 $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
-                if (portalIsHidden($hiddenIds, $hiddenProperties, 'mls', (string)$row['source_id'], $fields)) $row['publishable'] = 0;
+                if (portalIsHidden($hiddenIds, $hiddenProperties, (string)$row['source'], (string)$row['source_id'], $fields)) $row['publishable'] = 0;
             }
             unset($row['fields_json']);
         }
@@ -219,13 +219,12 @@ try {
         $db->beginTransaction();
         $db->prepare('INSERT INTO portal_hidden_offers (source, source_id, property_key, offer_number, title) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE property_key = VALUES(property_key), offer_number = VALUES(offer_number), title = VALUES(title)')
             ->execute([$source, $sourceId, $propertyKey, $number, $title]);
-        $sourceCondition = $hasSource ? "o.source = 'mls' AND " : '';
-        $featured = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id")->fetchAll();
-        $remove = $db->prepare('DELETE FROM featured_offers WHERE source_id = ?');
+        $featured = $db->query('SELECT f.source, f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON o.source = f.source AND o.source_id = f.source_id')->fetchAll();
+        $remove = $db->prepare('DELETE FROM featured_offers WHERE source = ? AND source_id = ?');
         foreach ($featured as $item) {
             $itemFields = json_decode($item['fields_json'], true, 512, JSON_THROW_ON_ERROR);
-            if (($source === 'mls' && $item['source_id'] === $sourceId) || ($propertyKey !== '' && portalPropertyKey($itemFields) === $propertyKey)) {
-                $remove->execute([$item['source_id']]);
+            if (($source === $item['source'] && $item['source_id'] === $sourceId) || ($propertyKey !== '' && portalPropertyKey($itemFields) === $propertyKey)) {
+                $remove->execute([$item['source'], $item['source_id']]);
             }
         }
         $db->commit();
@@ -235,25 +234,28 @@ try {
     $ids = $input['ids'] ?? null;
     if (!is_array($ids) || !array_is_list($ids) || count($ids) > 10) respond(422, ['error' => 'invalid_selection']);
     foreach ($ids as $id) {
-        if (!is_string($id) || !preg_match('/\A[0-9]{1,40}\z/', $id)) respond(422, ['error' => 'invalid_selection']);
+        if (!is_string($id) || portalParseOfferId($id) === null) respond(422, ['error' => 'invalid_selection']);
     }
     if (count(array_unique($ids)) !== count($ids)) respond(422, ['error' => 'duplicate_selection']);
     $db = db($config);
     $db->beginTransaction();
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-    $sourceCondition = portalOffersHaveSource($db) ? "source = 'mls' AND " : '';
-    $check = $db->prepare("SELECT fields_json FROM mls_offers WHERE $sourceCondition source_id = ? AND publishable = 1 LIMIT 1");
+    $check = $db->prepare('SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1');
     foreach ($ids as $id) {
-        $check->execute([$id]);
+        [$source, $sourceId] = portalParseOfferId($id);
+        $check->execute([$source, $sourceId]);
         $fieldsJson = $check->fetchColumn();
-        if (!$fieldsJson || portalIsHidden($hiddenIds, $hiddenProperties, 'mls', $id, json_decode($fieldsJson, true, 512, JSON_THROW_ON_ERROR))) {
+        if (!$fieldsJson || portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, json_decode($fieldsJson, true, 512, JSON_THROW_ON_ERROR))) {
             $db->rollBack();
             respond(422, ['error' => 'offer_unavailable', 'id' => $id]);
         }
     }
     $db->exec('DELETE FROM featured_offers');
-    $insert = $db->prepare('INSERT INTO featured_offers (source_id, display_order) VALUES (?, ?)');
-    foreach ($ids as $position => $id) $insert->execute([$id, $position + 1]);
+    $insert = $db->prepare('INSERT INTO featured_offers (source, source_id, display_order) VALUES (?, ?, ?)');
+    foreach ($ids as $position => $id) {
+        [$source, $sourceId] = portalParseOfferId($id);
+        $insert->execute([$source, $sourceId, $position + 1]);
+    }
     $db->commit();
     respond(200, ['ok' => true]);
 } catch (JsonException $error) {

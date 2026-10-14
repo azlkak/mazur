@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
+require_once __DIR__ . '/offer-source.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -18,14 +19,13 @@ try {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         PDO::ATTR_EMULATE_PREPARES => false,
     ]);
-    // Deleted or withdrawn MLS offers are omitted immediately without changing the selection.
+    // Deleted or withdrawn offers are omitted immediately without changing the selection.
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
-    $sourceCondition = portalOffersHaveSource($db) ? "o.source = 'mls' AND " : '';
-    $rows = $db->query("SELECT f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON $sourceCondition o.source_id = f.source_id AND o.publishable = 1 ORDER BY f.display_order");
+    $rows = $db->query('SELECT f.source, f.source_id, o.fields_json FROM featured_offers f INNER JOIN mls_offers o ON o.source = f.source AND o.source_id = f.source_id AND o.publishable = 1 ORDER BY f.display_order');
     $ids = [];
     foreach ($rows as $row) {
         $fields = json_decode($row['fields_json'], true, 512, JSON_THROW_ON_ERROR);
-        if (!portalIsHidden($hiddenIds, $hiddenProperties, 'mls', (string)$row['source_id'], $fields)) $ids[] = (string)$row['source_id'];
+        if (!portalIsHidden($hiddenIds, $hiddenProperties, (string)$row['source'], (string)$row['source_id'], $fields)) $ids[] = portalPublicOfferId((string)$row['source'], (string)$row['source_id']);
     }
     echo json_encode(['ids' => $ids], JSON_THROW_ON_ERROR);
 } catch (Throwable $error) {
