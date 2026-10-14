@@ -8,6 +8,7 @@
   let selected = [];
   let catalog = [];
   let hidden = [];
+  let priceOverrides = {};
   let inactive = new Set();
   let integrationPending = false;
   let translationPending = false;
@@ -68,11 +69,43 @@
     $('search-hint').textContent = matches.length ? `Pierwsze ${matches.length} wyników` : 'Nie znaleziono oferty.';
     for (const offer of matches) {
       const id = String(offer.id); const li = document.createElement('li');
-      text(li, 'span', offerLabel(offer, id));
+      const sourceKey = id.startsWith('esti-') ? 'esticrm:' + id.slice(5) : id.startsWith('vix-') ? 'vixcrm:' + id.slice(4) : 'mls:' + id;
+      const info = document.createElement('div'); info.className = 'offer-result-info';
+      text(info, 'strong', offerLabel(offer, id));
+      const priceLabel = Number(offer.price) > 0 ? `${Number(offer.price).toLocaleString('pl-PL', {maximumFractionDigits: 2})} ${offer.currency || ''}`.trim() : 'Cena niepodana';
+      text(info, 'span', `Cena: ${priceLabel}${Object.hasOwn(priceOverrides, sourceKey) ? ' · ustawiona ręcznie' : ''}`);
       const actions = document.createElement('div'); actions.className = 'actions';
       const canFeature = /^\d+$/.test(id);
       const add = text(actions, 'button', !canFeature ? 'Tylko MLS w wybranych' : selected.includes(id) ? 'Dodano' : 'Do wybranych'); add.type = 'button'; add.disabled = !canFeature || selected.includes(id) || selected.length >= 10;
       add.onclick = () => { selected.push(id); renderSelected(); renderResults(); };
+      const edit = text(actions, 'button', 'Edytuj cenę'); edit.type = 'button'; edit.className = 'quiet';
+      edit.onclick = () => {
+        const editor = document.createElement('form'); editor.className = 'price-editor';
+        const label = text(editor, 'label', `Nowa cena ${offer.currency || ''}`.trim());
+        const input = document.createElement('input'); input.type = 'number'; input.min = '0.01'; input.max = '999999999999.99'; input.step = '0.01'; input.required = true;
+        input.value = Number(offer.price) > 0 ? String(offer.price) : '';
+        label.append(input);
+        const controls = document.createElement('div'); controls.className = 'actions';
+        const save = text(controls, 'button', 'Zapisz cenę'); save.type = 'submit';
+        const cancel = text(controls, 'button', 'Anuluj'); cancel.type = 'button'; cancel.className = 'quiet'; cancel.onclick = () => editor.remove();
+        if (Object.hasOwn(priceOverrides, sourceKey)) {
+          const restore = text(controls, 'button', 'Przywróć cenę z importu'); restore.type = 'button'; restore.className = 'quiet';
+          restore.onclick = async () => {
+            restore.disabled = true;
+            try { await post('set-price', {id, price: null}); notice('Przywrócono cenę z importu.'); await initialize(); }
+            catch { notice('Nie udało się przywrócić ceny.', true); restore.disabled = false; }
+          };
+        }
+        editor.append(controls);
+        editor.onsubmit = async event => {
+          event.preventDefault();
+          if (!input.reportValidity()) return;
+          save.disabled = true;
+          try { await post('set-price', {id, price: input.value}); notice('Cena została zapisana na portalu.'); await initialize(); }
+          catch { notice('Nie udało się zapisać ceny.', true); save.disabled = false; }
+        };
+        li.querySelector('.price-editor')?.remove(); li.append(editor); input.focus();
+      };
       const hide = text(actions, 'button', 'Ukryj z portalu'); hide.type = 'button'; hide.className = 'danger';
       let hideConfirmed = false;
       hide.onclick = async () => {
@@ -85,7 +118,7 @@
         try { await post('hide', {id}); notice('Oferta ukryta na portalu. Możesz ją przywrócić poniżej.'); await initialize(); }
         catch { notice('Nie udało się ukryć oferty. Spróbuj ponownie.', true); hide.disabled = false; }
       };
-      li.append(actions);
+      li.prepend(info); li.append(actions);
       list.append(li);
     }
   }
@@ -438,6 +471,7 @@
     refreshMonitoring();
     selected = state.selected.map(row => String(row.source_id));
     hidden = state.hidden || [];
+    priceOverrides = state.prices || {};
     inactive = new Set(state.selected.filter(row => Number(row.publishable) !== 1).map(row => String(row.source_id)));
     renderSelected(); renderHidden();
     try {

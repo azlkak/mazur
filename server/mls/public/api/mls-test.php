@@ -3,6 +3,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
 require_once __DIR__ . '/offer-translation-read.php';
+require_once __DIR__ . '/offer-price.php';
 
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -24,6 +25,7 @@ try {
         PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => false,
     ]);
     [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+    $prices = portalPriceOverrides($db);
     $translatedTitles = mazurTranslationTitles($db, $requestedLanguage);
     $hasSource = portalOffersHaveSource($db);
     $rows = $db->query($hasSource
@@ -64,7 +66,7 @@ try {
             },
             'city' => $city,
             'district' => $district,
-            'price' => (float)($fields['price'] ?? 0),
+            'price' => portalOfferPrice($fields, $prices, (string)$row['source'], (string)$row['source_id']),
             'currency' => ((string)($fields['priceCurrency'] ?? '')) === '2' ? 'PLN' : '',
             'area' => (float)($fields['areaTotal'] ?? 0),
             'plotArea' => (float)($fields['areaPlot'] ?? 0),

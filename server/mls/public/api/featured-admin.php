@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . '/portal-visibility.php';
 require_once __DIR__ . '/offer-source.php';
+require_once __DIR__ . '/offer-price.php';
 require_once __DIR__ . '/translation-queue-status.php';
 require_once __DIR__ . '/translation-queue-retry.php';
 require_once dirname(__DIR__, 2) . '/mls/integration-health.php';
@@ -88,7 +89,7 @@ try {
         $hidden = $db->query('SELECT source, source_id, offer_number, title, hidden_at FROM portal_hidden_offers ORDER BY hidden_at DESC, source, source_id')->fetchAll();
         foreach ($hidden as &$row) $row['id'] = portalPublicOfferId((string)$row['source'], (string)$row['source_id']);
         unset($row);
-        respond(200, ['authorized' => true, 'email' => $_SESSION['admin_email'], 'csrf' => $_SESSION['csrf'], 'selected' => $rows, 'hidden' => $hidden]);
+        respond(200, ['authorized' => true, 'email' => $_SESSION['admin_email'], 'csrf' => $_SESSION['csrf'], 'selected' => $rows, 'hidden' => $hidden, 'prices' => portalPriceOverrides($db)]);
     }
     if (($_SERVER['REQUEST_METHOD'] ?? '') === 'GET' && ($_GET['action'] ?? '') === 'integration-status') {
         if (!$authorized) respond(401, ['error' => 'login_required']);
@@ -160,6 +161,37 @@ try {
     if ($action === 'logout') {
         $_SESSION = [];
         session_destroy();
+        respond(200, ['ok' => true]);
+    }
+    if ($action === 'set-price') {
+        $id = $input['id'] ?? null;
+        $parsedId = is_string($id) ? portalParseOfferId($id) : null;
+        if ($parsedId === null || !array_key_exists('price', $input)) respond(422, ['error' => 'invalid_offer']);
+        [$source, $sourceId] = $parsedId;
+        $price = $input['price'] ?? null;
+        if ($price !== null && (!is_string($price) || !preg_match('/\A(?:0|[1-9][0-9]{0,11})(?:\.[0-9]{1,2})?\z/', $price) || (float)$price <= 0)) {
+            respond(422, ['error' => 'invalid_price']);
+        }
+        $db = db($config);
+        $hasSource = portalOffersHaveSource($db);
+        if ($source !== 'mls' && !$hasSource) respond(404, ['error' => 'offer_unavailable']);
+        $lookup = $db->prepare($hasSource
+            ? 'SELECT fields_json FROM mls_offers WHERE source = ? AND source_id = ? AND publishable = 1 LIMIT 1'
+            : 'SELECT fields_json FROM mls_offers WHERE source_id = ? AND publishable = 1 LIMIT 1');
+        $lookup->execute($hasSource ? [$source, $sourceId] : [$sourceId]);
+        $fieldsJson = $lookup->fetchColumn();
+        if ($fieldsJson === false) respond(404, ['error' => 'offer_unavailable']);
+        [$hiddenIds, $hiddenProperties] = portalHiddenSets($db);
+        if (portalIsHidden($hiddenIds, $hiddenProperties, $source, $sourceId, json_decode($fieldsJson, true, 512, JSON_THROW_ON_ERROR))) {
+            respond(404, ['error' => 'offer_unavailable']);
+        }
+        portalEnsurePriceTable($db);
+        if ($price === null) {
+            $db->prepare('DELETE FROM portal_offer_prices WHERE source = ? AND source_id = ?')->execute([$source, $sourceId]);
+        } else {
+            $db->prepare('INSERT INTO portal_offer_prices (source, source_id, price, updated_by) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE price = VALUES(price), updated_by = VALUES(updated_by), updated_at = CURRENT_TIMESTAMP')
+                ->execute([$source, $sourceId, $price, $_SESSION['admin_email']]);
+        }
         respond(200, ['ok' => true]);
     }
     if ($action === 'hide' || $action === 'restore') {
