@@ -25,3 +25,19 @@ test('mobile results gallery loads every photo after the preview', async () => {
   for (let index = 3; index < images.length; index += 1) await gallery.step(offer, 1, list);
   assert.match(gallery.markup(offer), /10\/10/);
 });
+
+test('result cards request cached thumbnails while keeping the original URL as fallback', async () => {
+  const first = `https://api.mazurestate.pl/api/mls-image.php?name=${'a'.repeat(64)}.jpg`;
+  const second = `https://api.mazurestate.pl/api/mls-image.php?name=${'b'.repeat(64)}.png`;
+  const gallery = createResultsGallery();
+  const offer = { id: '2', title: 'Oferta', hasPhotos: true, gallery: [first, second], imageCount: 2 };
+  const firstMarkup = gallery.markup(offer);
+  assert.match(firstMarkup, /w=800 800w/);
+  assert.match(firstMarkup, /w=1200 1200w/);
+  assert.match(firstMarkup, new RegExp(`src="${first.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace('&', '&amp;')}"`));
+  await gallery.step(offer, 1, { querySelectorAll: () => [] });
+  assert.match(gallery.markup(offer), new RegExp(`${'b'.repeat(64)}\\.png&amp;w=800`));
+
+  const external = { id: '3', title: 'Zewnętrzna', hasPhotos: true, gallery: ['https://vixcrm.com/photo/e/1/photo.png'], imageCount: 1 };
+  assert.doesNotMatch(gallery.markup(external), /srcset=/);
+});

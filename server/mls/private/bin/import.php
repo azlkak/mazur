@@ -446,7 +446,14 @@ function importPackage(string $path, array $c, string $source, string $feedRoot,
             if (($exportType ?? null) === 'full') {
                 $used = [];
                 foreach ($db->query('SELECT images_json FROM mls_offers') as $record) {
-                    foreach (json_decode($record['images_json'], true, 512, JSON_THROW_ON_ERROR) as $image) $used[$image] = true;
+                    foreach (json_decode($record['images_json'], true, 512, JSON_THROW_ON_ERROR) as $image) {
+                        $used[$image] = true;
+                        // Keep cached list thumbnails while their original is still in an offer.
+                        if (preg_match('/\A([a-f0-9]{64})\.(?:jpg|png)\z/', $image, $match)) {
+                            $used[$match[1] . '-w800.webp'] = true;
+                            $used[$match[1] . '-w1200.webp'] = true;
+                        }
+                    }
                 }
                 foreach (glob(ROOT . '/images/*') as $stored) if (is_file($stored) && !isset($used[basename($stored)])) @unlink($stored);
             }

@@ -15,6 +15,15 @@ export function createResultsGallery({
   const states = new Map();
   const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
   const validImages = images => Array.isArray(images) ? images.filter(src => typeof src === 'string' && src.trim() !== '') : [];
+  const thumbnailSrcset = src => {
+    try {
+      const url = new URL(src);
+      if (url.origin !== 'https://api.mazurestate.pl' || url.pathname !== '/api/mls-image.php' || !/^[a-f0-9]{64}\.(?:jpg|png)$/.test(url.searchParams.get('name') || '')) return '';
+      url.searchParams.set('w', '800'); const small = url.href;
+      url.searchParams.set('w', '1200'); return `${small} 800w, ${url.href} 1200w`;
+    } catch { return ''; }
+  };
+  const thumbnailSizes = '(max-width: 768px) calc(100vw - 32px), (max-width: 1200px) 45vw, 33vw';
 
   function stateFor(offer) {
     const id = String(offer.id);
@@ -51,8 +60,10 @@ export function createResultsGallery({
     const state = stateFor(offer);
     const disabled = state.loading || !canMove(state);
     const message = state.loading ? labels.loading : state.error;
+    const src = state.images[state.index] || state.fallback;
+    const srcset = thumbnailSrcset(src);
     return `<div class="gallery" data-offer="${escape(state.id)}" aria-busy="${state.loading}">
-      <img src="${escape(state.images[state.index] || state.fallback)}" alt="${escape(state.title)}" loading="lazy" decoding="async">
+      <img ${srcset ? `srcset="${escape(srcset)}" sizes="${thumbnailSizes}" ` : ''}src="${escape(src)}" alt="${escape(state.title)}" loading="lazy" decoding="async">
       <button type="button" class="gallery-arrow prev" data-gallery="prev" data-id="${escape(state.id)}" aria-label="${escape(labels.prev)}" aria-disabled="${disabled}"${!canMove(state) ? ' style="display:none" tabindex="-1"' : ''}>‹</button>
       <button type="button" class="gallery-arrow next" data-gallery="next" data-id="${escape(state.id)}" aria-label="${escape(labels.next)}" aria-disabled="${disabled}"${!canMove(state) ? ' style="display:none" tabindex="-1"' : ''}>›</button>
       <div class="gallery-dots" aria-hidden="true">${dotsMarkup(state)}</div>
@@ -67,6 +78,9 @@ export function createResultsGallery({
     if (!gallery) return;
     const image = gallery.querySelector('img');
     const src = state.images[state.index] || state.fallback;
+    const srcset = thumbnailSrcset(src);
+    if (srcset) { image.setAttribute('srcset', srcset); image.setAttribute('sizes', thumbnailSizes); }
+    else { image.removeAttribute('srcset'); image.removeAttribute('sizes'); }
     if (image.getAttribute('src') !== src) image.setAttribute('src', src);
     gallery.setAttribute('aria-busy', String(state.loading));
     gallery.querySelectorAll('[data-gallery]').forEach(button => {
