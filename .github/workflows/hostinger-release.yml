@@ -25,6 +25,7 @@ jobs:
           find server/mls/private -name '*.php' -print0 | xargs -0 -n1 php -l
           php scripts/test-offer-translation-core.php
           php scripts/test-integration-alerts.php
+          php scripts/test-search-results-seo.php
           /bin/sh -n server/mls/private/bin/run-import.sh
           python3 scripts/test-import-runner.py
           node --check oferta/script.js

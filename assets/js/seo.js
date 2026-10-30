@@ -5,6 +5,7 @@
   // The PHP offer route supplies offer-specific metadata in the initial HTML.
   // Never replace it with the generic, noindex metadata for /oferta/.
   if (document.head.querySelector('meta[name="mazur-offer-ssr"]')) return;
+  if (document.head.querySelector('meta[name="mazur-search-ssr"]')) return;
   // Static language-path offer pages load their real title from the offer API.
   // Keep their generated noindex metadata, but do not overwrite that title.
   if (/\/oferta\/?$/.test(location.pathname) && new URLSearchParams(location.search).has('id')) return;
