@@ -99,7 +99,7 @@ $html = str_replace('<section id="offer-list" class="offer-list" aria-live="poli
 $pagination = $status === 200 ? mazurSearchPagination($path, $category, $transaction, $page, $data['pages'], $lang) : '';
 $html = str_replace('<nav id="pagination" class="pagination"></nav>', '<nav id="pagination" class="pagination">' . $pagination . '</nav>', $html);
 http_response_code($status);
-header('Cache-Control: public, max-age=60, must-revalidate');
+header('Cache-Control: ' . ($status === 200 ? 'public, max-age=60, must-revalidate' : 'no-store'));
 if ($status !== 200 || $data['total'] === 0) header('X-Robots-Tag: noindex, follow');
 if ($status === 503) header('Retry-After: 300');
 echo $html;
