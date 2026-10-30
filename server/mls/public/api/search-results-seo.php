@@ -67,10 +67,10 @@ function mazurSearchEscape(string $value): string
 function mazurSearchCopy(string $lang): array
 {
     return [
-        'pl' => ['Mieszkania', 'Domy', 'Działki', 'Lokale komercyjne', 'na sprzedaż', 'na wynajem', 'Znaleziono {n} dopasowanych ofert', 'Poprzednia strona', 'Następna strona', 'Brak ofert spełniających wybrane kryteria.', 'Strona', 'Cena na zapytanie', 'pokoi', 'pomieszczenia', 'Działka', 'Parter', 'piętro', ' / mies.'],
-        'en' => ['Apartments', 'Houses', 'Land', 'Commercial properties', 'for sale', 'for rent', '{n} matching properties found', 'Previous page', 'Next page', 'No properties match these filters.', 'Page', 'Ask for price', 'rooms', 'spaces', 'Plot', 'Ground floor', 'floor', ' / month'],
-        'uk' => ['Квартири', 'Будинки', 'Земельні ділянки', 'Комерційні приміщення', 'на продаж', 'в оренду', 'Знайдено {n} відповідних пропозицій', 'Попередня сторінка', 'Наступна сторінка', 'Немає пропозицій за цими критеріями.', 'Сторінка', 'Ціна за запитом', 'кімнат', 'приміщення', 'Ділянка', 'Перший поверх', 'поверх', ' / міс.'],
-        'ru' => ['Квартиры', 'Дома', 'Участки', 'Коммерческие помещения', 'на продажу', 'в аренду', 'Найдено {n} подходящих предложений', 'Предыдущая страница', 'Следующая страница', 'По этим критериям предложений нет.', 'Страница', 'Цена по запросу', 'комнат', 'помещения', 'Участок', 'Первый этаж', 'этаж', ' / мес.'],
+        'pl' => ['Mieszkania', 'Domy', 'Działki', 'Lokale komercyjne', 'na sprzedaż', 'na wynajem', 'Znaleziono {n} dopasowanych ofert', 'Poprzednia strona', 'Następna strona', 'Brak ofert spełniających wybrane kryteria.', 'Strona', 'Cena na zapytanie', 'pokoi', 'pomieszczenia', 'Działka', 'Parter', 'piętro', ' / mies.', '2 kondygnacje', 'Dodaj do ulubionych', 'Poprzednie zdjęcie', 'Następne zdjęcie'],
+        'en' => ['Apartments', 'Houses', 'Land', 'Commercial properties', 'for sale', 'for rent', '{n} matching properties found', 'Previous page', 'Next page', 'No properties match these filters.', 'Page', 'Ask for price', 'rooms', 'spaces', 'Plot', 'Ground floor', 'floor', ' / month', '2 storeys', 'Add to favourites', 'Previous photo', 'Next photo'],
+        'uk' => ['Квартири', 'Будинки', 'Земельні ділянки', 'Комерційні приміщення', 'на продаж', 'в оренду', 'Знайдено {n} відповідних пропозицій', 'Попередня сторінка', 'Наступна сторінка', 'Немає пропозицій за цими критеріями.', 'Сторінка', 'Ціна за запитом', 'кімнат', 'приміщення', 'Ділянка', 'Перший поверх', 'поверх', ' / міс.', '2 поверхи', 'Додати до обраного', 'Попереднє фото', 'Наступне фото'],
+        'ru' => ['Квартиры', 'Дома', 'Участки', 'Коммерческие помещения', 'на продажу', 'в аренду', 'Найдено {n} подходящих предложений', 'Предыдущая страница', 'Следующая страница', 'По этим критериям предложений нет.', 'Страница', 'Цена по запросу', 'комнат', 'помещения', 'Участок', 'Первый этаж', 'этаж', ' / мес.', '2 этажа', 'Добавить в избранное', 'Предыдущее фото', 'Следующее фото'],
     ][$lang];
 }
 
@@ -92,15 +92,25 @@ function mazurSearchCard(array $offer, string $category, string $transaction, st
     $image = (string)($offer['images'][0] ?? (['mieszkania'=>'category-apartments.webp', 'domy'=>'category-houses.webp', 'dzialki'=>'category-land.webp', 'lokale'=>'category-commercial.webp'][$category]));
     if (!$offer['images']) $image = '../assets/images/' . $image;
     $room = $category === 'dzialki' ? $t[14] : ($category === 'lokale' ? ((int)$offer['rooms'] ? $offer['rooms'] . ' ' . $t[13] : $t[13]) : ((int)$offer['rooms'] ? $offer['rooms'] . ' ' . $t[12] : ''));
-    $floor = $category === 'dzialki' ? ((float)$offer['plotArea'] > 0 ? number_format((float)$offer['plotArea'], 0, ',', ' ') . ' m²' : '') : ($category === 'lokale' ? $t[15] : ((string)$offer['floor'] !== '' ? $offer['floor'] . ' ' . $t[16] : ''));
+    $floor = $category === 'dzialki' ? ((float)$offer['plotArea'] > 0 ? number_format((float)$offer['plotArea'], 0, ',', ' ') . ' m²' : '') : ($category === 'lokale' ? $t[15] : ($category === 'domy' ? $t[18] : ((string)$offer['floor'] !== '' ? $offer['floor'] . ' ' . $t[16] : '')));
+    $imageCount = count($offer['images']);
+    $galleryDots = '';
+    for ($i = 0; $i < min(5, $imageCount); $i++) $galleryDots .= '<span' . ($i === 0 ? ' class="active"' : '') . '></span>';
     $html = '<article class="offer-card" data-offer-card="' . $e((string)$offer['id']) . '">';
-    $html .= '<div class="gallery"><img src="' . $e($image) . '" alt="' . $e($title) . '" loading="lazy" decoding="async" width="640" height="420"></div>';
+    $html .= '<div class="gallery" data-offer="' . $e((string)$offer['id']) . '"><img src="' . $e($image) . '" alt="' . $e($title) . '" loading="lazy" decoding="async" width="640" height="420">';
+    if ($imageCount > 1) {
+        $html .= '<button type="button" class="gallery-arrow prev" data-gallery="prev" data-id="' . $e((string)$offer['id']) . '" aria-label="' . $e($t[20]) . '">‹</button>';
+        $html .= '<button type="button" class="gallery-arrow next" data-gallery="next" data-id="' . $e((string)$offer['id']) . '" aria-label="' . $e($t[21]) . '">›</button>';
+    }
+    $html .= '<div class="gallery-dots" aria-hidden="true">' . $galleryDots . '</div>';
+    if ($imageCount > 0) $html .= '<span class="gallery-count">▣ 1/' . $imageCount . '</span>';
+    $html .= '</div>';
     $html .= '<div class="offer-content"><div class="offer-top"><div><span class="price">' . $e($price > 0 ? number_format($price, 0, ',', ' ') . ' ' . $currency . ($transaction === 'wynajem' ? $t[17] : '') : $t[11]) . '</span>';
     if ($price > 0 && $area > 0) $html .= '<span class="unit-price">' . $e(number_format(round($price / $area), 0, ',', ' ') . ' ' . $currency . '/m²') . '</span>';
-    $html .= '</div><button class="favorite" type="button" aria-label="Dodaj do ulubionych">♡</button></div>';
+    $html .= '</div><button class="favorite" type="button" aria-label="' . $e($t[19]) . '">♡</button></div>';
     $html .= '<h2 lang="pl"><a data-canonical-offer href="' . $e($url) . '">' . $e($title) . '</a></h2><p class="address">' . $e($location) . '</p><div class="details">';
-    foreach ([$room, $area > 0 ? number_format($area, 1, ',', ' ') . ' m²' : '', $floor] as $detail) {
-        if ($detail !== '') $html .= '<span class="detail"><i class="detail-icon">⌂</i>' . $e((string)$detail) . '</span>';
+    foreach ([$room, $area > 0 ? number_format($area, fmod($area, 1.0) === 0.0 ? 0 : 2, ',', ' ') . ' m²' : '', $floor] as $index => $detail) {
+        if ($detail !== '') $html .= '<span class="detail"><i class="detail-icon">' . ['⌂', '↗', '▦'][$index] . '</i>' . $e((string)$detail) . '</span>';
     }
     $html .= '</div><div class="offer-footer"><span class="offer-kind">' . $e($t[array_search($category, MAZUR_SEARCH_TYPES, true)] . ' ' . $t[$transaction === 'wynajem' ? 5 : 4]) . '</span></div></div></article>';
     return $html;

@@ -225,7 +225,7 @@
   const picker=document.getElementById('language-picker');
   if(picker){const trigger=picker.querySelector('.language-trigger');trigger.addEventListener('click',()=>{const open=picker.classList.toggle('open');trigger.setAttribute('aria-expanded',String(open))});picker.querySelectorAll('[data-lang]').forEach(button=>button.addEventListener('click',()=>{params.delete('lang');location.href=window.mazurLocalizedUrl(`../wyniki-wyszukiwania/?${params.toString()}`,button.dataset.lang)}));document.addEventListener('click',e=>{if(!picker.contains(e.target)){picker.classList.remove('open');trigger.setAttribute('aria-expanded','false')}})}
   render();
-  void offersPromise.then(()=>{loading=false;updateSummary();render()});
+  void offersPromise.then(()=>{if(loadError&&serverRendered)return;loading=false;updateSummary();render()});
   void galleryPromise.then(()=>{if(!loading)render()});
 })();
 
