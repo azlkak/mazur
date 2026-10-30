@@ -40,3 +40,14 @@ $danger = mazurSearchSelect([searchFixture('9', 'mls', ['portalTitle'=>'<script>
 expectSearch(str_contains(mazurSearchCard($danger['items'][0], 'domy', 'sprzedaz', 'pl'), '&lt;script&gt;'), 'CRM text is escaped');
 $pagination = mazurSearchPagination('/domy/', 'domy', 'sprzedaz', 2, 8, 'pl');
 expectSearch(str_contains($pagination, 'href="/domy/?type=domy&amp;transaction=sprzedaz"') && str_contains($pagination, 'rel="prev"'), 'Pagination uses crawlable links');
+
+if (($argv[1] ?? '') === '--preview') {
+    $template = file_get_contents(__DIR__ . '/../wyniki-wyszukiwania/index.html');
+    $cards = implode('', array_map(static fn(array $offer): string => mazurSearchCard($offer, 'domy', 'sprzedaz', 'pl'), $first['items']));
+    $template = str_replace('<section id="offer-list" class="offer-list" aria-live="polite"></section>', '<section id="offer-list" class="offer-list" aria-live="polite">' . $cards . '</section>', $template);
+    $template = str_replace('<nav id="pagination" class="pagination"></nav>', '<nav id="pagination" class="pagination">' . mazurSearchPagination('/wyniki-wyszukiwania/', 'domy', 'sprzedaz', 1, 2, 'pl') . '</nav>', $template);
+    $template = str_replace('<h1 id="results-title">Nieruchomości na sprzedaż</h1>', '<h1 id="results-title">Domy na sprzedaż</h1>', $template);
+    $template = str_replace('<p id="results-summary"></p>', '<p id="results-summary">PODGLĄD — fikcyjne oferty i zdjęcia. Układ jest taki sam jak na stronie wyników.</p>', $template);
+    $template = str_replace('<head>', '<head><meta name="mazur-search-ssr" content="1">', $template);
+    file_put_contents(sys_get_temp_dir() . '/mazur-search-preview.html', $template);
+}
