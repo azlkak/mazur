@@ -21,6 +21,7 @@ function anchor(href, switcher = false) {
   return {
     nodeType: 1,
     dataset: {},
+    hasAttribute() { return false; },
     getAttribute(name) { return name === 'href' ? href : null; },
     setAttribute(name, value) { if (name === 'href') href = value; },
     matches(selector) { return selector === 'a[href]' || switcher; }

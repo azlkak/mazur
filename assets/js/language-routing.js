@@ -39,6 +39,7 @@
   const rewrite = root => {
     const anchors = root.matches?.('a[href]') ? [root] : root.querySelectorAll?.('a[href]') || [];
     anchors.forEach(anchor => {
+      if (anchor.hasAttribute('data-canonical-offer')) return;
       const raw = anchor.getAttribute('href');
       if (!raw || /^(?:mailto:|tel:|javascript:)/i.test(raw)) return;
       // Leave template expressions intact until the runtime renders them.

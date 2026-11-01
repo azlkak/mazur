@@ -19,6 +19,8 @@ PAGE_DIRS = [
 ]
 ROOT_FILES = ["index.html", "sitemap.xml", "robots.txt", "favicon.ico"]
 SERVER_FILES = {
+    "public/wyniki-wyszukiwania/index.php": "wyniki-wyszukiwania/index.php",
+    "public/api/search-results-seo.php": "api/search-results-seo.php",
     "public/health.php": "health.php",
     "public/.htaccess": ".htaccess",
     "public/sitemap-oferty.php": "sitemap-oferty.php",

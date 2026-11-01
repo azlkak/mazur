@@ -25,6 +25,7 @@ jobs:
           find server/mls/private -name '*.php' -print0 | xargs -0 -n1 php -l
           php scripts/test-offer-translation-core.php
           php scripts/test-integration-alerts.php
+          php scripts/test-search-results-seo.php --preview
           /bin/sh -n server/mls/private/bin/run-import.sh
           python3 scripts/test-import-runner.py
           node --check oferta/script.js
@@ -43,6 +44,11 @@ jobs:
           path: ${{ runner.temp }}/mazur-build/public/
           include-hidden-files: true
           retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: search-visual-test
+          path: /tmp/mazur-search-preview.html
+          retention-days: 7
   publish:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
