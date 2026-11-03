@@ -66,9 +66,86 @@ try {
 $t = mazurSearchCopy($lang);
 $typeName = $t[array_search($category, MAZUR_SEARCH_TYPES, true)];
 $heading = $typeName . ' ' . $t[$transaction === 'wynajem' ? 5 : 4];
+$categoryIntros = [
+    'pl' => [
+        'mieszkania' => [
+            'sprzedaz' => 'Porównaj mieszkania pod kątem lokalizacji, metrażu, liczby pokoi i ceny. Użyj filtrów, by zawęzić wyniki do lokali odpowiadających Twoim potrzebom i budżetowi.',
+            'wynajem' => 'Znajdź mieszkanie dopasowane do codziennego życia: sprawdź lokalizację, układ pomieszczeń i miesięczną cenę. Filtry pomogą Ci szybko porównać dostępne propozycje.',
+        ],
+        'domy' => [
+            'sprzedaz' => 'Szukasz domu dla rodziny lub miejsca z przestrzenią do własnej aranżacji? Porównaj powierzchnię, położenie i cenę ofert, a szczegóły wybranej nieruchomości sprawdź na jej karcie.',
+            'wynajem' => 'Przejrzyj domy dostępne na wynajem i wybierz lokalizację oraz metraż, które pasują do Twoich planów. Zawęź wyniki filtrami, by łatwiej porównać miesięczne koszty.',
+        ],
+        'dzialki' => [
+            'sprzedaz' => 'Porównaj działki według lokalizacji, powierzchni i ceny. Jeśli planujesz budowę lub inwestycję, potraktuj ogłoszenie jako punkt wyjścia — możliwości wykorzystania gruntu wymagają osobnej weryfikacji.',
+            'wynajem' => 'Szukasz terenu do wykorzystania bez jego zakupu? Sprawdź dostępne działki, ich powierzchnię i położenie, a przed podjęciem decyzji ustal dopuszczalny sposób użytkowania oraz warunki najmu.',
+        ],
+        'lokale' => [
+            'sprzedaz' => 'Znajdź przestrzeń dla firmy lub inwestycji, porównując lokalizację, metraż i cenę. Przy wybranym lokalu warto dodatkowo sprawdzić, czy jego układ i możliwości techniczne pasują do planowanej działalności.',
+            'wynajem' => 'Wybierz lokal dopasowany do sposobu prowadzenia biznesu — od położenia po potrzebną powierzchnię. Przed podpisaniem umowy sprawdź nie tylko czynsz, ale też warunki użytkowania i możliwości adaptacji.',
+        ],
+    ],
+    'en' => [
+        'mieszkania' => [
+            'sprzedaz' => 'Compare apartments by location, floor area, number of rooms and price. Use the filters to narrow the results to homes that suit your needs and budget.',
+            'wynajem' => 'Find an apartment that fits everyday life: check its location, layout and monthly rent. The filters make it easier to compare available homes.',
+        ],
+        'domy' => [
+            'sprzedaz' => 'Looking for a family home or a place to make your own? Compare floor area, location and price, then explore the details on each property page.',
+            'wynajem' => 'Browse houses for rent and choose the location and size that suit your plans. Use the filters to compare monthly costs more easily.',
+        ],
+        'dzialki' => [
+            'sprzedaz' => 'Compare plots by location, size and price. If you plan to build or invest, treat the listing as a starting point: permitted uses of the land need separate verification.',
+            'wynajem' => 'Need land without buying it? Check the available plots, their size and location, then confirm permitted uses and lease terms before deciding.',
+        ],
+        'lokale' => [
+            'sprzedaz' => 'Find space for your business or investment by comparing location, floor area and price. Check whether the layout and technical possibilities suit your planned activity.',
+            'wynajem' => 'Choose commercial space that fits how you work, from location to the area you need. Before signing, check the rent, terms of use and options for adaptation.',
+        ],
+    ],
+    'uk' => [
+        'mieszkania' => [
+            'sprzedaz' => 'Порівняйте квартири за розташуванням, площею, кількістю кімнат і ціною. Скористайтеся фільтрами, щоб знайти варіанти відповідно до ваших потреб і бюджету.',
+            'wynajem' => 'Знайдіть квартиру для повсякденного життя: оцініть розташування, планування та щомісячну орендну плату. Фільтри допоможуть порівняти доступні варіанти.',
+        ],
+        'domy' => [
+            'sprzedaz' => 'Шукаєте будинок для родини або простір, який облаштуєте на власний смак? Порівняйте площу, розташування та ціну, а деталі перегляньте на сторінці об’єкта.',
+            'wynajem' => 'Перегляньте будинки в оренду та оберіть розташування і площу, що відповідають вашим планам. Звузьте результати фільтрами, щоб легше порівняти щомісячні витрати.',
+        ],
+        'dzialki' => [
+            'sprzedaz' => 'Порівняйте ділянки за розташуванням, площею та ціною. Якщо плануєте будівництво чи інвестицію, сприймайте оголошення як відправну точку: можливості використання землі слід перевірити окремо.',
+            'wynajem' => 'Потрібна ділянка без купівлі? Перегляньте її площу та розташування, а перед рішенням з’ясуйте дозволене використання й умови оренди.',
+        ],
+        'lokale' => [
+            'sprzedaz' => 'Знайдіть приміщення для бізнесу чи інвестиції, порівнявши розташування, площу та ціну. Додатково перевірте, чи відповідають планування й технічні можливості вашій діяльності.',
+            'wynajem' => 'Оберіть приміщення відповідно до потреб бізнесу — від розташування до необхідної площі. Перед підписанням договору перевірте орендну плату, умови користування та можливості адаптації.',
+        ],
+    ],
+    'ru' => [
+        'mieszkania' => [
+            'sprzedaz' => 'Сравните квартиры по расположению, площади, количеству комнат и цене. Используйте фильтры, чтобы найти варианты под ваши потребности и бюджет.',
+            'wynajem' => 'Найдите квартиру для повседневной жизни: оцените расположение, планировку и ежемесячную аренду. Фильтры помогут сравнить доступные варианты.',
+        ],
+        'domy' => [
+            'sprzedaz' => 'Ищете дом для семьи или место, которое можно обустроить по своему вкусу? Сравните площадь, расположение и цену, а подробности изучите на странице объекта.',
+            'wynajem' => 'Посмотрите дома в аренду и выберите расположение и площадь под свои планы. Сузьте результаты фильтрами, чтобы легче сравнить ежемесячные расходы.',
+        ],
+        'dzialki' => [
+            'sprzedaz' => 'Сравните участки по расположению, площади и цене. Если планируете строительство или инвестицию, считайте объявление отправной точкой: возможности использования земли нужно проверить отдельно.',
+            'wynajem' => 'Нужен участок без покупки? Посмотрите его площадь и расположение, а перед решением уточните разрешённое использование и условия аренды.',
+        ],
+        'lokale' => [
+            'sprzedaz' => 'Найдите помещение для бизнеса или инвестиции, сравнив расположение, площадь и цену. Дополнительно проверьте, подходят ли планировка и технические возможности для вашей деятельности.',
+            'wynajem' => 'Выберите помещение под задачи бизнеса — от расположения до необходимой площади. Перед подписанием договора проверьте аренду, условия использования и возможности адаптации.',
+        ],
+    ],
+];
+$intro = $page === 1 && $status === 200 && $data['total'] > 0
+    ? ($categoryIntros[$lang][$category][$transaction] ?? '')
+    : '';
 $canonical = 'https://mazurestate.pl' . mazurSearchUrl($path, $category, $transaction, $page);
 $title = $heading . ($page > 1 ? ' — ' . $t[10] . ' ' . $page : '') . ' | MazurEstate';
-$description = $heading . '. ' . str_replace('{n}', (string)$data['total'], $t[6]) . ' — MazurEstate.';
+$description = $intro !== '' ? $intro : $heading . '. ' . str_replace('{n}', (string)$data['total'], $t[6]) . ' — MazurEstate.';
 $seo = '<!-- SEO START -->' . "\n"
     . '<title>' . mazurSearchEscape($title) . '</title>' . "\n"
     . '<meta name="description" content="' . mazurSearchEscape($description) . '">' . "\n"
@@ -88,6 +165,10 @@ $seo .= '<script src="../assets/js/language-routing.js?v=20261030-search-ssr"></
 $html = preg_replace('~<!-- SEO START -->.*?<!-- SEO END -->~s', $seo, $html, 1);
 if ($html === null) throw new RuntimeException('Search SEO template changed');
 $html = str_replace('<h1 id="results-title">Nieruchomości na sprzedaż</h1>', '<h1 id="results-title">' . mazurSearchEscape($heading) . '</h1>', $html);
+if ($intro !== '') {
+    $html = str_replace('<p id="results-summary"></p>', '<p class="category-intro">' . mazurSearchEscape($intro) . '</p><p id="results-summary"></p>', $html);
+    $html = str_replace('styles.css?v=20261003-floor-dropdown', 'styles.css?v=20261103-category-intro', $html);
+}
 $summary = $status === 503 ? 'Oferty są chwilowo niedostępne.' : ($status === 404 ? 'Ta strona wyników nie istnieje.' : str_replace('{n}', (string)$data['total'], $t[6]));
 $html = str_replace('<p id="results-summary"></p>', '<p id="results-summary">' . mazurSearchEscape($summary) . '</p>', $html);
 $cards = '';
