@@ -116,3 +116,7 @@
   .results-search>.custom-filter .filter-menu,.sort-control .filter-menu,#floor-filter .filter-menu{display:none;position:static;inset:auto;width:100%;min-width:0;max-height:45vh;margin-top:8px;opacity:1;visibility:visible;transform:none}
   .results-search>.custom-filter.open .filter-menu,.sort-control.open .filter-menu,#floor-filter.open .filter-menu{display:block}
 }
+
+/* Category guidance sits between the title and the result count on canonical category pages. */
+.results-heading .category-intro{max-width:690px;margin:14px 0 18px;color:var(--muted);font-size:15px;line-height:1.6}
+@media(max-width:650px){.results-heading .category-intro{max-width:none;margin:13px 0 18px;font-size:14px;line-height:1.55}}
